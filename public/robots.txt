@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://fullzsy.github.io/sitemap.xml
