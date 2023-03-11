@@ -10,7 +10,16 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://fullzsy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 11 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://fullzsy.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>技术杂记</title>
+      <link>https://fullzsy.github.io/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
+      <pubDate>Sat, 11 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://fullzsy.github.io/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Redis升级</title>
       <link>https://fullzsy.github.io/tags/redis%E5%8D%87%E7%BA%A7/</link>

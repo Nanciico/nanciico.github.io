@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>技术杂记 on Shuyang&#39;s Blog</title>
+    <link>https://fullzsy.github.io/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</link>
+    <description>Recent content in 技术杂记 on Shuyang&#39;s Blog</description>
+    <image>
+      <url>https://fullzsy.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://fullzsy.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 11 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://fullzsy.github.io/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Volatile变量与线程安全</title>
+      <link>https://fullzsy.github.io/posts/tech/volatile%E5%8F%98%E9%87%8F%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/</link>
+      <pubDate>Sat, 11 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://fullzsy.github.io/posts/tech/volatile%E5%8F%98%E9%87%8F%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/</guid>
+      <description>Volatile变量与线程安全</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -3,10 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://fullzsy.github.io/posts/tech/</loc>
-    <lastmod>2023-03-03T00:00:00+00:00</lastmod>
+    <lastmod>2023-03-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://fullzsy.github.io/posts/</loc>
-    <lastmod>2023-03-03T00:00:00+00:00</lastmod>
+    <lastmod>2023-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://fullzsy.github.io/</loc>
+    <lastmod>2023-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://fullzsy.github.io/tags/</loc>
+    <lastmod>2023-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://fullzsy.github.io/posts/tech/volatile%E5%8F%98%E9%87%8F%E4%B8%8E%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/</loc>
+    <lastmod>2023-03-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://fullzsy.github.io/tags/%E6%8A%80%E6%9C%AF%E6%9D%82%E8%AE%B0/</loc>
+    <lastmod>2023-03-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://fullzsy.github.io/tags/redis%E5%8D%87%E7%BA%A7/</loc>
     <lastmod>2023-03-03T00:00:00+00:00</lastmod>
@@ -15,12 +27,6 @@
     <lastmod>2023-03-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://fullzsy.github.io/posts/tech/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/</loc>
-    <lastmod>2023-03-03T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://fullzsy.github.io/</loc>
-    <lastmod>2023-03-03T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://fullzsy.github.io/tags/</loc>
     <lastmod>2023-03-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://fullzsy.github.io/tags/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88/</loc>
