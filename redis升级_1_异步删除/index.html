@@ -1,0 +1,942 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>Redis异步删除解决大Key过期阻塞问题可行性分析 - Nanciico&#39;s Blog</title><meta name="Description" content="通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。"><meta property="og:title" content="Redis异步删除解决大Key过期阻塞问题可行性分析" />
+<meta property="og:description" content="通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-04T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-03-04T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Redis异步删除解决大Key过期阻塞问题可行性分析"/>
+<meta name="twitter:description" content="通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" /><link rel="prev" href="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_0_%E5%BC%80%E7%AF%87/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Redis异步删除解决大Key过期阻塞问题可行性分析",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4\/"
+        },"genre": "posts","keywords": "Redis升级","wordcount":  2927 ,
+        "url": "https:\/\/Nanciico.github.io\/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4\/","datePublished": "2023-03-04T00:00:00+00:00","dateModified": "2023-03-04T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。"
+    }
+    </script><script src="//instant.page/5.1.1" defer type="module" integrity="sha384-MWfCL6g1OTGsbSwfuMHc8+8J2u71/LA8dzlIN3ycajckxuZZmF+DNjdm7O6H3PSq"></script>
+</head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/series"> 系列 </a><a class="menu-item" href="/about"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/series" title="">系列</a><a class="menu-item" href="/about" title="">关于</a><a href="#" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#源码分析">源码分析</a>
+      <ul>
+        <li><a href="#异步删除流程">异步删除流程</a></li>
+        <li><a href="#惰性删除与异步删除">惰性删除与异步删除</a></li>
+        <li><a href="#定时删除与异步删除">定时删除与异步删除</a></li>
+      </ul>
+    </li>
+    <li><a href="#结论">结论</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis异步删除解决大Key过期阻塞问题可行性分析</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/redis%E5%8D%87%E7%BA%A7/"><i class="far fa-folder fa-fw"></i>Redis升级</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/redis%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>Redis升级笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-03-04">2023-03-04</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-03-04">2023-03-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2927 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - Redis升级笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/redis%E5%8D%87%E7%BA%A7_0_%E5%BC%80%E7%AF%87/">Redis升级——开篇</a></li><li><span class="active">Redis异步删除解决大Key过期阻塞问题可行性分析</span></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#源码分析">源码分析</a>
+      <ul>
+        <li><a href="#异步删除流程">异步删除流程</a></li>
+        <li><a href="#惰性删除与异步删除">惰性删除与异步删除</a></li>
+        <li><a href="#定时删除与异步删除">定时删除与异步删除</a></li>
+      </ul>
+    </li>
+    <li><a href="#结论">结论</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>自 Redis 4 版本引入了异步删除方法 unlink，官方对该接口的解释：</p>
+<blockquote>
+<p>“This command is very similar to DEL: it removes the specified keys. Just like DEL a key is ignored if it does not exist. However the command performs the actual memory reclaiming in a different thread, so it is not blocking, while DEL is. This is where the command name comes from: the command just unlinks the keys from the keyspace. The actual removal will happen later asynchronously.”</p>
+</blockquote>
+<p>可知 unlink 与 del 用法相同，只不过内存回收在另一个不同线程中，内存回收操作在 unlink 方法调用结束之后，因此是非阻塞方法。</p>
+<h2 id="源码分析" class="headerLink">
+    <a href="#%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90" class="header-mark"></a>源码分析</h2><h3 id="异步删除流程" class="headerLink">
+    <a href="#%e5%bc%82%e6%ad%a5%e5%88%a0%e9%99%a4%e6%b5%81%e7%a8%8b" class="header-mark"></a>异步删除流程</h3><p>同步删除与异步删除的方法入口分别为 delCommand 方法与 unlinkCommand 方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">delCommand</span><span class="p">(</span><span class="n">client</span> <span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delGenericCommand</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">server</span><span class="p">.</span><span class="n">lazyfree_lazy_user_del</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">unlinkCommand</span><span class="p">(</span><span class="n">client</span> <span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delGenericCommand</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这两个方法都调用 delGenericCommand 方法，server.lazyfree_lazy_user_del 可通过配置文件配置，配置后可以使 del 命令与 unlink 命令完全相同。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* This command implements DEL and LAZYDEL. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">delGenericCommand</span><span class="p">(</span><span class="n">client</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lazy</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">numdel</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">argc</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">expireIfNeeded</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 判断传入的 lazy 值选择异步删除或同步删除
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">deleted</span>  <span class="o">=</span> <span class="n">lazy</span> <span class="o">?</span> <span class="n">dbAsyncDelete</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">:</span>
+</span></span><span class="line"><span class="cl">                              <span class="n">dbSyncDelete</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">deleted</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">signalModifiedKey</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">db</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">notifyKeyspaceEvent</span><span class="p">(</span><span class="n">NOTIFY_GENERIC</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s">&#34;del&#34;</span><span class="p">,</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">dirty</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">numdel</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">addReplyLongLong</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="n">numdel</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>delGenericCommand 方法判断传入的 lazy 参数值决定异步删除或者同步删除。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Delete a key, value, and associated expiration entry if any, from the DB */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">dbSyncDelete</span><span class="p">(</span><span class="n">redisDb</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span> <span class="n">robj</span> <span class="o">*</span><span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">dbGenericDelete</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Delete a key, value, and associated expiration entry if any, from the DB. If
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * the value consists of many allocations, it may be freed asynchronously. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">dbAsyncDelete</span><span class="p">(</span><span class="n">redisDb</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span> <span class="n">robj</span> <span class="o">*</span><span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">dbGenericDelete</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同步删除和异步删除都是调用 dbGenericDelete 方法，仅传入的 async 参数不同。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Helper for sync and async delete. */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">dbGenericDelete</span><span class="p">(</span><span class="n">redisDb</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span> <span class="n">robj</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">async</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Deleting an entry from the expires dict will not free the sds of
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * the key, because it is shared with the main dictionary. */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 删除 expires 字典中该 key，但不会删除 SDS 结构，因为该 SDS 在 dict 字典中被共享。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">dictSize</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">expires</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">dictDelete</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">expires</span><span class="p">,</span><span class="n">key</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 数据库字典中移除 key，不释放内存。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">dictEntry</span> <span class="o">*</span><span class="n">de</span> <span class="o">=</span> <span class="n">dictUnlink</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">,</span><span class="n">key</span><span class="o">-&gt;</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">de</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">robj</span> <span class="o">*</span><span class="n">val</span> <span class="o">=</span> <span class="n">dictGetVal</span><span class="p">(</span><span class="n">de</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Tells the module that the key has been unlinked from the database. */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">moduleNotifyKeyUnlink</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">val</span><span class="p">,</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* We want to try to unblock any client using a blocking XREADGROUP */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">val</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">OBJ_STREAM</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">signalKeyAsReady</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">key</span><span class="p">,</span><span class="n">val</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">async</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// 异步释放内存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">freeObjAsync</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">db</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">dictSetVal</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">,</span> <span class="n">de</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">cluster_enabled</span><span class="p">)</span> <span class="n">slotToKeyDelEntry</span><span class="p">(</span><span class="n">de</span><span class="p">,</span> <span class="n">db</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 释放内存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">dictFreeUnlinkedEntry</span><span class="p">(</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">,</span><span class="n">de</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* You need to call this function to really free the entry after a call
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * to dictUnlink(). It&#39;s safe to call this function with &#39;he&#39; = NULL. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">dictFreeUnlinkedEntry</span><span class="p">(</span><span class="n">dict</span> <span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">dictEntry</span> <span class="o">*</span><span class="n">he</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">he</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dictFreeKey</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">he</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dictFreeVal</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">he</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">zfree</span><span class="p">(</span><span class="n">he</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>dbGenericDelete 方法首先将 key 在 expires 字典中删除并释放内存，再在 dict 字典中移除该 key，但此时不释放内存。
+通过 async 参数判断是否需要异步释放内存，若需要则会调用 freeObjAsync 方法进行异步释放内存，若不需要异步释放内存，则在 dictFreeUnlinkedEntry 方法中直接释放。
+若进入 freeObjAsync 方法但不满足异步释放条件（在 freeObjAsync 方法中），也会在 dictFreeUnlinkedEntry 方法中直接释放。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* If there are enough allocations to free the value object asynchronously, it
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * may be put into a lazy free list instead of being freed synchronously. The
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * lazy free list will be reclaimed in a different bio.c thread. If the value is
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * composed of a few allocations, to free in a lazy way is actually just
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * slower... So under a certain limit we just free the object synchronously. */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define LAZYFREE_THRESHOLD 64
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Free an object, if the object is huge enough, free it in async way. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">freeObjAsync</span><span class="p">(</span><span class="n">robj</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="n">robj</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dbid</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 计算异步删除阈值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">size_t</span> <span class="n">free_effort</span> <span class="o">=</span> <span class="n">lazyfreeGetFreeEffort</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">obj</span><span class="p">,</span><span class="n">dbid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Note that if the object is shared, to reclaim it now it is not
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * possible. This rarely happens, however sometimes the implementation
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * of parts of the Redis core may call incrRefCount() to protect
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * objects, and then call dbDelete(). */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">free_effort</span> <span class="o">&gt;</span> <span class="n">LAZYFREE_THRESHOLD</span> <span class="o">&amp;&amp;</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">refcount</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">atomicIncr</span><span class="p">(</span><span class="n">lazyfree_objects</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 任务超过异步删除阈值，创建异步删除任务
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">bioCreateLazyFreeJob</span><span class="p">(</span><span class="n">lazyfreeFreeObject</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">obj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">decrRefCount</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重点看 freeObjAsync 方法，先计算该 key 的异步删除阈值，若大于阈值 64，则为该 key 创建异步删除任务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">bioCreateLazyFreeJob</span><span class="p">(</span><span class="n">lazy_free_fn</span> <span class="n">free_fn</span><span class="p">,</span> <span class="kt">int</span> <span class="n">arg_count</span><span class="p">,</span> <span class="p">...)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">va_list</span> <span class="n">valist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Allocate memory for the job structure and all required
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * arguments */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bio_job</span> <span class="o">*</span><span class="n">job</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">job</span><span class="p">)</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">arg_count</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">job</span><span class="o">-&gt;</span><span class="n">free_args</span><span class="p">.</span><span class="n">free_fn</span> <span class="o">=</span> <span class="n">free_fn</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">va_start</span><span class="p">(</span><span class="n">valist</span><span class="p">,</span> <span class="n">arg_count</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arg_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">job</span><span class="o">-&gt;</span><span class="n">free_args</span><span class="p">.</span><span class="n">free_args</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">va_arg</span><span class="p">(</span><span class="n">valist</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">va_end</span><span class="p">(</span><span class="n">valist</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 提交任务
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">bioSubmitJob</span><span class="p">(</span><span class="n">BIO_LAZY_FREE</span><span class="p">,</span> <span class="n">job</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">bioSubmitJob</span><span class="p">(</span><span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="n">bio_job</span> <span class="o">*</span><span class="n">job</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 互斥锁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_mutex</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 添加任务至末尾
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">listAddNodeTail</span><span class="p">(</span><span class="n">bio_jobs</span><span class="p">[</span><span class="n">type</span><span class="p">],</span><span class="n">job</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bio_pending</span><span class="p">[</span><span class="n">type</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 发送信号唤醒阻塞线程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">pthread_cond_signal</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_newjob_cond</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_mutex</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>bioCreateLazyFreeJob 方法创建任务并调用 bioSubmitJob 方法提交任务到 job 数据结构中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span><span class="lnt">93
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="nf">bioProcessBackgroundJobs</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bio_job</span> <span class="o">*</span><span class="n">job</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">type</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span> <span class="n">arg</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sigset_t</span> <span class="n">sigset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Check that the type is within the right interval. */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">&gt;=</span> <span class="n">BIO_NUM_OPS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">serverLog</span><span class="p">(</span><span class="n">LL_WARNING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;Warning: bio thread started with wrong type %lu&#34;</span><span class="p">,</span><span class="n">type</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="p">(</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">BIO_CLOSE_FILE</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">redis_set_thread_title</span><span class="p">(</span><span class="s">&#34;bio_close_file&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">BIO_AOF_FSYNC</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">redis_set_thread_title</span><span class="p">(</span><span class="s">&#34;bio_aof_fsync&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">BIO_LAZY_FREE</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">redis_set_thread_title</span><span class="p">(</span><span class="s">&#34;bio_lazy_free&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">redisSetCpuAffinity</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">bio_cpulist</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">makeThreadKillable</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_mutex</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Block SIGALRM so we are sure that only the main thread will
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * receive the watchdog signal. */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sigset</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sigset</span><span class="p">,</span> <span class="n">SIGALRM</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sigset</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">serverLog</span><span class="p">(</span><span class="n">LL_WARNING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;Warning: can&#39;t mask SIGALRM in bio.c thread: %s&#34;</span><span class="p">,</span> <span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">listNode</span> <span class="o">*</span><span class="n">ln</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* The loop always starts with the lock hold. */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">listLength</span><span class="p">(</span><span class="n">bio_jobs</span><span class="p">[</span><span class="n">type</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pthread_cond_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_newjob_cond</span><span class="p">[</span><span class="n">type</span><span class="p">],</span><span class="o">&amp;</span><span class="n">bio_mutex</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Pop the job from the queue. */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ln</span> <span class="o">=</span> <span class="n">listFirst</span><span class="p">(</span><span class="n">bio_jobs</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">job</span> <span class="o">=</span> <span class="n">ln</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* It is now possible to unlock the background system as we know have
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * a stand alone job structure to process.*/</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_mutex</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Process the job accordingly to its type. */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">BIO_CLOSE_FILE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">fd_args</span><span class="p">.</span><span class="n">need_fsync</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">redis_fsync</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">fd_args</span><span class="p">.</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">close</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">fd_args</span><span class="p">.</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">BIO_AOF_FSYNC</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="cm">/* The fd may be closed by main thread and reused for another
+</span></span></span><span class="line"><span class="cl"><span class="cm">             * socket, pipe, or file. We just ignore these errno because
+</span></span></span><span class="line"><span class="cl"><span class="cm">             * aof fsync did not really fail. */</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">redis_fsync</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">fd_args</span><span class="p">.</span><span class="n">fd</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">errno</span> <span class="o">!=</span> <span class="n">EBADF</span> <span class="o">&amp;&amp;</span> <span class="n">errno</span> <span class="o">!=</span> <span class="n">EINVAL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">int</span> <span class="n">last_status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">atomicGet</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_bio_fsync_status</span><span class="p">,</span><span class="n">last_status</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">atomicSet</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_bio_fsync_status</span><span class="p">,</span><span class="n">C_ERR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">atomicSet</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_bio_fsync_errno</span><span class="p">,</span><span class="n">errno</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="n">last_status</span> <span class="o">==</span> <span class="n">C_OK</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">serverLog</span><span class="p">(</span><span class="n">LL_WARNING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="s">&#34;Fail to fsync the AOF file: %s&#34;</span><span class="p">,</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">atomicSet</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">aof_bio_fsync_status</span><span class="p">,</span><span class="n">C_OK</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">BIO_LAZY_FREE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">job</span><span class="o">-&gt;</span><span class="n">free_args</span><span class="p">.</span><span class="n">free_fn</span><span class="p">(</span><span class="n">job</span><span class="o">-&gt;</span><span class="n">free_args</span><span class="p">.</span><span class="n">free_args</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">serverPanic</span><span class="p">(</span><span class="s">&#34;Wrong job type in bioProcessBackgroundJobs().&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">zfree</span><span class="p">(</span><span class="n">job</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Lock again before reiterating the loop, if there are no longer
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * jobs to process we&#39;ll block again in pthread_cond_wait(). */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_mutex</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">listDelNode</span><span class="p">(</span><span class="n">bio_jobs</span><span class="p">[</span><span class="n">type</span><span class="p">],</span><span class="n">ln</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bio_pending</span><span class="p">[</span><span class="n">type</span><span class="p">]</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Unblock threads blocked on bioWaitStepOfType() if any. */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pthread_cond_broadcast</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bio_step_cond</span><span class="p">[</span><span class="n">type</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行后台任务方法 bioProcessBackgroundJobs，详细过程不在讨论的主题中。</p>
+<p>结论：异步删除能够解决主线程阻塞问题。</p>
+<h3 id="惰性删除与异步删除" class="headerLink">
+    <a href="#%e6%83%b0%e6%80%a7%e5%88%a0%e9%99%a4%e4%b8%8e%e5%bc%82%e6%ad%a5%e5%88%a0%e9%99%a4" class="header-mark"></a>惰性删除与异步删除</h3><p>Redis 惰性删除策略是否采用异步删除策略？</p>
+<p>在惰性删除中，Redis 在操作 Key 时会先判断该 Key 是否过期，若过期则会删除该 Key。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* This function is called when we are going to perform some operation
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * in a given key, but such key may be already logically expired even if
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * it still exists in the database. The main way this function is called
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * is via lookupKey*() family of functions.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The behavior of the function depends on the replication role of the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * instance, because by default replicas do not delete expired keys. They
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * wait for DELs from the master for consistency matters. However even
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * replicas will try to have a coherent return value for the function,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * so that read commands executed in the replica side will be able to
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * behave like if the key is expired even if still present (because the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * master has yet to propagate the DEL).
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * In masters as a side effect of finding a key which is expired, such
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * key will be evicted from the database. Also this may trigger the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * propagation of a DEL/UNLINK command in AOF / replication stream.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * On replicas, this function does not delete expired keys by default, but
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * it still returns 1 if the key is logically expired. To force deletion
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * of logically expired keys even on replicas, use the EXPIRE_FORCE_DELETE_EXPIRED
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * flag. Note though that if the current client is executing
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * replicated commands from the master, keys are never considered expired.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * On the other hand, if you just want expiration check, but need to avoid
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * the actual key deletion and propagation of the deletion, use the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * EXPIRE_AVOID_DELETE_EXPIRED flag.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The return value of the function is 0 if the key is still valid,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * otherwise the function returns 1 if the key is expired. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">expireIfNeeded</span><span class="p">(</span><span class="n">redisDb</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span> <span class="n">robj</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">keyIsExpired</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">key</span><span class="p">))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* If we are running in the context of a replica, instead of
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * evicting the expired key from the database, we return ASAP:
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * the replica key expiration is controlled by the master that will
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * send us synthesized DEL operations for expired keys. The
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * exception is when write operations are performed on writable
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * replicas.
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * Still we try to return the right information to the caller,
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * that is, 0 if we think the key should be still valid, 1 if
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * we think the key is expired at this time.
+</span></span></span><span class="line"><span class="cl"><span class="cm">     *
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * When replicating commands from the master, keys are never considered
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * expired. */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">masterhost</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">current_client</span> <span class="o">==</span> <span class="n">server</span><span class="p">.</span><span class="n">master</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">EXPIRE_FORCE_DELETE_EXPIRED</span><span class="p">))</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* In some cases we&#39;re explicitly instructed to return an indication of a
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * missing key without actually deleting it, even on masters. */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">EXPIRE_AVOID_DELETE_EXPIRED</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* If clients are paused, we keep the current dataset constant,
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * but return to the client what we believe is the right state. Typically,
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * at the end of the pause we will properly expire the key OR we will
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * have failed over and the new primary will send us the expire. */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">checkClientPauseTimeoutAndReturnIfPaused</span><span class="p">())</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Delete the key */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 删除 key
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">deleteExpiredKeyAndPropagate</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>expireIfNeeded 方法会调用 deleteExpiredKeyAndPropagate 方法删除 key。</p>
+<p>删除 key 时会读取 server.lazyfree_lazy_expire 配置决定删除策略。server.lazyfree_lazy_expire 可在配置文件中配置，配置后惰性删除将采用异步删除策略。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Delete the specified expired key and propagate expire. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">deleteExpiredKeyAndPropagate</span><span class="p">(</span><span class="n">redisDb</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span> <span class="n">robj</span> <span class="o">*</span><span class="n">keyobj</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mstime_t</span> <span class="n">expire_latency</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">latencyStartMonitor</span><span class="p">(</span><span class="n">expire_latency</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">lazyfree_lazy_expire</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 采用异步删除策略
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">dbAsyncDelete</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">keyobj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="n">dbSyncDelete</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">keyobj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">latencyEndMonitor</span><span class="p">(</span><span class="n">expire_latency</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">latencyAddSampleIfNeeded</span><span class="p">(</span><span class="s">&#34;expire-del&#34;</span><span class="p">,</span><span class="n">expire_latency</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">notifyKeyspaceEvent</span><span class="p">(</span><span class="n">NOTIFY_EXPIRED</span><span class="p">,</span><span class="s">&#34;expired&#34;</span><span class="p">,</span><span class="n">keyobj</span><span class="p">,</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">signalModifiedKey</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">keyobj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">propagateDeletion</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">keyobj</span><span class="p">,</span><span class="n">server</span><span class="p">.</span><span class="n">lazyfree_lazy_expire</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">server</span><span class="p">.</span><span class="n">stat_expiredkeys</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结论：Redis 惰性删除在配置后可采用异步删除策略。</p>
+<h3 id="定时删除与异步删除" class="headerLink">
+    <a href="#%e5%ae%9a%e6%97%b6%e5%88%a0%e9%99%a4%e4%b8%8e%e5%bc%82%e6%ad%a5%e5%88%a0%e9%99%a4" class="header-mark"></a>定时删除与异步删除</h3><p>定时任务 serverCron 方法最终会调用 activeExpireCycleTryExpire 方法，该方法仍会调用 deleteExpiredKeyAndPropagate 方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Helper function for the activeExpireCycle() function.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * This function will try to expire the key that is stored in the hash table
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * entry &#39;de&#39; of the &#39;expires&#39; hash table of a Redis database.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * If the key is found to be expired, it is removed from the database and
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * 1 is returned. Otherwise no operation is performed and 0 is returned.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * When a key is expired, server.stat_expiredkeys is incremented.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The parameter &#39;now&#39; is the current time in milliseconds as is passed
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * to the function to avoid too many gettimeofday() syscalls. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">activeExpireCycleTryExpire</span><span class="p">(</span><span class="n">redisDb</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span> <span class="n">dictEntry</span> <span class="o">*</span><span class="n">de</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">now</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="n">dictGetSignedIntegerVal</span><span class="p">(</span><span class="n">de</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">&gt;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sds</span> <span class="n">key</span> <span class="o">=</span> <span class="n">dictGetKey</span><span class="p">(</span><span class="n">de</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">robj</span> <span class="o">*</span><span class="n">keyobj</span> <span class="o">=</span> <span class="n">createStringObject</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">sdslen</span><span class="p">(</span><span class="n">key</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 删除 key
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">deleteExpiredKeyAndPropagate</span><span class="p">(</span><span class="n">db</span><span class="p">,</span><span class="n">keyobj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">decrRefCount</span><span class="p">(</span><span class="n">keyobj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>结论：Redis 定时删除在配置后可采用异步删除策略。</p>
+<h2 id="结论" class="headerLink">
+    <a href="#%e7%bb%93%e8%ae%ba" class="header-mark"></a>结论</h2><p>异步删除策略能够在删除大 Key 时避免主线程阻塞，惰性删除与定时删除在配置后均可采用异步删除策略，因此异步删除能够解决大 Key 过期引起的主线程阻塞问题。</p>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-03-04</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析" data-hashtags="Redis升级"><i class="fab fa-twitter fa-fw"></i></a><a href="#" title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-hashtag="Redis升级"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析"><i class="fab fa-weibo fa-fw"></i></a><a href="#" title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析" data-description="通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。"><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析" data-description="通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。"><i class="fab fa-blogger fa-fw"></i></a><a href="#" title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/" data-title="Redis异步删除解决大Key过期阻塞问题可行性分析"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/redis%E5%8D%87%E7%BA%A7/">Redis升级</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/redis%E5%8D%87%E7%BA%A7_0_%E5%BC%80%E7%AF%87/" class="prev" rel="prev" title="Redis升级——开篇"><i class="fas fa-angle-left fa-fw"></i>Redis升级——开篇</a></div>
+</div>
+<div id="comments"></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>
