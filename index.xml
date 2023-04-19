@@ -3,9 +3,16 @@
         <title>Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/</link>
         <description>这是我的全新 Hugo 网站</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 15 Apr 2023 00:00:00 &#43;0000</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 19 Apr 2023 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://Nanciico.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Redis内存碎片整理调研</title>
+    <link>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/</link>
+    <pubDate>Wed, 19 Apr 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/</guid>
+    <description><![CDATA[分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。]]></description>
+</item><item>
     <title>「算法第四版」Union-Find 算法</title>
     <link>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_05_union-find%E7%AE%97%E6%B3%95/</link>
     <pubDate>Sat, 15 Apr 2023 00:00:00 &#43;0000</pubDate><author>
@@ -68,12 +75,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_01_%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</guid>
     <description><![CDATA[「算法第四版」二分查找]]></description>
-</item><item>
-    <title>「算法第四版」阅读开篇</title>
-    <link>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/</link>
-    <pubDate>Sat, 25 Feb 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/</guid>
-    <description><![CDATA[「算法第四版」阅读开篇]]></description>
 </item></channel>
 </rss>
