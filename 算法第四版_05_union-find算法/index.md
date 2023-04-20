@@ -41,6 +41,7 @@ public class UF
 
 ``` Java
 public class UF {
+
     private int[] id;
     private int count;
 
@@ -85,6 +86,7 @@ public class UF {
 
 ``` Java
 public class QuickFindUF {
+
     private int[] id;    // id[i] = component identifier of i
     private int count;   // number of components
 
@@ -122,6 +124,7 @@ Quick-Find 算法中，find 方法的时间复杂度为 O(1)，但 union 方法�
 
 ``` Java
 public class QuickUnionUF {
+
     private int[] parent;  // parent[i] = parent of i
     private int count;     // number of components
 
@@ -156,6 +159,7 @@ Quick-Union 算法中，h 表示树的高度，find 方法的时间复杂度为 
 
 ``` Java
 public class WeightedQuickUnionUF {
+
     private int[] parent;   // parent[i] = parent of i
     private int[] size;     // size[i] = number of elements in subtree rooted at i
     private int count;      // number of components
@@ -204,6 +208,7 @@ public class WeightedQuickUnionUF {
 
 ``` Java
 public class WeightedQuickUnionWithPathCompression {
+
     private final int[] parent;
     private final int[] size;
     private int count;

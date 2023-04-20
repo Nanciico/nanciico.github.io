@@ -23,6 +23,7 @@ public class Bag<Item> implements Iterable<Item>
 import java.util.Iterator;
 
 public class Bag<Item> implements Iterable<Item> {
+
     private Node first;
 
     private class Node {
@@ -43,6 +44,7 @@ public class Bag<Item> implements Iterable<Item> {
     }
 
     private class ListIterator implements Iterator<Item> {
+
         private Node current = first;
 
         @Override

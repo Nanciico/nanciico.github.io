@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>Redis内存碎片整理调研 - Nanciico&#39;s Blog</title><meta name="Description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><meta property="og:title" content="Redis内存碎片整理调研" />
+    <title>Redis 内存碎片整理调研 - Nanciico&#39;s Blog</title><meta name="Description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><meta property="og:title" content="Redis 内存碎片整理调研" />
 <meta property="og:description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" /><meta property="article:section" content="posts" />
@@ -16,7 +16,7 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Redis内存碎片整理调研"/>
+<meta name="twitter:title" content="Redis 内存碎片整理调研"/>
 <meta name="twitter:description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
@@ -29,7 +29,7 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Redis内存碎片整理调研",
+        "headline": "Redis 内存碎片整理调研",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
@@ -139,7 +139,7 @@
     <li><a href="#参考资料">参考资料</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis内存碎片整理调研</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis 内存碎片整理调研</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/redis%E5%8D%87%E7%BA%A7/"><i class="far fa-folder fa-fw"></i>Redis升级</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/redis%E5%8D%87%E7%BA%A7%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>Redis升级笔记</a></span></div>
@@ -154,7 +154,7 @@
                                     <nav>
                                         <ul>
                                                     <li><a href="/redis%E5%8D%87%E7%BA%A7_0_%E5%BC%80%E7%AF%87/">Redis升级——开篇</a></li>
-                                                    <li><a href="/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/">Redis异步删除解决大Key过期阻塞问题可行性分析</a></li><li><span class="active">Redis内存碎片整理调研</span></li></ul>
+                                                    <li><a href="/redis%E5%8D%87%E7%BA%A7_1_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/">Redis异步删除解决大Key过期阻塞问题可行性分析</a></li><li><span class="active">Redis 内存碎片整理调研</span></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -539,7 +539,7 @@
             <div class="post-info-md"><span><a class="link-to-mardown" href=/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
                     </span></div>
             <div class="post-info-share">
-                <span><a href="#" title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研" data-hashtags="Redis升级"><i class="fab fa-twitter fa-fw"></i></a><a href="#" title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-hashtag="Redis升级"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研"><i class="fab fa-weibo fa-fw"></i></a><a href="#" title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研" data-description="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研" data-description="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><i class="fab fa-blogger fa-fw"></i></a><a href="#" title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis内存碎片整理调研"><i class="fab fa-evernote fa-fw"></i></a></span>
+                <span><a href="#" title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研" data-hashtags="Redis升级"><i class="fab fa-twitter fa-fw"></i></a><a href="#" title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-hashtag="Redis升级"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研"><i class="fab fa-weibo fa-fw"></i></a><a href="#" title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研" data-description="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研" data-description="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><i class="fab fa-blogger fa-fw"></i></a><a href="#" title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_2_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/" data-title="Redis 内存碎片整理调研"><i class="fab fa-evernote fa-fw"></i></a></span>
             </div>
         </div>
     </div>
