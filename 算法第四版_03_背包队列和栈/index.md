@@ -87,6 +87,7 @@ public class Queue<Item> implements Interable<Item>
 import java.util.Iterator;
 
 public class Queue<Item> implements Iterable<Item> {
+
     private Node first;
     private Node last;
     private int size;
@@ -133,6 +134,7 @@ public class Queue<Item> implements Iterable<Item> {
     }
 
     private class ListIterator implements Iterator<Item> {
+
         private Node current = first;
 
         @Override
@@ -172,6 +174,7 @@ public class Stack<Item> implements Iterable<Item>
 import java.util.Iterator;
 
 public class ResizingArrayStack<Item> implements Iterable<Item> {
+
     private Item[] array = (Item[]) new Object[1];
     private int size = 0;
 
@@ -213,6 +216,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
     }
 
     private class ReverseArrayIterator implements Iterator<Item> {
+
         private int index = size;
 
         @Override
@@ -234,6 +238,7 @@ public class ResizingArrayStack<Item> implements Iterable<Item> {
 import java.util.Iterator;
 
 public class Stack<Item> implements Iterable<Item> {
+
     private Node first;
     private int size;
 
@@ -271,6 +276,7 @@ public class Stack<Item> implements Iterable<Item> {
     }
 
     private class ListIterator implements Iterator<Item> {
+
         private Node current = first;
 
         @Override
@@ -294,6 +300,7 @@ Dijkstra 双栈算术表达式求值算法
 
 ``` Java
 public class Evaluate {
+
     public static void main(String[] args) {
         Stack<String> ops = new Stack<>();
         Stack<Double> vals = new Stack<>();

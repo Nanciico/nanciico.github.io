@@ -19,6 +19,7 @@
 
 ``` Java
 public class DoublingTest {
+
     public static double timeTrial(int N) {  
         // Time ThreeSum.count() for N random 6-digit ints.
         int MAX = 1000000;
@@ -70,6 +71,7 @@ public class DoublingTest {
 
 ``` Java
 public class DoublingRatio {
+
     public static double timeTrial(int N) {  
         // Time ThreeSum.count() for N random 6-digit ints.
         int MAX = 1000000;
