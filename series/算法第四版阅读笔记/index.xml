@@ -3,7 +3,14 @@
         <title>「算法第四版」阅读笔记 - 系列 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <description>「算法第四版」阅读笔记 - 系列 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 21 May 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 08 Jul 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="self" type="application/rss+xml" /><item>
+    <title>「算法第四版」快速排序</title>
+    <link>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</link>
+    <pubDate>Sat, 08 Jul 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</guid>
+    <description><![CDATA[快速排序]]></description>
+</item><item>
     <title>「算法第四版」归并排序</title>
     <link>https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</link>
     <pubDate>Sun, 21 May 2023 00:00:00 &#43;0000</pubDate><author>

@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>「汇编语言」 - 标签 - Nanciico&#39;s Blog</title>
+        <link>https://Nanciico.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</link>
+        <description>「汇编语言」 - 标签 - Nanciico&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 10 Jul 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="self" type="application/rss+xml" /><item>
+    <title>「汇编语言」基础知识</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+    <pubDate>Mon, 10 Jul 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+    <description><![CDATA[「汇编语言」基础知识]]></description>
+</item><item>
+    <title>「汇编语言」阅读开篇</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/</link>
+    <pubDate>Sun, 09 Jul 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/</guid>
+    <description><![CDATA[「汇编语言」阅读开篇]]></description>
+</item></channel>
+</rss>
