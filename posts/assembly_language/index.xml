@@ -1,7 +1,7 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>所有汇编语言读书笔记 - Nanciico&#39;s Blog</title>
+        <title>所有「汇编语言」阅读笔记 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/posts/assembly_language/</link>
-        <description>所有汇编语言读书笔记 | Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 10 Jul 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/posts/assembly_language/" rel="self" type="application/rss+xml" /></channel>
+        <description>所有「汇编语言」阅读笔记 | Nanciico&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 04 Aug 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/posts/assembly_language/" rel="self" type="application/rss+xml" /></channel>
 </rss>
