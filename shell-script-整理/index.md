@@ -3,7 +3,7 @@
 
 ## Shell 参数处理特殊字符
 
-``` sh
+``` bash
 #!/bin/bash
 
 echo "Starting program at $(date)"                                  # 1. $( CMD ) 运行 CMD 命令
@@ -36,7 +36,7 @@ done
 
 ## Safe-bgsave 脚本整理
 
-``` sh
+``` bash
 #!/bin/bash
 
 function help()                                                     # 1. 函数声明

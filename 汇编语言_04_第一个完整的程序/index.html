@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>「汇编语言」第一个完整的程序 - Nanciico&#39;s Blog</title><meta name="Description" content="「汇编语言」第一个完整的程序"><meta property="og:title" content="「汇编语言」第一个完整的程序" />
+<meta property="og:description" content="「汇编语言」第一个完整的程序" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-08-06T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="「汇编语言」第一个完整的程序"/>
+<meta name="twitter:description" content="「汇编语言」第一个完整的程序"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "「汇编语言」第一个完整的程序",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  1664 ,
+        "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F\/","datePublished": "2023-08-06T00:00:00+00:00","dateModified": "2023-08-06T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "「汇编语言」第一个完整的程序"
+    }
+    </script><script src="//instant.page/5.1.1" defer type="module" integrity="sha384-MWfCL6g1OTGsbSwfuMHc8+8J2u71/LA8dzlIN3ycajckxuZZmF+DNjdm7O6H3PSq"></script>
+</head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/series"> 系列 </a><a class="menu-item" href="/about"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/series" title="">系列</a><a class="menu-item" href="/about" title="">关于</a><a href="#" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一个源程序从写出到执行的过程">一个源程序从写出到执行的过程</a></li>
+    <li><a href="#一个源程序">一个源程序</a>
+      <ul>
+        <li><a href="#伪指令">伪指令</a>
+          <ul>
+            <li><a href="#segment-ends">segment ends</a></li>
+            <li><a href="#end">end</a></li>
+            <li><a href="#assume">assume</a></li>
+          </ul>
+        </li>
+        <li><a href="#源程序中的程序">源程序中的“程序”</a></li>
+        <li><a href="#标号">标号</a></li>
+        <li><a href="#程序返回">程序返回</a></li>
+      </ul>
+    </li>
+    <li><a href="#编译连接">编译连接</a></li>
+    <li><a href="#执行">执行</a>
+      <ul>
+        <li><a href="#程序的加载过程">程序的加载过程</a></li>
+      </ul>
+    </li>
+    <li><a href="#汇编程序从写出到执行的过程">汇编程序从写出到执行的过程</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「汇编语言」第一个完整的程序</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><i class="far fa-folder fa-fw"></i>「汇编语言」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-06">2023-08-06</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-06">2023-08-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1664 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/">「汇编语言」阅读开篇</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">「汇编语言」基础知识</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/">「汇编语言」寄存器</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">「汇编语言」寄存器(内存访问)</a></li><li><span class="active">「汇编语言」第一个完整的程序</span></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#一个源程序从写出到执行的过程">一个源程序从写出到执行的过程</a></li>
+    <li><a href="#一个源程序">一个源程序</a>
+      <ul>
+        <li><a href="#伪指令">伪指令</a>
+          <ul>
+            <li><a href="#segment-ends">segment ends</a></li>
+            <li><a href="#end">end</a></li>
+            <li><a href="#assume">assume</a></li>
+          </ul>
+        </li>
+        <li><a href="#源程序中的程序">源程序中的“程序”</a></li>
+        <li><a href="#标号">标号</a></li>
+        <li><a href="#程序返回">程序返回</a></li>
+      </ul>
+    </li>
+    <li><a href="#编译连接">编译连接</a></li>
+    <li><a href="#执行">执行</a>
+      <ul>
+        <li><a href="#程序的加载过程">程序的加载过程</a></li>
+      </ul>
+    </li>
+    <li><a href="#汇编程序从写出到执行的过程">汇编程序从写出到执行的过程</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="一个源程序从写出到执行的过程" class="headerLink">
+    <a href="#%e4%b8%80%e4%b8%aa%e6%ba%90%e7%a8%8b%e5%ba%8f%e4%bb%8e%e5%86%99%e5%87%ba%e5%88%b0%e6%89%a7%e8%a1%8c%e7%9a%84%e8%bf%87%e7%a8%8b" class="header-mark"></a>一个源程序从写出到执行的过程</h2><p>一个汇编语言程序从写出到最终执行的简要过程如下：</p>
+<ol>
+<li>编写汇编源程序，生成源程序文件</li>
+<li>对源程序进行编译连接，生成可执行文件</li>
+<li>在操作系统中，执行可执行文件中的程序</li>
+</ol>
+<figure><a class="lightgallery" href="/images/assembly_language/04_01.jpg" title="汇编语言程序从写出到执行的过程" data-thumbnail="/images/assembly_language/04_01.jpg" data-sub-html="<h2>汇编语言程序从写出到执行的过程</h2><p>汇编语言程序从写出到执行的过程</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/04_01.jpg"
+            srcset="/images/assembly_language/04_01.jpg, /images/assembly_language/04_01.jpg 1.5x, /images/assembly_language/04_01.jpg 2x"
+            sizes="auto"
+            alt="/images/assembly_language/04_01.jpg">
+    </a><figcaption class="image-caption">汇编语言程序从写出到执行的过程</figcaption>
+    </figure>
+<h2 id="一个源程序" class="headerLink">
+    <a href="#%e4%b8%80%e4%b8%aa%e6%ba%90%e7%a8%8b%e5%ba%8f" class="header-mark"></a>一个源程序</h2><p>一段简单的汇编语言源程序：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">codesg</span>        <span class="c">; 将用作代码段的段 codesg 和 CPU 中的段寄存器 cs 联系起来
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">codesq</span> <span class="no">segment</span>          <span class="c">; 定义一个段，段的名称为 “codesg”，这个段从此开始
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0123</span><span class="no">H</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0456</span><span class="no">H</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="no">ax</span><span class="p">,</span> <span class="no">bx</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="no">ax</span><span class="p">,</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">4</span><span class="no">c00H</span>       <span class="c">; 程序返回
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">int</span> <span class="mi">21</span><span class="no">H</span>
+</span></span><span class="line"><span class="cl"><span class="nf">codesq</span> <span class="no">ends</span>             <span class="c">; 名称为 “codesg” 的段到此结束
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">end</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="伪指令" class="headerLink">
+    <a href="#%e4%bc%aa%e6%8c%87%e4%bb%a4" class="header-mark"></a>伪指令</h3><p>在汇编语言源程序中，包含两种指令，一种是汇编指令，一种是伪指令。</p>
+<p>伪指令是由编译器来执行的指令，编译器根据伪指令来进行相关的编译工作。</p>
+<h4 id="segment-ends" class="headerLink">
+    <a href="#segment-ends" class="header-mark"></a>segment ends</h4><p>segment 和 ends 是一对成对使用的伪指令。功能是定义一个段，segment 说明一个段开始，ends 说明一个段结束。</p>
+<p>一个汇编程序是由多个段组成的，这些段被用来存放代码、 数据或当作栈空问来使用。一个有意义的汇编程序中至少要有一个段，这个段用来存放代码。</p>
+<h4 id="end" class="headerLink">
+    <a href="#end" class="header-mark"></a>end</h4><p>end 是一个汇编程序的结束标记，编译器在编译汇编程序的过程中，如果碰到了伪指令 end，就结束对源程序的编译。</p>
+<h4 id="assume" class="headerLink">
+    <a href="#assume" class="header-mark"></a>assume</h4><p>编译程序可以将段寄存器和某一个具体的段相联系。</p>
+<p>使用 assume 指令可以一段寄存器和程序中的某一个用 segment..ends 定义的段相关联。</p>
+<h3 id="源程序中的程序" class="headerLink">
+    <a href="#%e6%ba%90%e7%a8%8b%e5%ba%8f%e4%b8%ad%e7%9a%84%e7%a8%8b%e5%ba%8f" class="header-mark"></a>源程序中的“程序”</h3><p>源程序中最终由计算机执行、处理的指令或数据，称为程序。程序最先以汇编指令的形式存在源程序中，经编译、 连接后转变为机器码，存储在可执行文件中。</p>
+<figure><a class="lightgallery" href="/images/assembly_language/04_02.jpg" title="汇编语言程序从写出到执行的过程" data-thumbnail="/images/assembly_language/04_02.jpg" data-sub-html="<h2>源程序经过编译连接之后称为机器吗</h2><p>汇编语言程序从写出到执行的过程</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/04_02.jpg"
+            srcset="/images/assembly_language/04_02.jpg, /images/assembly_language/04_02.jpg 1.5x, /images/assembly_language/04_02.jpg 2x"
+            sizes="auto"
+            alt="/images/assembly_language/04_02.jpg">
+    </a><figcaption class="image-caption">源程序经过编译连接之后称为机器吗</figcaption>
+    </figure>
+<h3 id="标号" class="headerLink">
+    <a href="#%e6%a0%87%e5%8f%b7" class="header-mark"></a>标号</h3><p>汇编源程序中，除了汇编指令和伪指令外，还有一些标号，比如 “codesg”。一个标号指代了一个地址。</p>
+<p>“codesg” 这个标号是代码段的名称，这个段的名称最终将被编译、连接程序处理为一个段的段地址。</p>
+<h3 id="程序返回" class="headerLink">
+    <a href="#%e7%a8%8b%e5%ba%8f%e8%bf%94%e5%9b%9e" class="header-mark"></a>程序返回</h3><p>一个程序 P2 在可执行文件中，则必须有一个正在运行的程序 P1，将 P2 从可执行文件中加载入内存后，将 CPU 的控制权交给 P2，P2 才能得以运行。P2 开始运行后，P1 暂停运行。</p>
+<p>而当 P2 运行完毕后，应该将 CPU 的控制权交还给使它得以运行的程序 P1，此后， P1 继续运行。</p>
+<p>一个程序结束后，将 CPU 的控制权交还给使它得以运行的程序，我们称这个过程为：程序返回。</p>
+<p>总结一下与结束相关的指令：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">目的</th>
+<th style="text-align:center">相关指令</th>
+<th style="text-align:center">指令性质</th>
+<th style="text-align:center">指令执行者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">通知编译器一个段结束</td>
+<td style="text-align:center">段名 ends</td>
+<td style="text-align:center">伪 指 令</td>
+<td style="text-align:center">编译时，由编译器执行</td>
+</tr>
+<tr>
+<td style="text-align:center">通知编译器程序结束</td>
+<td style="text-align:center">end</td>
+<td style="text-align:center">伪 指 令</td>
+<td style="text-align:center">编译时，由编译器执行</td>
+</tr>
+<tr>
+<td style="text-align:center">程序返回</td>
+<td style="text-align:center"><code>mov ax,4c00H  int 21H</code></td>
+<td style="text-align:center">汇编指令</td>
+<td style="text-align:center">执行时，由 CPU 执行</td>
+</tr>
+</tbody>
+</table>
+<h2 id="编译连接" class="headerLink">
+    <a href="#%e7%bc%96%e8%af%91%e8%bf%9e%e6%8e%a5" class="header-mark"></a>编译连接</h2><p>编译的作用是通过源程序文件生成包含机器代码的目标文件(.obj 文件)。</p>
+<p>连接的作用如下：</p>
+<ol>
+<li>当源程序很大时，可以将它分为多个源程序文件来编译，每个源程序编译成为目标文件后，再用连接程序将它们连接到一起，生成一个可执行 文件;</li>
+<li>程序中调用了某个库文件中的子程序，需要将这个库文件和该程序生成的目标文件连接到一起，生成一个可执行文件;</li>
+<li>一个源程序编译后，得到了存有机器码的目标文件，目标文件中的有些内容还不能直接用来生成可执行文件，连接程序将这些内容处理为最终的可执行信息。所以，在只有一个源程序文件，而又不需要调用某个库中的子程序的情况下，也必须用连接程序对目标文件进行处理，生成可执行文件(.exe 文件)。</li>
+</ol>
+<h2 id="执行" class="headerLink">
+    <a href="#%e6%89%a7%e8%a1%8c" class="header-mark"></a>执行</h2><p>DOS 中有一个程序 command.com，这个程序在 DOS 中称为命令解释器，也就是 DOS 系统的 shell。</p>
+<p>如果用户要执行一个程序，则输入该程序的可执行文件的名称，command 首先根据文件名找到可执行文件，然后将这个可执行文件中的程序加载入内存，设置 CS:IP 指向程序的入口。此后，command 暂停运行，CPU 运行程序。程序运行结束后，返回到 command 中，command 再次显示由当前盘符和当前路径组成的提示符，等待用户的输入。</p>
+<h3 id="程序的加载过程" class="headerLink">
+    <a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e5%8a%a0%e8%bd%bd%e8%bf%87%e7%a8%8b" class="header-mark"></a>程序的加载过程</h3><figure><a class="lightgallery" href="/images/assembly_language/04_03.jpg" title="EXE 文件中程序的加载过程" data-thumbnail="/images/assembly_language/04_03.jpg" data-sub-html="<h2>EXE 文件中程序的加载过程</h2><p>EXE 文件中程序的加载过程</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/04_03.jpg"
+            srcset="/images/assembly_language/04_03.jpg, /images/assembly_language/04_03.jpg 1.5x, /images/assembly_language/04_03.jpg 2x"
+            sizes="auto"
+            alt="/images/assembly_language/04_03.jpg">
+    </a><figcaption class="image-caption">EXE 文件中程序的加载过程</figcaption>
+    </figure>
+<ol>
+<li>程序加载后，ds 中存放着程序所在内存区的段地址，这个内存区的偏移地址为 0，则程序所在的内存区的地址为 ds:0;</li>
+<li>这个内存区的前 256 个字节中存放的是 PSP，DOS 用来和程序进行通信。从 256 字节处向后的空间存放的是程序。</li>
+</ol>
+<h2 id="汇编程序从写出到执行的过程" class="headerLink">
+    <a href="#%e6%b1%87%e7%bc%96%e7%a8%8b%e5%ba%8f%e4%bb%8e%e5%86%99%e5%87%ba%e5%88%b0%e6%89%a7%e8%a1%8c%e7%9a%84%e8%bf%87%e7%a8%8b" class="header-mark"></a>汇编程序从写出到执行的过程</h2><p>到此，完成了一个汇编程序从写出到执行的全部过程。</p>
+<figure><a class="lightgallery" href="/images/assembly_language/04_04.jpg" title="汇编程序从写出到执行的过程" data-thumbnail="/images/assembly_language/04_04.jpg" data-sub-html="<h2>汇编程序从写出到执行的过程</h2><p>汇编程序从写出到执行的过程</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/04_04.jpg"
+            srcset="/images/assembly_language/04_04.jpg, /images/assembly_language/04_04.jpg 1.5x, /images/assembly_language/04_04.jpg 2x"
+            sizes="auto"
+            alt="/images/assembly_language/04_04.jpg">
+    </a><figcaption class="image-caption">汇编程序从写出到执行的过程</figcaption>
+    </figure>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-08-06</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序" data-hashtags="「汇编语言」"><i class="fab fa-twitter fa-fw"></i></a><a href="#" title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-hashtag="「汇编语言」"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序"><i class="fab fa-weibo fa-fw"></i></a><a href="#" title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序" data-description="「汇编语言」第一个完整的程序"><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序" data-description="「汇编语言」第一个完整的程序"><i class="fab fa-blogger fa-fw"></i></a><a href="#" title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」第一个完整的程序"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" class="prev" rel="prev" title="「汇编语言」寄存器(内存访问)"><i class="fas fa-angle-left fa-fw"></i>「汇编语言」寄存器(内存访问)</a></div>
+</div>
+<div id="comments"></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>
