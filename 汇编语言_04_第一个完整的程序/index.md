@@ -18,7 +18,7 @@
 ``` asm
 assume cs:codesg        ; 将用作代码段的段 codesg 和 CPU 中的段寄存器 cs 联系起来
 
-codesq segment          ; 定义一个段，段的名称为 “codesg”，这个段从此开始
+codesg segment          ; 定义一个段，段的名称为 “codesg”，这个段从此开始
     mov ax, 0123H
     mov bx, 0456H
     add ax, bx
@@ -26,7 +26,7 @@ codesq segment          ; 定义一个段，段的名称为 “codesg”，这�
 
     mov ax, 4c00H       ; 程序返回
     int 21H
-codesq ends             ; 名称为 “codesg” 的段到此结束
+codesg ends             ; 名称为 “codesg” 的段到此结束
 
 end
 ```
@@ -99,14 +99,22 @@ DOS 中有一个程序 command.com，这个程序在 DOS 中称为命令解释�
 
 ### 程序的加载过程
 
-{{< image src="/images/assembly_language/04_03.jpg" caption="EXE 文件中程序的加载过程" title="EXE 文件中程序的加载过程" >}}
+Debug 将程序从可执行文件载入内存后，各个内存器的设置情况入下图：
 
-1. 程序加载后，ds 中存放着程序所在内存区的段地址，这个内存区的偏移地址为 0，则程序所在的内存区的地址为 ds:0;
-2. 这个内存区的前 256 个字节中存放的是 PSP，DOS 用来和程序进行通信。从 256 字节处向后的空间存放的是程序。
+{{< image src="/images/assembly_language/04_03.jpg" caption="程序加载后各个寄存器的设置情况" title="程序加载后各个寄存器的设置情况" >}}
+
+DOS 系统中 EXE 文件中的程序的加载过程入下图：
+
+{{< image src="/images/assembly_language/04_04.jpg" caption="EXE 文件中程序的加载过程" title="EXE 文件中程序的加载过程" >}}
+
+1. 程序从可执行文件加载入内存后，cx 中存放程序的长度；
+2. ds 中存放着程序所在内存区的段地址，这个内存区的偏移地址为 0，则程序所在的内存区的地址为 ds:0；
+3. 这个内存区的前 256 个字节中存放的是 PSP，DOS 用来和程序进行通信。从 256 字节处向后的空间存放的是程序；
+4. cs:ip 指向程序的第一条指令。
 
 ## 汇编程序从写出到执行的过程
 
 到此，完成了一个汇编程序从写出到执行的全部过程。
 
-{{< image src="/images/assembly_language/04_04.jpg" caption="汇编程序从写出到执行的过程" title="汇编程序从写出到执行的过程" >}}
+{{< image src="/images/assembly_language/04_05.jpg" caption="汇编程序从写出到执行的过程" title="汇编程序从写出到执行的过程" >}}
 

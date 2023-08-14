@@ -4,12 +4,12 @@
         <link>https://Nanciico.github.io/tags/redis/</link>
         <description>Redis - 标签 - Nanciico&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 27 Jul 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/redis/" rel="self" type="application/rss+xml" /><item>
-    <title>Redis 事件驱动框架</title>
-    <link>https://Nanciico.github.io/redis_01_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/</link>
+    <title>Redis 简单动态字符串SDS</title>
+    <link>https://Nanciico.github.io/redis_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds/</link>
     <pubDate>Thu, 27 Jul 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis_01_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/</guid>
-    <description><![CDATA[阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。]]></description>
+    </author><guid>https://Nanciico.github.io/redis_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds/</guid>
+    <description><![CDATA[阅读 Redis SDS 相关代码，理解 Redis 中字符串是如何存储的。]]></description>
 </item><item>
     <title>Redis 代码阅读开篇</title>
     <link>https://Nanciico.github.io/redis_00_%E5%BC%80%E7%AF%87/</link>

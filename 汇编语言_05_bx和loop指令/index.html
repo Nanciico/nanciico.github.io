@@ -1,0 +1,390 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>「汇编语言」[BX]和loop指令 - Nanciico&#39;s Blog</title><meta name="Description" content="「汇编语言」[BX]和loop指令"><meta property="og:title" content="「汇编语言」[BX]和loop指令" />
+<meta property="og:description" content="「汇编语言」[BX]和loop指令" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-11T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-08-11T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="「汇编语言」[BX]和loop指令"/>
+<meta name="twitter:description" content="「汇编语言」[BX]和loop指令"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "「汇编语言」[BX]和loop指令",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  1528 ,
+        "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4\/","datePublished": "2023-08-11T00:00:00+00:00","dateModified": "2023-08-11T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "「汇编语言」[BX]和loop指令"
+    }
+    </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+</head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/series"> 系列 </a><a class="menu-item" href="/about"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/series" title="">系列</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#bx">[BX]</a></li>
+    <li><a href="#loop-指令">Loop 指令</a></li>
+    <li><a href="#loop-和-bx-的联合应用">Loop 和 [bx] 的联合应用</a></li>
+    <li><a href="#段前缀">段前缀</a>
+      <ul>
+        <li><a href="#一段安全的空间">一段安全的空间</a></li>
+        <li><a href="#段前缀的使用">段前缀的使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「汇编语言」[BX]和loop指令</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><i class="far fa-folder fa-fw"></i>「汇编语言」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-11">2023-08-11</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-11">2023-08-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1528 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/">「汇编语言」阅读开篇</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">「汇编语言」基础知识</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/">「汇编语言」寄存器</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">「汇编语言」寄存器(内存访问)</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/">「汇编语言」第一个完整的程序</a></li><li><span class="active">「汇编语言」[BX]和loop指令</span></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#bx">[BX]</a></li>
+    <li><a href="#loop-指令">Loop 指令</a></li>
+    <li><a href="#loop-和-bx-的联合应用">Loop 和 [bx] 的联合应用</a></li>
+    <li><a href="#段前缀">段前缀</a>
+      <ul>
+        <li><a href="#一段安全的空间">一段安全的空间</a></li>
+        <li><a href="#段前缀的使用">段前缀的使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="bx" class="headerLink">
+    <a href="#bx" class="header-mark"></a>[BX]</h2><p>指令 <code>mov ax, [bx]</code> 的功能：bx 中存放的数据作为一个偏移地址 EA，段地址 SA 默认在 ds 中，将 SA:EA 处的数据送入 ax 中。即: (ax)=((ds)*16+(bx))。</p>
+<p>指令 <code>mov [bx], ax</code> 的功能：bx 中存放的数据作为一个偏移地址 EA，段地址 SA 默认在 ds 中，将 ax 中的 数据送入内存 SA:EA 处。即: ((ds)*16+(6x))=(ax)。</p>
+<h2 id="loop-指令" class="headerLink">
+    <a href="#loop-%e6%8c%87%e4%bb%a4" class="header-mark"></a>Loop 指令</h2><p>CPU 执行 loop 指令的时候，要进行两步操作：</p>
+<ol>
+<li>(cx) = (cx) - 1；</li>
+<li>判断 cx 中的值，不为零则转至标号执行程序，如果为零则向下执行。</li>
+</ol>
+<p>通常我们用 loop 指令来实现循环功能，cx 中存放循环次数。</p>
+<p>使用 cx 和 loop 指令配合实现循环功能的要点：</p>
+<ol>
+<li>在 cx 中存放循环次数；</li>
+<li>loop 指令中的标号所标识的地址在前面；</li>
+<li>要循环执行的程序段，要写在标号和 loop 指令的中间。</li>
+</ol>
+<p>用 cx 和 loop 指令相配合实现循环功能的程序框架如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">    mov cx, 循环次数
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">s:
+</span></span><span class="line"><span class="cl">    循环执行的程序段
+</span></span><span class="line"><span class="cl">    loop s
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>标号 &ldquo;s&rdquo; 实际是一个地址，如果在执行 &ldquo;loop s&rdquo; 时，cx 减 1 后不为 0，指令 &ldquo;loop s&rdquo; 就会把 IP 设置为 &ldquo;s&rdquo; 指向的地址，从而使 CS:IP 指向循环执行的程序段。</p>
+<h2 id="loop-和-bx-的联合应用" class="headerLink">
+    <a href="#loop-%e5%92%8c-bx-%e7%9a%84%e8%81%94%e5%90%88%e5%ba%94%e7%94%a8" class="header-mark"></a>Loop 和 [bx] 的联合应用</h2><p>编程目标：计算 ffff:0~ffff:b 单元中的数据的和，结果存储在 dx 中。</p>
+<p>分析问题：</p>
+<ol>
+<li>运算后的结果是否会超出 dx 所能存储的范围?</li>
+<li>能否将 ffff:0~ffff:b 中的数据直接累加到 dx 中?</li>
+<li>能否将 ffff:0~ffff:b 中的数据累加到 dl 中，并设置 (dh)=0，从而实现累加到 dx 中?</li>
+</ol>
+<p>问题解答：</p>
+<ol>
+<li>ffff:0~ffff:b 内存単元中的数据是字节型数据，范围在 0~255 之间，12 个这样的数据相加，结果不会大于 65535，可以在dx中存放下；</li>
+<li>ffff:0~ffff:b 中的数据是 8 位的，不能直接加到 16 位寄存器 dx 中；</li>
+<li>不行，因为 dl 是 8 位寄存器，能容纳的数据的范围在 0~ 255 之间，ffff:0~ffff:b 中的数据也都是 8 位，如果仅向 dl 中累加 12 个 8 位数据，很有可能造成进位丢失。</li>
+</ol>
+<p>编程思路：用一个 16 位寄存器来做中介。将内存单元中的 8 位数据赋值到一个 16 位寄存器 ax 中，再将 ax 中的数据加到 dx 上，从而使两个运算对象的类型匹配并且结果不会超界。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">code</span>
+</span></span><span class="line"><span class="cl"><span class="nf">code</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span><span class="no">ffffh</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ds</span><span class="p">,</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>               <span class="c">; 初始化 ds:bx 指向 ffff:0
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">dx</span><span class="p">,</span> <span class="mi">0</span>               <span class="c">; 初始化累加寄存器 dx， (dx)=0
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">12</span>              <span class="c">; 初始化循环计数寄存器 cx, (cx)=12
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nl">s:</span>  <span class="nf">mov</span> <span class="no">al</span><span class="p">,</span> <span class="p">[</span><span class="no">bx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ah</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="no">dx</span><span class="p">,</span> <span class="no">ax</span>              <span class="c">; 间接向 dx 中加上 ((ds)*16+(bx)) 单元的数值
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">inc</span> <span class="no">bx</span>                  <span class="c">; ds:bx 指向下一个单元
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">loop</span> <span class="no">s</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">4</span><span class="no">c00h</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mi">21</span><span class="no">h</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">code</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">end</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="段前缀" class="headerLink">
+    <a href="#%e6%ae%b5%e5%89%8d%e7%bc%80" class="header-mark"></a>段前缀</h2><p>指令 <code>mov ax, [bx]</code> 中，内存单元的偏移地址由 bx 给出，而段地址默认在 ds 中。我们可以在访问内存单元的指令中显式地给出内存单元的段地址所在的段寄存器。比如：</p>
+<ol>
+<li><code>mov ax,ds:[bx]</code></li>
+<li><code>mov ax,cs:[bx]</code></li>
+<li><code>mov ax,ss:[bx]</code></li>
+<li><code>mov ax,es:[bx]</code></li>
+<li><code>mov ax,ss:[0]</code></li>
+<li><code>mov ax,cs:[0]</code></li>
+<li>&hellip;</li>
+</ol>
+<p>这些出现在访问内存单元的指令中，用于显式地指明内存单元的段地址的 “ds:” “cs:” “ss:” “es:〞，在汇编语言中称为段前缀。</p>
+<h3 id="一段安全的空间" class="headerLink">
+    <a href="#%e4%b8%80%e6%ae%b5%e5%ae%89%e5%85%a8%e7%9a%84%e7%a9%ba%e9%97%b4" class="header-mark"></a>一段安全的空间</h3><p>在 8086 模式中，随意向一段内存空间写入内容是很危险的，因为这段空间中可能存放着重要的系统数据或代码。</p>
+<p>DOS 方式下， 一般情况，0:200~0:2ff 空间中没有系统或其他程序的数据或代码，以后，我们需要直接向一段内存中写入内容时，就使用 0:200~0:2ff 这段空间。</p>
+<h3 id="段前缀的使用" class="headerLink">
+    <a href="#%e6%ae%b5%e5%89%8d%e7%bc%80%e7%9a%84%e4%bd%bf%e7%94%a8" class="header-mark"></a>段前缀的使用</h3><p>编程目标：将内存 ffff:0~ffff:b 单元中的数据复制到 0:200~0:20b 单元中。</p>
+<p>问题：如何指定 0:200~0:20b 的段地址？</p>
+<p>使用 0020:0~0020:b 来描述 0:200~0:20b，它们描述的是同一段内存空间。 因为源始单元 ffff:X 和目标单元 0020:X 的偏移地址 X 是变量，将 0:200~0:20b 用 0020:0~0020:b 描述，就是为了使目标单元的偏移地址和源始单元的偏移地址从同一数值又开始。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">code</span>
+</span></span><span class="line"><span class="cl"><span class="nf">code</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span><span class="no">ffffh</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ds</span><span class="p">,</span> <span class="no">ax</span>                  <span class="c">; (ds)=0ffffh
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">20</span><span class="no">h</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">es</span><span class="p">,</span> <span class="no">ax</span>                  <span class="c">; (es)=0020h
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>                   <span class="c">; (bx)=0，此时 ds:bx 指向 ffff:0，es:bx 指向0020:0
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">12</span>                  <span class="c">; (cx)=12，循环12次
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>
+</span></span><span class="line"><span class="cl"><span class="nl">s:</span>  <span class="nf">mov</span> <span class="no">dl</span><span class="p">,</span> <span class="p">[</span><span class="no">bx</span><span class="p">]</span>                <span class="c">; (dl)=((ds)*16+(bx))，将 ffff:bx 中的数据送入 dl
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">mov</span> <span class="no">es</span><span class="p">:[</span><span class="no">bx</span><span class="p">],</span> <span class="no">dl</span>             <span class="c">; ((es)*16+(bx))=(dl)，将 dl 中的数据送入 0020:bx
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">inc</span> <span class="no">bx</span>                      <span class="c">; (bx)=(bx)+1
+</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">loop</span> <span class="no">s</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">4</span><span class="no">c00h</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">int</span> <span class="mi">21</span><span class="no">h</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">code</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">end</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因源始单元 ffff:X 和目标单元 0020:X 相距大于64KB，在不同的 64KB 段里。因此使用 es 存放目标空间 0020:0~0020:b 的段地址，用 ds 存放源始空间 ffff:O~ffff:b 的段地址。</p>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-08-11</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令" data-description="「汇编语言」[BX]和loop指令"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令" data-description="「汇编语言」[BX]和loop指令"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" data-title="「汇编语言」[BX]和loop指令"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/" class="prev" rel="prev" title="「汇编语言」第一个完整的程序"><i class="fas fa-angle-left fa-fw"></i>「汇编语言」第一个完整的程序</a></div>
+</div>
+<div id="comments"></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>
