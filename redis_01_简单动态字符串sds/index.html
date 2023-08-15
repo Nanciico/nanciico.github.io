@@ -35,7 +35,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/Nanciico.github.io\/redis_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds\/"
-        },"genre": "posts","keywords": "Redis, Redis数据结构","wordcount":  1222 ,
+        },"genre": "posts","keywords": "Redis, Redis数据结构","wordcount":  4141 ,
         "url": "https:\/\/Nanciico.github.io\/redis_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds\/","datePublished": "2023-07-27T00:00:00+00:00","dateModified": "2023-07-27T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -122,7 +122,7 @@
   <ul>
     <li><a href="#sds-定义">SDS 定义</a>
       <ul>
-        <li><a href="#sds-的内存构造">sds 的内存构造</a></li>
+        <li><a href="#sds-的内存构造">SDS 的内存构造</a></li>
         <li><a href="#内存对齐">内存对齐</a></li>
       </ul>
     </li>
@@ -130,6 +130,14 @@
       <ul>
         <li><a href="#创建字符串">创建字符串</a></li>
         <li><a href="#字符串空间预分配">字符串空间预分配</a></li>
+        <li><a href="#字符串空间惰性释放重分配">字符串空间惰性释放(重分配)</a></li>
+      </ul>
+    </li>
+    <li><a href="#字符串编码">字符串编码</a>
+      <ul>
+        <li><a href="#redisobject">redisObject</a></li>
+        <li><a href="#字符串紧凑编码-embstr">字符串紧凑编码 embstr</a></li>
+        <li><a href="#字符串对象的创建">字符串对象的创建</a></li>
       </ul>
     </li>
   </ul>
@@ -138,7 +146,7 @@
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/redis/"><i class="far fa-folder fa-fw"></i>Redis</a>&nbsp;<a href="/categories/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>Redis数据结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/redis%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"><i class="far fa-list-alt fa-fw"></i>Redis源码阅读</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-27">2023-07-27</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-27">2023-07-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1222 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-27">2023-07-27</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-27">2023-07-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4141 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - Redis源码阅读</span>
@@ -159,7 +167,7 @@
   <ul>
     <li><a href="#sds-定义">SDS 定义</a>
       <ul>
-        <li><a href="#sds-的内存构造">sds 的内存构造</a></li>
+        <li><a href="#sds-的内存构造">SDS 的内存构造</a></li>
         <li><a href="#内存对齐">内存对齐</a></li>
       </ul>
     </li>
@@ -167,6 +175,14 @@
       <ul>
         <li><a href="#创建字符串">创建字符串</a></li>
         <li><a href="#字符串空间预分配">字符串空间预分配</a></li>
+        <li><a href="#字符串空间惰性释放重分配">字符串空间惰性释放(重分配)</a></li>
+      </ul>
+    </li>
+    <li><a href="#字符串编码">字符串编码</a>
+      <ul>
+        <li><a href="#redisobject">redisObject</a></li>
+        <li><a href="#字符串紧凑编码-embstr">字符串紧凑编码 embstr</a></li>
+        <li><a href="#字符串对象的创建">字符串对象的创建</a></li>
       </ul>
     </li>
   </ul>
@@ -270,7 +286,7 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="sds-的内存构造" class="headerLink">
-    <a href="#sds-%e7%9a%84%e5%86%85%e5%ad%98%e6%9e%84%e9%80%a0" class="header-mark"></a>sds 的内存构造</h3><p>下图使用一个 <code>sdshdr16</code> 类型的 Header 演示 sds 的内存构造。</p>
+    <a href="#sds-%e7%9a%84%e5%86%85%e5%ad%98%e6%9e%84%e9%80%a0" class="header-mark"></a>SDS 的内存构造</h3><p>下图使用一个 <code>sdshdr16</code> 类型的 Header 演示 sds 的内存构造。</p>
 <figure><a class="lightgallery" href="/images/redis_code/01_01.jpg" title="SDS 内存构造" data-thumbnail="/images/redis_code/01_01.jpg" data-sub-html="<h2>SDS 内存构造</h2><p>SDS 内存构造</p>">
         <img
             
@@ -296,7 +312,8 @@
     </figure>
 <h2 id="sds-api" class="headerLink">
     <a href="#sds-api" class="header-mark"></a>SDS API</h2><h3 id="创建字符串" class="headerLink">
-    <a href="#%e5%88%9b%e5%bb%ba%e5%ad%97%e7%ac%a6%e4%b8%b2" class="header-mark"></a>创建字符串</h3><div class="highlight"><div class="chroma">
+    <a href="#%e5%88%9b%e5%bb%ba%e5%ad%97%e7%ac%a6%e4%b8%b2" class="header-mark"></a>创建字符串</h3><p><code>sdsnew</code> 函数创建一个字符串，返回指向 sds 的指针。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -479,7 +496,688 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="字符串空间预分配" class="headerLink">
-    <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%a9%ba%e9%97%b4%e9%a2%84%e5%88%86%e9%85%8d" class="header-mark"></a>字符串空间预分配</h3></div>
+    <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%a9%ba%e9%97%b4%e9%a2%84%e5%88%86%e9%85%8d" class="header-mark"></a>字符串空间预分配</h3><p>在 sds 可能会有空间内存增长时，会调用 <code>sdsMakeRoomFor</code> 方法进行 sds 空间检查和扩容。</p>
+<p>为了尽可能避免内存的重新申请/分配，redis 的 buf 数组如果有变动，通常会预分配额外的空间保证下次字符串变化时，如果空间足够，就不需要再次进行内存分配。</p>
+<p>常量 <code>SDS_MAX_PREALLOC</code> 值为 1024 * 1024。当新申请的 sds 大小小于 1MB 时，会多分配一倍的内存；当新申请的 sds 大小大于等于 1MB 时，函数多分配 1MB 内存。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Enlarge the free space at the end of the sds string so that the caller
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * is sure that after calling this function can overwrite up to addlen
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * bytes after the end of the string, plus one more byte for nul term.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * If there&#39;s already sufficient free space, this function returns without any
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * action, if there isn&#39;t sufficient free space, it&#39;ll allocate what&#39;s missing,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * and possibly more:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * When greedy is 1, enlarge more than needed, to avoid need for future reallocs
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * on incremental growth.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * When greedy is 0, enlarge just enough so that there&#39;s free space for &#39;addlen&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Note: this does not change the *length* of the sds string as returned
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * by sdslen(), but only the free buffer space we have. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">sds</span> <span class="nf">_sdsMakeRoomFor</span><span class="p">(</span><span class="n">sds</span> <span class="n">s</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">addlen</span><span class="p">,</span> <span class="kt">int</span> <span class="n">greedy</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 旧 sdshdr 和新 sdshdr 指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="n">sh</span><span class="p">,</span> <span class="o">*</span><span class="n">newsh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 旧 sds 可用内存 (sh-&gt;alloc - sh-&gt;len)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">size_t</span> <span class="n">avail</span> <span class="o">=</span> <span class="n">sdsavail</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 旧 sds 长度，新 sds 长度，请求的长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="n">newlen</span><span class="p">,</span> <span class="n">reqlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">type</span><span class="p">,</span> <span class="n">oldtype</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">SDS_TYPE_MASK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">hdrlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">usable</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Return ASAP if there is enough space left. */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果可用空间 avail 足够，直接返回 (避免内存的重新分配)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">avail</span> <span class="o">&gt;=</span> <span class="n">addlen</span><span class="p">)</span> <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">len</span> <span class="o">=</span> <span class="n">sdslen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sh</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">s</span><span class="o">-</span><span class="n">sdsHdrSize</span><span class="p">(</span><span class="n">oldtype</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reqlen</span> <span class="o">=</span> <span class="n">newlen</span> <span class="o">=</span> <span class="p">(</span><span class="n">len</span><span class="o">+</span><span class="n">addlen</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">newlen</span> <span class="o">&gt;</span> <span class="n">len</span><span class="p">);</span>   <span class="cm">/* Catch size_t overflow */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">greedy</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果小于 1MB，就扩容两倍 newlen
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">newlen</span> <span class="o">&lt;</span> <span class="n">SDS_MAX_PREALLOC</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">newlen</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 否则，只扩展 1MB
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="n">newlen</span> <span class="o">+=</span> <span class="n">SDS_MAX_PREALLOC</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 根据长度计算 sdshdr 类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">type</span> <span class="o">=</span> <span class="n">sdsReqType</span><span class="p">(</span><span class="n">newlen</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Don&#39;t use type 5: the user is appending to the string and type 5 is
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * not able to remember empty space, so sdsMakeRoomFor() must be called
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * at every appending operation. */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDS_TYPE_5</span><span class="p">)</span> <span class="n">type</span> <span class="o">=</span> <span class="n">SDS_TYPE_8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 新的 sdshdr 大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">hdrlen</span> <span class="o">=</span> <span class="n">sdsHdrSize</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">hdrlen</span> <span class="o">+</span> <span class="n">newlen</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">reqlen</span><span class="p">);</span>  <span class="cm">/* Catch size_t overflow */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">oldtype</span><span class="o">==</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 如果新旧 sdshdr 类型一致, 对 sh 的空间重新分配, 不会改变原来里面的数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// https://man.cx/realloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">newsh</span> <span class="o">=</span> <span class="n">s_realloc_usable</span><span class="p">(</span><span class="n">sh</span><span class="p">,</span> <span class="n">hdrlen</span><span class="o">+</span><span class="n">newlen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">usable</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">newsh</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">newsh</span><span class="o">+</span><span class="n">hdrlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Since the header size changes, need to move the string forward,
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * and can&#39;t use realloc */</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// sdshdr 类型改变，不能使用 realloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">newsh</span> <span class="o">=</span> <span class="n">s_malloc_usable</span><span class="p">(</span><span class="n">hdrlen</span><span class="o">+</span><span class="n">newlen</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">usable</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">newsh</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 将旧 sds 内容拷贝到新 sds 中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">memcpy</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">newsh</span><span class="o">+</span><span class="n">hdrlen</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 释放旧 sdshdr 空间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">s_free</span><span class="p">(</span><span class="n">sh</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 旧 sds 指针指向新 sds
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">newsh</span><span class="o">+</span><span class="n">hdrlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 赋值 flags
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 设置 sh-&gt;len
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">sdssetlen</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置 sh-&gt;alloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">usable</span> <span class="o">=</span> <span class="n">usable</span><span class="o">-</span><span class="n">hdrlen</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">usable</span> <span class="o">&gt;</span> <span class="n">sdsTypeMaxSize</span><span class="p">(</span><span class="n">type</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">usable</span> <span class="o">=</span> <span class="n">sdsTypeMaxSize</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sdssetalloc</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">usable</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Enlarge the free space at the end of the sds string more than needed,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * This is useful to avoid repeated re-allocations when repeatedly appending to the sds. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">sds</span> <span class="nf">sdsMakeRoomFor</span><span class="p">(</span><span class="n">sds</span> <span class="n">s</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">addlen</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">_sdsMakeRoomFor</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">addlen</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Unlike sdsMakeRoomFor(), this one just grows to the necessary size. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">sds</span> <span class="nf">sdsMakeRoomForNonGreedy</span><span class="p">(</span><span class="n">sds</span> <span class="n">s</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">addlen</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">_sdsMakeRoomFor</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">addlen</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="字符串空间惰性释放重分配" class="headerLink">
+    <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%a9%ba%e9%97%b4%e6%83%b0%e6%80%a7%e9%87%8a%e6%94%be%e9%87%8d%e5%88%86%e9%85%8d" class="header-mark"></a>字符串空间惰性释放(重分配)</h3><p>在 sds 长度减少，Redis 不会立即回收减少部分的内存空间，在下次需要增加 sds 长度时，可以一定程度上避免内存的分配。</p>
+<p>比如在 <code>sdstrim</code> 中，不会释放内存空间：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Remove the part of the string from left and from right composed just of
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * contiguous characters found in &#39;cset&#39;, that is a null terminated C string.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * After the call, the modified sds string is no longer valid and all the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * references must be substituted with the new pointer returned by the call.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Example:
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * s = sdsnew(&#34;AA...AA.a.aa.aHelloWorld     :::&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * s = sdstrim(s,&#34;Aa. :&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * printf(&#34;%s\n&#34;, s);
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Output will be just &#34;HelloWorld&#34;.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="n">sds</span> <span class="nf">sdstrim</span><span class="p">(</span><span class="n">sds</span> <span class="n">s</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cset</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">end</span><span class="p">,</span> <span class="o">*</span><span class="n">sp</span><span class="p">,</span> <span class="o">*</span><span class="n">ep</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">sp</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ep</span> <span class="o">=</span> <span class="n">end</span> <span class="o">=</span> <span class="n">s</span><span class="o">+</span><span class="n">sdslen</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="n">sp</span> <span class="o">&lt;=</span> <span class="n">end</span> <span class="o">&amp;&amp;</span> <span class="n">strchr</span><span class="p">(</span><span class="n">cset</span><span class="p">,</span> <span class="o">*</span><span class="n">sp</span><span class="p">))</span> <span class="n">sp</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="n">ep</span> <span class="o">&gt;</span> <span class="n">sp</span> <span class="o">&amp;&amp;</span> <span class="n">strchr</span><span class="p">(</span><span class="n">cset</span><span class="p">,</span> <span class="o">*</span><span class="n">ep</span><span class="p">))</span> <span class="n">ep</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">len</span> <span class="o">=</span> <span class="p">(</span><span class="n">ep</span><span class="o">-</span><span class="n">sp</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// sp 长度为 len 的内存拷贝到 s
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="n">sp</span><span class="p">)</span> <span class="n">memmove</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 维护末尾的 &#39;\0&#39;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">s</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 维护 sh-&gt;len， sh-&gt;alloc 没有更改
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sdssetlen</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>调用 <code>sdsRemoveFreeSpace</code> 可以主动回收空间。例如客户端输入缓冲区大于 4KB 并且客户端空闲时间超过 2s，会调用 <code>sdsRemoveFreeSpace</code> 对 <code>c-&gt;querybuf</code> 进行进行多余空间的释放。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* The client query buffer is an sds.c string that can end with a lot of
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * free space not used, this function reclaims space if needed.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The function always returns 0 as it never terminates the client. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">clientsCronResizeQueryBuffer</span><span class="p">(</span><span class="n">client</span> <span class="o">*</span><span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Only resize the query buffer if the buffer is actually wasting at least a
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * few kbytes */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">sdsavail</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">querybuf</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* There are two conditions to resize the query buffer: */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">idletime</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="cm">/* 1) Query is idle for a long time. */</span>
+</span></span><span class="line"><span class="cl">            <span class="n">c</span><span class="o">-&gt;</span><span class="n">querybuf</span> <span class="o">=</span> <span class="n">sdsRemoveFreeSpace</span><span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">querybuf</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>sdsRemoveFreeSpace</code> 实际上是调用的 <code>sdsResize</code> 方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Reallocate the sds string so that it has no free space at the end. The
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * contained string remains not altered, but next concatenation operations
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * will require a reallocation.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * After the call, the passed sds string is no longer valid and all the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * references must be substituted with the new pointer returned by the call. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">sds</span> <span class="nf">sdsRemoveFreeSpace</span><span class="p">(</span><span class="n">sds</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">would_regrow</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">sdsResize</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">sdslen</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">would_regrow</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Resize the allocation, this can make the allocation bigger or smaller,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if the size is smaller than currently used len, the data will be truncated.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The when the would_regrow argument is set to 1, it prevents the use of
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * SDS_TYPE_5, which is desired when the sds is likely to be changed again.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The sdsAlloc size will be set to the requested size regardless of the actual
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * allocation size, this is done in order to avoid repeated calls to this
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * function when the caller detects that it has excess space. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">sds</span> <span class="nf">sdsResize</span><span class="p">(</span><span class="n">sds</span> <span class="n">s</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">would_regrow</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 旧 sdshdr 和 新 sdshdr 指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="n">sh</span><span class="p">,</span> <span class="o">*</span><span class="n">newsh</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 新 sdshdr 类型 和 旧 sdshdr 类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">char</span> <span class="n">type</span><span class="p">,</span> <span class="n">oldtype</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&amp;</span> <span class="n">SDS_TYPE_MASK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 新 sdshdr 长度 和 新 sdshdr 长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">hdrlen</span><span class="p">,</span> <span class="n">oldhdrlen</span> <span class="o">=</span> <span class="n">sdsHdrSize</span><span class="p">(</span><span class="n">oldtype</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">len</span> <span class="o">=</span> <span class="n">sdslen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sh</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">s</span><span class="o">-</span><span class="n">oldhdrlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Return ASAP if the size is already good. */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 大小无变化，不需要 resize
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">sdsalloc</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="n">size</span><span class="p">)</span> <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Truncate len if needed. */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">)</span> <span class="n">len</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Check what would be the minimum SDS header that is just good enough to
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * fit this string. */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">type</span> <span class="o">=</span> <span class="n">sdsReqType</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">would_regrow</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Don&#39;t use type 5, it is not good for strings that are expected to grow back. */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">type</span> <span class="o">==</span> <span class="n">SDS_TYPE_5</span><span class="p">)</span> <span class="n">type</span> <span class="o">=</span> <span class="n">SDS_TYPE_8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">hdrlen</span> <span class="o">=</span> <span class="n">sdsHdrSize</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* If the type is the same, or can hold the size in it with low overhead
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * (larger than SDS_TYPE_8), we just realloc(), letting the allocator
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * to do the copy only if really needed. Otherwise if the change is
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * huge, we manually reallocate the string to use the different header
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * type. */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 如果 新旧 sdshdr 类型一样，或者旧类型能够容纳新类型，使用 realloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">use_realloc</span> <span class="o">=</span> <span class="p">(</span><span class="n">oldtype</span><span class="o">==</span><span class="n">type</span> <span class="o">||</span> <span class="p">(</span><span class="n">type</span> <span class="o">&lt;</span> <span class="n">oldtype</span> <span class="o">&amp;&amp;</span> <span class="n">type</span> <span class="o">&gt;</span> <span class="n">SDS_TYPE_8</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">newlen</span> <span class="o">=</span> <span class="n">use_realloc</span> <span class="o">?</span> <span class="n">oldhdrlen</span><span class="o">+</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span> <span class="o">:</span> <span class="n">hdrlen</span><span class="o">+</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// jemalloc 优化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">alloc_already_optimal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#if defined(USE_JEMALLOC)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cm">/* je_nallocx returns the expected allocation size for the newlen.
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * We aim to avoid calling realloc() when using Jemalloc if there is no
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * change in the allocation size, as it incurs a cost even if the
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * allocation size stays the same. */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">alloc_already_optimal</span> <span class="o">=</span> <span class="p">(</span><span class="n">je_nallocx</span><span class="p">(</span><span class="n">newlen</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="n">zmalloc_size</span><span class="p">(</span><span class="n">sh</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">use_realloc</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">alloc_already_optimal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 使用 realloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">newsh</span> <span class="o">=</span> <span class="n">s_realloc</span><span class="p">(</span><span class="n">sh</span><span class="p">,</span> <span class="n">newlen</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">newsh</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">newsh</span><span class="o">+</span><span class="n">oldhdrlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">alloc_already_optimal</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 使用 malloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">newsh</span> <span class="o">=</span> <span class="n">s_malloc</span><span class="p">(</span><span class="n">newlen</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">newsh</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 复制
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">memcpy</span><span class="p">((</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">newsh</span><span class="o">+</span><span class="n">hdrlen</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 释放原 sds
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">s_free</span><span class="p">(</span><span class="n">sh</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">newsh</span><span class="o">+</span><span class="n">hdrlen</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sdssetlen</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sdssetalloc</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="字符串编码" class="headerLink">
+    <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%bc%96%e7%a0%81" class="header-mark"></a>字符串编码</h2><p>Redis 字符串会使用不同的编码格式存储不同类型的数据。若字符串是数字，则使用 int 编码；若设置的字符串大小小于等于 44 个字节，则使用紧凑的编码类型 embstr；若设置的字符串大小大于 44 个字节，则使用 raw 类型进行编码。</p>
+<h3 id="redisobject" class="headerLink">
+    <a href="#redisobject" class="header-mark"></a>redisObject</h3><p>在学习 Redis 编码之前，需要先了解 redisObject 结构体。在 Redis 中，所有的 key/value 都是一个 <code>redisObject</code> 结构体。该结构体的定义如下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#define LRU_BITS 24
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">redisObject</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4 bits 表示类型， string / list / set / zset / hash / module / stream
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="nl">type</span><span class="p">:</span><span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4 bits 表示编码，如 string 可以有 raw / embstr / int 等编码方式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="nl">encoding</span><span class="p">:</span><span class="mi">4</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 24 bits
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="nl">lru</span><span class="p">:</span><span class="n">LRU_BITS</span><span class="p">;</span> <span class="cm">/* LRU time (relative to global lru_clock) or
+</span></span></span><span class="line"><span class="cl"><span class="cm">                            * LFU data (least significant 8 bits frequency
+</span></span></span><span class="line"><span class="cl"><span class="cm">                            * and most significant 16 bits access time). */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4 * 8 = 32 bits 对象的引用计数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">refcount</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 8 bytes (64-bit system)，指向实际对象地址指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以算出 redisObject 的大小为 16 字节。4 bits 的 encoding 域保存对象编码类型。</p>
+<h3 id="字符串紧凑编码-embstr" class="headerLink">
+    <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%b4%a7%e5%87%91%e7%bc%96%e7%a0%81-embstr" class="header-mark"></a>字符串紧凑编码 embstr</h3><p>embstr 类型的介绍：<a href="https://github.com/redis/redis/commit/894eba07c8484c0f34b09d54a84e69314c37c427" title="Introduction of a new string encoding: EMBSTR" target="_blank" rel="noopener noreferrer">Introduction of a new string encoding: EMBSTR</a></p>
+<p>在字符串大小小于等于 44 字节时，使用 embstr 对字符串进行编码。以 44 字节作为分界的原因需要对比一下 embstr 和 raw 在内存上的存储方式。</p>
+<figure><a class="lightgallery" href="/images/redis_code/01_03.jpg" title="embstr 和 raw 在内存上的存储方式" data-thumbnail="/images/redis_code/01_03.jpg" data-sub-html="<h2>embstr 和 raw 在内存上的存储方式</h2><p>embstr 和 raw 在内存上的存储方式</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/redis_code/01_03.jpg"
+            srcset="/images/redis_code/01_03.jpg, /images/redis_code/01_03.jpg 1.5x, /images/redis_code/01_03.jpg 2x"
+            sizes="auto"
+            alt="embstr 和 raw 在内存上的存储方式">
+    </a><figcaption class="image-caption">embstr 和 raw 在内存上的存储方式</figcaption>
+    </figure>
+<p>在 embstr 编码中， robj 和 sds 在内存中是连续的，申请内存时只需要调用一次 malloc 方法，释放内存也只需调用一次 free 方法；raw 格式编码在内存地址中不连续，申请/释放内存时会进行两次 malloc/free 调用。</p>
+<h3 id="字符串对象的创建" class="headerLink">
+    <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%af%b9%e8%b1%a1%e7%9a%84%e5%88%9b%e5%bb%ba" class="header-mark"></a>字符串对象的创建</h3><p>创建字符串对象的代码如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Create a string object with EMBSTR encoding if it is smaller than
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * OBJ_ENCODING_EMBSTR_SIZE_LIMIT, otherwise the RAW encoding is
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * used.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The current limit of 44 is chosen so that the biggest string object
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * we allocate as EMBSTR will still fit into the 64 byte arena of jemalloc. */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define OBJ_ENCODING_EMBSTR_SIZE_LIMIT 44
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">robj</span> <span class="o">*</span><span class="nf">createStringObject</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 长度小于等于 44 字节，使用 embstr 编码，否则使用 raw 编码
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&lt;=</span> <span class="n">OBJ_ENCODING_EMBSTR_SIZE_LIMIT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">createEmbeddedStringObject</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span><span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">createRawStringObject</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span><span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Create a string object with encoding OBJ_ENCODING_EMBSTR, that is
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * an object where the sds string is actually an unmodifiable string
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * allocated in the same chunk as the object itself. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">robj</span> <span class="o">*</span><span class="nf">createEmbeddedStringObject</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// malloc 一次性申请 robj + sdshdr8 + len + 1 字节的内存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">robj</span> <span class="o">*</span><span class="n">o</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">robj</span><span class="p">)</span><span class="o">+</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">sdshdr8</span><span class="p">)</span><span class="o">+</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sdshdr8</span> <span class="o">*</span><span class="n">sh</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="n">o</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置 robj
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">o</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">=</span> <span class="n">OBJ_STRING</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">OBJ_ENCODING_EMBSTR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">sh</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">refcount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">lru</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">sh</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// alloc 设置为 len
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sh</span><span class="o">-&gt;</span><span class="n">alloc</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sh</span><span class="o">-&gt;</span><span class="n">flags</span> <span class="o">=</span> <span class="n">SDS_TYPE_8</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">==</span> <span class="n">SDS_NOINIT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sh</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">memcpy</span><span class="p">(</span><span class="n">sh</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">,</span><span class="n">ptr</span><span class="p">,</span><span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sh</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">memset</span><span class="p">(</span><span class="n">sh</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">len</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">o</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Create a string object with encoding OBJ_ENCODING_RAW, that is a plain
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * string object where o-&gt;ptr points to a proper sds string. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">robj</span> <span class="o">*</span><span class="nf">createRawStringObject</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// sdsnewlen 中会调用一次 malloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="n">createObject</span><span class="p">(</span><span class="n">OBJ_STRING</span><span class="p">,</span> <span class="n">sdsnewlen</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span><span class="n">len</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">robj</span> <span class="o">*</span><span class="nf">createObject</span><span class="p">(</span><span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 第二次调用 malloc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">robj</span> <span class="o">*</span><span class="n">o</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">o</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">=</span> <span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">OBJ_ENCODING_RAW</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">refcount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">o</span><span class="o">-&gt;</span><span class="n">lru</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">o</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">
