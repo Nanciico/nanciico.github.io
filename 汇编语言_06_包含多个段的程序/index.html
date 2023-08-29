@@ -7,41 +7,41 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>「汇编语言」阅读开篇 - Nanciico&#39;s Blog</title><meta name="Description" content="「汇编语言」阅读开篇"><meta property="og:title" content="「汇编语言」阅读开篇" />
-<meta property="og:description" content="「汇编语言」阅读开篇" />
+    <title>「汇编语言」包含多个段的程序 - Nanciico&#39;s Blog</title><meta name="Description" content="「汇编语言」包含多个段的程序"><meta property="og:title" content="「汇编语言」包含多个段的程序" />
+<meta property="og:description" content="「汇编语言」包含多个段的程序" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-07-09T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-07-09T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+<meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-08-23T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="「汇编语言」阅读开篇"/>
-<meta name="twitter:description" content="「汇编语言」阅读开篇"/>
+<meta name="twitter:title" content="「汇编语言」包含多个段的程序"/>
+<meta name="twitter:description" content="「汇编语言」包含多个段的程序"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
 <meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" /><link rel="next" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "「汇编语言」阅读开篇",
+        "headline": "「汇编语言」包含多个段的程序",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87\/"
-        },"genre": "posts","keywords": "「汇编语言」","wordcount":  120 ,
-        "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87\/","datePublished": "2023-07-09T00:00:00+00:00","dateModified": "2023-07-09T00:00:00+00:00","publisher": {
+            "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  0 ,
+        "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F\/","datePublished": "2023-08-23T00:00:00+00:00","dateModified": "2023-08-23T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico"
-            },"description": "「汇编语言」阅读开篇"
+            },"description": "「汇编语言」包含多个段的程序"
     }
     </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
 </head>
@@ -118,21 +118,12 @@
 <main class="main">
             <div class="container"><div class="toc" id="toc-auto">
         <h2 class="toc-title">目录</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#前言">前言</a>
-      <ul>
-        <li><a href="#学习汇编的目的">学习汇编的目的</a></li>
-        <li><a href="#学习汇编语言的重心">学习汇编语言的重心</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「汇编语言」阅读开篇</h1><div class="post-meta">
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents"></nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「汇编语言」包含多个段的程序</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><i class="far fa-folder fa-fw"></i>「汇编语言」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-09">2023-07-09</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-09">2023-07-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 120 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-23">2023-08-23</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-23">2023-08-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 0 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 0 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 「汇编语言」阅读笔记</span>
@@ -140,13 +131,13 @@
                                 </div>
                                 <div class="details-content series-content">
                                     <nav>
-                                        <ul><li><span class="active">「汇编语言」阅读开篇</span></li>
+                                        <ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/">「汇编语言」阅读开篇</a></li>
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">「汇编语言」基础知识</a></li>
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/">「汇编语言」寄存器</a></li>
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">「汇编语言」寄存器(内存访问)</a></li>
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/">「汇编语言」第一个完整的程序</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">「汇编语言」[BX]和loop指令</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/">「汇编语言」包含多个段的程序</a></li></ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">「汇编语言」[BX]和loop指令</a></li><li><span class="active">「汇编语言」包含多个段的程序</span></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -154,39 +145,21 @@
                     <span>目录</span>
                     <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#前言">前言</a>
-      <ul>
-        <li><a href="#学习汇编的目的">学习汇编的目的</a></li>
-        <li><a href="#学习汇编语言的重心">学习汇编语言的重心</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-            </div><div class="content" id="content"><h2 id="前言" class="headerLink">
-    <a href="#%e5%89%8d%e8%a8%80" class="header-mark"></a>前言</h2><p>本系列文章记录学习《汇编语言》——王爽 的知识点，为接下来系统学习操作系统打下基础。</p>
-<h3 id="学习汇编的目的" class="headerLink">
-    <a href="#%e5%ad%a6%e4%b9%a0%e6%b1%87%e7%bc%96%e7%9a%84%e7%9b%ae%e7%9a%84" class="header-mark"></a>学习汇编的目的</h3><ol>
-<li>充分获得底层编程的体验；</li>
-<li>深刻理解机器运行程序的机理。</li>
-</ol>
-<h3 id="学习汇编语言的重心" class="headerLink">
-    <a href="#%e5%ad%a6%e4%b9%a0%e6%b1%87%e7%bc%96%e8%af%ad%e8%a8%80%e7%9a%84%e9%87%8d%e5%bf%83" class="header-mark"></a>学习汇编语言的重心</h3><p>通过学习关键指令来<strong>深入理解机器工作的基本原理</strong>，<strong>培养底层编程意识和思想</strong>。</p>
-</div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"></div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2023-07-09</span>
+                <span>更新于 2023-08-23</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
                     </span></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇" data-description="「汇编语言」阅读开篇"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇" data-description="「汇编语言」阅读开篇"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/" data-title="「汇编语言」阅读开篇"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序" data-description="「汇编语言」包含多个段的程序"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序" data-description="「汇编语言」包含多个段的程序"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="「汇编语言」包含多个段的程序"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
@@ -197,8 +170,7 @@
         </section>
     </div>
 
-    <div class="post-nav">
-            <a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="next" rel="next" title="「汇编语言」基础知识">「汇编语言」基础知识<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" class="prev" rel="prev" title="「汇编语言」[BX]和loop指令"><i class="fas fa-angle-left fa-fw"></i>「汇编语言」[BX]和loop指令</a></div>
 </div>
 <div id="comments"></div></article></div>
         </main><footer class="footer">

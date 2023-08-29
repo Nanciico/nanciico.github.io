@@ -35,7 +35,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/Nanciico.github.io\/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_10_%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8\/"
-        },"genre": "posts","keywords": "「算法第四版」, 排序算法","wordcount":  284 ,
+        },"genre": "posts","keywords": "「算法第四版」, 排序算法","wordcount":  689 ,
         "url": "https:\/\/Nanciico.github.io\/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_10_%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8\/","datePublished": "2023-08-09T00:00:00+00:00","dateModified": "2023-08-09T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -120,14 +120,19 @@
         <h2 class="toc-title">目录</h2>
         <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#应该使用哪种排序算法">应该使用哪种排序算法</a></li>
+    <li><a href="#应该使用哪种排序算法">应该使用哪种排序算法</a>
+      <ul>
+        <li><a href="#java-系统库的排序算法">Java 系统库的排序算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#问题的归约">问题的归约</a></li>
   </ul>
 </nav></div>
     </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「算法第四版」排序算法应用</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88/"><i class="far fa-folder fa-fw"></i>「算法第四版」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「算法第四版」阅读笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-09">2023-08-09</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-09">2023-08-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 284 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-09">2023-08-09</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-09">2023-08-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 689 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 「算法第四版」阅读笔记</span>
@@ -155,7 +160,12 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#应该使用哪种排序算法">应该使用哪种排序算法</a></li>
+    <li><a href="#应该使用哪种排序算法">应该使用哪种排序算法</a>
+      <ul>
+        <li><a href="#java-系统库的排序算法">Java 系统库的排序算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#问题的归约">问题的归约</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>排序有用的一个主要原因是，在一个有序的数组中查找一个元素要比在一个无序的数组中查找简单得多。</p>
@@ -225,9 +235,24 @@
 <p>插入排序的效率取决于输入元素的排列情况。</p>
 <p>快速排序的运行效率由概率提供保证。三向快速排序的运行效率由概率保证，同时也取决于输入元素的分布情况。</p>
 <p><strong>快速排序是最快的通用排序算法</strong>。在大多数实际情况中，快速排序是最佳选择。</p>
-<p>// 引用排序  原始类型数据排</p>
-<p>// 排序算法的稳定性</p>
-<p>// TODO 归并排序 逆序对</p>
+<h3 id="java-系统库的排序算法" class="headerLink">
+    <a href="#java-%e7%b3%bb%e7%bb%9f%e5%ba%93%e7%9a%84%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95" class="header-mark"></a>Java 系统库的排序算法</h3><p>Java 系统库的排序方法 <code>java.util.Arrays.sort()</code> 根据不同的参数类型，代表了一系列的排序算法：</p>
+<ul>
+<li>每种原始数据类型都有一个不同的排序方法；</li>
+<li>一个适用于所有实现了 Comparable 接口的数据类型的排序方法；</li>
+<li>一个适用于实现了比较器 Comparator 的数据类型的排序方法。</li>
+</ul>
+<p>对于原始数据类型，系统库使用三向切分的快速排序，牺牲稳定性换取速度和空间；对引用类型使用归并排序，牺牲速度和空间换取稳定性。</p>
+<h2 id="问题的归约" class="headerLink">
+    <a href="#%e9%97%ae%e9%a2%98%e7%9a%84%e5%bd%92%e7%ba%a6" class="header-mark"></a>问题的归约</h2><p>归约指的是为解决某个问题而发明的算法正好可以用来解决另一种问题。每次用解决问题 B 的方法来解决问题 A 时，就是在将 A 归约为 B。</p>
+<p>很多问题的第一想法往往是平方级别的暴力破解。但很多情况下如果先将数据排序，那么解决剩下的问题之需要线性级别的时间了。</p>
+<p>以下问题可以归约为排序：</p>
+<ul>
+<li>找出重复元素，可以先排序后再遍历数组；</li>
+<li>排列、排名问题，比如计算两个排列之间的 Kendall tau 距离；</li>
+<li>归约为优先队列，找到输入流中 M 个最大元素，或者将 M 个有序输入流合并为一个有序输入流；</li>
+<li>查找一组元素的中位数，可以归约为找到一组数的第 k 小的元素，并使用快速排序的 partition 解决。</li>
+</ul>
 </div>
 
         <div class="post-footer" id="post-footer">
