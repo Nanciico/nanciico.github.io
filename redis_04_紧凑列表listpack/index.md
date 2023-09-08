@@ -1,6 +1,8 @@
 # Redis 紧凑列表(listpack)
 
 
+---
+
 ## 紧凑列表的结构
 
 {{< image src="/images/redis_code/04_01.jpg" caption="紧凑列表的结构" title="紧凑列表的结构" >}}
@@ -71,6 +73,8 @@ typedef struct {
     long long lval;
 } listpackEntry;
 ```
+
+---
 
 ## 紧凑列表 API
 
@@ -382,4 +386,6 @@ unsigned char *lpInsert(unsigned char *lp, unsigned char *elestr, unsigned char 
     return lp;
 }
 ```
+
+---
 

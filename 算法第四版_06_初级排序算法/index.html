@@ -200,7 +200,8 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="排序算法类的模版" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="排序算法类的模版" class="headerLink">
     <a href="#%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e7%b1%bb%e7%9a%84%e6%a8%a1%e7%89%88" class="header-mark"></a>排序算法类的模版</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -261,7 +262,8 @@
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="选择排序" class="headerLink">
+</div><hr>
+<h2 id="选择排序" class="headerLink">
     <a href="#%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f" class="header-mark"></a>选择排序</h2><h3 id="选择排序算法描述" class="headerLink">
     <a href="#%e9%80%89%e6%8b%a9%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e6%8f%8f%e8%bf%b0" class="header-mark"></a>选择排序算法描述</h3><p>首先，找到数组中最小的元素，其次，将它和数组的第一个元素交换位置。再次，在剩下的元素中找到最小的元素，将它与数组的第二个元素交换位置。直到将整个数组排序。</p>
 <h3 id="选择排序的实现" class="headerLink">
@@ -308,6 +310,7 @@
 <li>运行时间和输入无关。</li>
 <li>数据移动是最少的。数据移动与数组长度线性相关。</li>
 </ol>
+<hr>
 <h2 id="插入排序" class="headerLink">
     <a href="#%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f" class="header-mark"></a>插入排序</h2><h3 id="插入排序算法描述" class="headerLink">
     <a href="#%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e6%8f%8f%e8%bf%b0" class="header-mark"></a>插入排序算法描述</h3><p>初始状态，把第一个元素看做只有一个元素的有序序列，从第二个元素开始及其之后的元素是未排序序列。对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。</p>
@@ -441,6 +444,7 @@
     <a href="#%e6%8f%92%e5%85%a5%e6%8e%92%e5%ba%8f%e7%9a%84%e7%89%b9%e7%82%b9" class="header-mark"></a>插入排序的特点</h3><p>对于随机排列的长度为 N 且逐渐不重复的数组，平均情况下插入排序需要 ~(N^2)/4 次比较与交换。最坏情况下需要 ~(N^2)/2 次比较与交换。最好情况下需要 N - 1 次比较和 0 次交换。</p>
 <p>插入排序所需时间取决于元素的初始顺序。因此插入排序适合实际应用中部分有序的非随机数组。</p>
 <p>插入排序的比较和交换的次数相等。</p>
+<hr>
 <h2 id="希尔排序" class="headerLink">
     <a href="#%e5%b8%8c%e5%b0%94%e6%8e%92%e5%ba%8f" class="header-mark"></a>希尔排序</h2><h3 id="希尔排序算法描述" class="headerLink">
     <a href="#%e5%b8%8c%e5%b0%94%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e6%8f%8f%e8%bf%b0" class="header-mark"></a>希尔排序算法描述</h3><p>希尔排序是更高效的插入排序。</p>
@@ -639,6 +643,7 @@
     <a href="#%e5%b8%8c%e5%b0%94%e6%8e%92%e5%ba%8f%e7%9a%84%e7%89%b9%e7%82%b9" class="header-mark"></a>希尔排序的特点</h3><p>希尔排序比插入排序和选择排序要快得多，并且数组越大，优势越大。</p>
 <p>对于中等大小的数组它的运行时间是可以接受的。它的代码量很小，且不需要使用额外的内存空间。</p>
 <p>解决一个排序问题时，可以先用希尔排序，然后再考虑是否值得将它替换为更加复杂的排序算法。</p>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

@@ -169,6 +169,7 @@
 <p>“This command is very similar to DEL: it removes the specified keys. Just like DEL a key is ignored if it does not exist. However the command performs the actual memory reclaiming in a different thread, so it is not blocking, while DEL is. This is where the command name comes from: the command just unlinks the keys from the keyspace. The actual removal will happen later asynchronously.”</p>
 </blockquote>
 <p>可知 unlink 与 del 用法相同，只不过内存回收在另一个不同线程中，内存回收操作在 unlink 方法调用结束之后，因此是非阻塞方法。</p>
+<hr>
 <h2 id="源码分析" class="headerLink">
     <a href="#%e6%ba%90%e7%a0%81%e5%88%86%e6%9e%90" class="header-mark"></a>源码分析</h2><h3 id="异步删除流程" class="headerLink">
     <a href="#%e5%bc%82%e6%ad%a5%e5%88%a0%e9%99%a4%e6%b5%81%e7%a8%8b" class="header-mark"></a>异步删除流程</h3><p>同步删除与异步删除的方法入口分别为 delCommand 方法与 unlinkCommand 方法。</p>
@@ -893,8 +894,10 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>结论：Redis 定时删除在配置后可采用异步删除策略。</p>
+<hr>
 <h2 id="结论" class="headerLink">
     <a href="#%e7%bb%93%e8%ae%ba" class="header-mark"></a>结论</h2><p>异步删除策略能够在删除大 Key 时避免主线程阻塞，惰性删除与定时删除在配置后均可采用异步删除策略，因此异步删除能够解决大 Key 过期引起的主线程阻塞问题。</p>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

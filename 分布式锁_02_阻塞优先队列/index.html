@@ -153,7 +153,8 @@
     <li><a href="#阻塞优先队列的实现">阻塞优先队列的实现</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="使用阻塞优先队列的原因" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="使用阻塞优先队列的原因" class="headerLink">
     <a href="#%e4%bd%bf%e7%94%a8%e9%98%bb%e5%a1%9e%e4%bc%98%e5%85%88%e9%98%9f%e5%88%97%e7%9a%84%e5%8e%9f%e5%9b%a0" class="header-mark"></a>使用阻塞优先队列的原因</h2><p>续约线程从阻塞优先队列中获取分布式锁对象进行续约。</p>
 <ul>
 <li>如果阻塞优先队列为空，线程应该等待阻塞优先队列有数据后再来获取数据；</li>
@@ -161,6 +162,7 @@
 <li>如果阻塞优先队列不为空，且已经到了分布式锁的续约时间，此时线程应从阻塞优先队列中获取数据并进行续约操作。</li>
 </ul>
 <p>因此在本场景下，线程有两个时机是需要阻塞的。</p>
+<hr>
 <h2 id="阻塞优先队列的实现" class="headerLink">
     <a href="#%e9%98%bb%e5%a1%9e%e4%bc%98%e5%85%88%e9%98%9f%e5%88%97%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>阻塞优先队列的实现</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -277,6 +279,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>其中 Insert、Delete、Peek 等方法为优先队列的基本操作。</p>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

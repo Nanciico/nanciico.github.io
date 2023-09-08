@@ -1,11 +1,15 @@
 # Redis 链表(adlist)
 
 
+---
+
 ## 链表的结构
 
 Redis 中链表的结构是这样的：一个 list 结构存储链表的元数据，每个链表结点 listNode 之间通过指针相连，head 与 tail 分别指向链表的头结点和尾结点。
 
 {{< image src="/images/redis_code/02_01.jpg" caption="链表的结构" title="链表的结构" >}}
+
+---
 
 ## 链表结构定义
 
@@ -88,8 +92,12 @@ void slowlogInit(void) {
 }
 ```
 
+---
+
 ## 应用
 
 - 服务端使用链表来保存所有连接的客户端，连接的从库客户端等。如 server.clients 、server.slaves
 - 慢查询 slowlog 使用链表来存储慢查询条目。server.slowlog
+
+---
 

@@ -1,6 +1,8 @@
 # Volatile 变量与线程安全
 
 
+---
+
 ## 一个线程不安全的现象
 
 一个数组实现的环形缓冲区，变量 readPos 和 writePos 分别记录下一个读取的索引和下一个写入的索引。当缓冲区为空时，消费者会在数据存入缓冲区前等待。当缓冲区满时，生产者会等待将数据存入缓冲区。
@@ -62,11 +64,15 @@ public class RingBuffer<Item> {
 
 在读取线程中，readPos 变量只会被读取线程修改，因此该变量对于读取线程来说始终是最新值。而读取线程调用 isEmpty 方法的 writePos 变量会被写入线程修改，导致读取线程中 writePos 变量是旧数据。
 
+---
+
 ## 解决方案
 
 将 readPos 和 writePos 改为 volatile 变量，在这个场景中能够保证这两个变量的线程安全。
 
 那么 volatile 变量在此场景中是如何保证线程安全的呢？
+
+---
 
 ## volatile 变量机制
 
@@ -85,12 +91,16 @@ happens-before 保证会对指令重排序进行限制。
 
 即本应在 volatile 变量读取与写入操作之间的指令，不会因为指令重排序导致这些指令在变量读取与写入操作之外。
 
+---
+
 ## volatile 变量何时是线程安全的？
 
 在以下两个场景，volatile 变量是线程安全的：
 
 1. 当只有一个线程向 volatile 变量写入，其余多个线程仅读取该变量时，总会读取最新的数据，此时是线程安全的；
 2. 当多个线程向 volatile 变量写入并且对变量的操作是原子操作（被写入的新值不依赖旧值），此时是线程安全的。
+
+---
 
 ## 一个 volitile 变量例子
 
@@ -114,9 +124,13 @@ public class Singleton {
 }
 ```
 
+---
+
 ## 参考资料
 
 [Concurrency in Java: "synchronized" and "volatile" keywords](https://codeburps.com/post/synchronized-and-volatile-keyword)
 
 [Volatile Variables and Thread Safety](https://www.baeldung.com/java-volatile-variables-thread-safety)
+
+---
 

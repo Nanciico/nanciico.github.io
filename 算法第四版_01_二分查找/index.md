@@ -1,11 +1,13 @@
 # 「算法第四版」二分查找
 
 
-
+---
 
 ## 前提条件
 
 查找的数组是有序的。
+
+---
 
 ## 递归写法
 
@@ -26,6 +28,8 @@ public class BinarySearch {
 }
 ```
 
+---
+
 ## 循环写法
 
 ``` Java
@@ -44,6 +48,8 @@ public class BinarySearch {
     }
 }
 ```
+
+---
 
 ## 二分查找 key 的最小索引
 
@@ -69,6 +75,8 @@ public class BinarySearch {
 }
 ```
 
+---
+
 ## 二分查找极小(大)值
 
 ``` Java
@@ -93,4 +101,6 @@ public class BinarySearch {
     }
 }
 ```
+
+---
 

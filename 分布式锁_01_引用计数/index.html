@@ -165,7 +165,8 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="什么是引用计数" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="什么是引用计数" class="headerLink">
     <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0" class="header-mark"></a>什么是引用计数</h2><blockquote>
 <p>In computer science, reference counting is a programming technique of storing the number of references, pointers, or handles to a resource, such as an object, a block of memory, disk space, and others.</p>
 <p>In garbage collection algorithms, reference counts may be used to deallocate objects that are no longer needed.</p>
@@ -173,6 +174,7 @@
 <p>对于一个实现了引用计数的对象，引用计数算法能够跟踪有多少引用处于活动状态。当引用的数量降至 0，我们可以安全的释放该对象的内存。</p>
 <p>引用计数也是实现基本的垃圾回收算法的方式。</p>
 <p><strong>如果一个对象在多线程环境中需要安全关闭，可以考虑使用引用计数算法。</strong></p>
+<hr>
 <h2 id="引用计数算法的实现" class="headerLink">
     <a href="#%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0%e7%ae%97%e6%b3%95%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>引用计数算法的实现</h2><p><a href="https://github.com/elastic/elasticsearch/blob/main/libs/core/src/main/java/org/elasticsearch/core/AbstractRefCounted.java" target="_blank" rel="noopener noreferrer">ElasticSearch 代码中实现了基本的的引用计数算法。</a></p>
 <div class="highlight"><div class="chroma">
@@ -315,7 +317,8 @@
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="分布式锁设计中如何使用引用计数" class="headerLink">
+</div><hr>
+<h2 id="分布式锁设计中如何使用引用计数" class="headerLink">
     <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e8%ae%be%e8%ae%a1%e4%b8%ad%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0" class="header-mark"></a>分布式锁设计中如何使用引用计数</h2><p>在分布式锁的设计中，本地锁生命周期通过引用计数进行管理，保证本地锁的安全关闭。</p>
 <h3 id="如何获取本地锁对象" class="headerLink">
     <a href="#%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e6%9c%ac%e5%9c%b0%e9%94%81%e5%af%b9%e8%b1%a1" class="header-mark"></a>如何获取本地锁对象</h3><ul>
@@ -399,7 +402,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div></div>
+</div><hr>
+</div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">

@@ -152,7 +152,8 @@
     <li><a href="#推进版本升级">推进版本升级</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="现版本存在的问题" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="现版本存在的问题" class="headerLink">
     <a href="#%e7%8e%b0%e7%89%88%e6%9c%ac%e5%ad%98%e5%9c%a8%e7%9a%84%e9%97%ae%e9%a2%98" class="header-mark"></a>现版本存在的问题</h2><p>目前在生产环境中部署的旧版本Redis存在的问题：</p>
 <ol>
 <li>大 key 过期删除引发集群节点阻塞失去响应不可用；</li>
@@ -160,6 +161,7 @@
 <li>运维时，手动主从切换总会产生复制风暴问题，主从无法同步；</li>
 <li>bgsave 内存消耗较高，有 OOM 风险。</li>
 </ol>
+<hr>
 <h2 id="推进版本升级" class="headerLink">
     <a href="#%e6%8e%a8%e8%bf%9b%e7%89%88%e6%9c%ac%e5%8d%87%e7%ba%a7" class="header-mark"></a>推进版本升级</h2><p>由于以上原因，开始推进 Redis 版本升级。</p>
 <p>版本升级工作流程：</p>
@@ -170,6 +172,7 @@
 <li>开发配套监控和运维工具；</li>
 <li>推进上线。</li>
 </ol>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

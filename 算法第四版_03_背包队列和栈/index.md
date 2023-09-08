@@ -1,6 +1,8 @@
 # 「算法第四版」背包、队列和栈
 
 
+---
+
 ## 背包
 
 背包 API：
@@ -61,6 +63,8 @@ public class Bag<Item> implements Iterable<Item> {
     }
 }
 ```
+
+---
 
 ## 先进先出（FIFO）队列
 
@@ -151,6 +155,8 @@ public class Queue<Item> implements Iterable<Item> {
     }
 }
 ```
+
+---
 
 ## 后进先出（LIFO）栈
 
@@ -332,4 +338,6 @@ public class Evaluate {
     }
 }
 ```
+
+---
 

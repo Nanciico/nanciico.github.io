@@ -1,6 +1,8 @@
 # Redis 简单动态字符串SDS
 
 
+---
+
 ## SDS 定义
 
 `sds` 的定义以及 `sdshdr` 的定义代码如下：
@@ -71,6 +73,8 @@ struct __attribute__ ((__packed__)) sdshdr64 {
 下图使用 `sdshdr16` 的 sds，内存对齐系数为 4，演示内存对齐与内存不对齐的区别。
 
 {{< image src="/images/redis_code/01_02.jpg" caption="内存对齐与内存不对齐的区别" title="内存对齐与内存不对齐的区别" >}}
+
+---
 
 ## SDS API
 
@@ -429,6 +433,8 @@ sds sdsResize(sds s, size_t size, int would_regrow) {
 }
 ```
 
+---
+
 ## 字符串编码
 
 Redis 字符串会使用不同的编码格式存储不同类型的数据。若字符串是数字，则使用 int 编码；若设置的字符串大小小于等于 44 个字节，则使用紧凑的编码类型 embstr；若设置的字符串大小大于 44 个字节，则使用 raw 类型进行编码。
@@ -536,4 +542,6 @@ robj *createObject(int type, void *ptr) {
     return o;
 }
 ```
+
+---
 

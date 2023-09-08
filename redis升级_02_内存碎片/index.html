@@ -184,7 +184,8 @@
     <li><a href="#参考资料">参考资料</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="内存碎片产生原因" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="内存碎片产生原因" class="headerLink">
     <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e4%ba%a7%e7%94%9f%e5%8e%9f%e5%9b%a0" class="header-mark"></a>内存碎片产生原因</h2><p>内存碎片产生有两种原因</p>
 <h3 id="内存分配原因" class="headerLink">
     <a href="#%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e5%8e%9f%e5%9b%a0" class="header-mark"></a>内存分配原因</h3><blockquote>
@@ -244,10 +245,12 @@
 <p>Redis will not always free up (return) memory to the OS when keys are removed. This is not something special about Redis, but it is how most malloc() implementations work. For example if you fill an instance with 5GB worth of data, and then remove the equivalent of 2GB of data, the Resident Set Size (also known as the RSS, which is the number of memory pages consumed by the process) will probably still be around 5GB, even if Redis will claim that the user memory is around 3GB. This happens because the underlying allocator can&rsquo;t easily release the memory. For example often most of the removed keys were allocated in the same pages as the other keys that still exist.</p>
 </blockquote>
 <p>在删除数据时，Redis 不会直接将该部分内存归还操作系统，原因是有可能有其他数据落在相同页上，这部分删除的内存也会产生内存碎片。</p>
+<hr>
 <h2 id="内存碎片率" class="headerLink">
     <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e7%8e%87" class="header-mark"></a>内存碎片率</h2><p>mem_fragmentation_ratio = used_memory_rss / used_memory</p>
 <p>可以理解为 Redis 向操作系统申请的内存与 Redis 实际使用内存的比。</p>
 <p>理想情况下内存碎片率维持在 1.03 最好。正常情况下在 1-1.5 之间。</p>
+<hr>
 <h2 id="内存碎片整理功能默认配置" class="headerLink">
     <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e6%95%b4%e7%90%86%e5%8a%9f%e8%83%bd%e9%bb%98%e8%ae%a4%e9%85%8d%e7%bd%ae" class="header-mark"></a>内存碎片整理功能默认配置</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -277,7 +280,8 @@
 </span></span><span class="line"><span class="cl">active-defrag-ignore-bytes = 100mb      # 碎片总空间少于 100mb 不进行内存整理。
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="内存碎片整理的实现" class="headerLink">
+</div><hr>
+<h2 id="内存碎片整理的实现" class="headerLink">
     <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e6%95%b4%e7%90%86%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>内存碎片整理的实现</h2><p>内存碎片整理功能通过 activeDefragCycle 函数实现，该函数通过 serverCron 函数调用，在开启该功能后会被定时调用。一次完整的内存碎片整理过程需要多次调用 activeDefragCycle 函数，即会横跨多次定时任务。</p>
 <h3 id="控制占用-cpu-时间比率限制的实现" class="headerLink">
     <a href="#%e6%8e%a7%e5%88%b6%e5%8d%a0%e7%94%a8-cpu-%e6%97%b6%e9%97%b4%e6%af%94%e7%8e%87%e9%99%90%e5%88%b6%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>控制占用 CPU 时间比率限制的实现</h3><p>通过 active-defrag-cycle-min、active-defrag-cycle-max、active-defrag-threshold-lower、active-defrag-threshold-upper 四个配置能够控制内存碎片整理功能占用 CPU 时间的百分比。</p>
@@ -513,18 +517,22 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>即一个大 key 的内存整理会分多次处理，不会长时间阻塞主线程。</p>
+<hr>
 <h2 id="手动内存整理-memory-purge" class="headerLink">
     <a href="#%e6%89%8b%e5%8a%a8%e5%86%85%e5%ad%98%e6%95%b4%e7%90%86-memory-purge" class="header-mark"></a>手动内存整理 Memory Purge</h2><p>该命令只在使用 jemalloc 内存分配器下生效。</p>
 <p>该命令清理内存脏页，和上述内存碎片整理功能管理的不是相同区域。</p>
+<hr>
 <h2 id="结论" class="headerLink">
     <a href="#%e7%bb%93%e8%ae%ba" class="header-mark"></a>结论</h2><p>Redis 内存碎片整理功能是通过 scan 命令渐进式地整理每次迭代到的 key，每次调用的时间复杂度为 O(1), 完整执行完一次内存碎片整理功能的时间复杂度为 O(n)。</p>
 <p>内存碎片整理大 key 会将大 key 分多次处理，不会长时间阻塞主线程。</p>
 <p>内存碎片整理功能的核心作用是降低内存碎片率，提高内存利用率以节省内存成本。</p>
 <p>但内存整理功能在主线程中执行，会阻塞主线程而降低 Redis 的性能。</p>
+<hr>
 <h2 id="参考资料" class="headerLink">
     <a href="#%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99" class="header-mark"></a>参考资料</h2><p><a href="https://redis.io/docs/management/optimization/memory-optimization/" target="_blank" rel="noopener noreferrer">Memory optimization | Redis</a></p>
 <p><a href="https://github.com/redis/redis/blob/unstable/src/defrag.c" target="_blank" rel="noopener noreferrer">redis/defrag.c at unstable · redis/redis · GitHub</a></p>
 <p><a href="https://redis.io/commands/memory-purge/" target="_blank" rel="noopener noreferrer">MEMORY PURGE | Redis</a></p>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

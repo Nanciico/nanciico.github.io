@@ -1,6 +1,8 @@
 # 「算法第四版」算法分析
 
 
+---
+
 ## 算法分析的方法
 
 - Observe some feature of the natural world, generally with precise measurements.
@@ -8,6 +10,8 @@
 - Predict events using the hypothesis.
 - Verify the predictions by making further observations.
 - Validate by repeating until the hypothesis and observations agree.
+
+---
 
 ## 算法运行时间实验
 
@@ -44,6 +48,8 @@ public class DoublingTest {
 
 分析实验数据，得到其运行时间的数学模型。
 
+---
+
 ## 运行时间的数学模型
 
 得到运行时间的数学模型步骤：（书：P114）
@@ -52,6 +58,8 @@ public class DoublingTest {
 - 识别**内循环**
 - 根据内循环中的操作确定**成本模型**
 - 对于给定的输入，判断这些操作的执行频率
+
+---
 
 ## 增长数量级
 
@@ -64,6 +72,8 @@ public class DoublingTest {
 | 平方级别 | N^2 | 选择排序 Selection.sort 和 插入排序 Insertion.sort | 双层循环 | 选择排序，插入排序 |
 | 立方级别 | N^3 | ThreeSum 三层循环 | 三层循环 | 三层循环 |
 | 指数级别 | 2^N | 第六章 | 穷举查找 | 检查所有子集 |
+
+---
 
 ## 倍率实验
 
@@ -96,4 +106,6 @@ public class DoublingRatio {
 ```
 
 在有性能问题的情况家应该考虑对编写过的所有程序进行倍率实验，以便能找到性能问题。
+
+---
 

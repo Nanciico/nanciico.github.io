@@ -1,6 +1,8 @@
 # Shell Script 整理
 
 
+---
+
 ## Shell 参数处理特殊字符
 
 ``` bash
@@ -33,6 +35,8 @@ done
 ### Test 命令的双中括号
 
 [Differences Between Single and Double Brackets in Bash.](https://www.baeldung.com/linux/bash-single-vs-double-brackets)
+
+---
 
 ## Safe-bgsave 脚本整理
 
@@ -117,4 +121,6 @@ fi
 
 exit 0
 ```
+
+---
 

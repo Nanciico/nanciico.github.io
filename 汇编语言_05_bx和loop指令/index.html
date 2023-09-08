@@ -170,9 +170,11 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="bx" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="bx" class="headerLink">
     <a href="#bx" class="header-mark"></a>[BX]</h2><p>指令 <code>mov ax, [bx]</code> 的功能：bx 中存放的数据作为一个偏移地址 EA，段地址 SA 默认在 ds 中，将 SA:EA 处的数据送入 ax 中。即: (ax)=((ds)*16+(bx))。</p>
 <p>指令 <code>mov [bx], ax</code> 的功能：bx 中存放的数据作为一个偏移地址 EA，段地址 SA 默认在 ds 中，将 ax 中的 数据送入内存 SA:EA 处。即: ((ds)*16+(6x))=(ax)。</p>
+<hr>
 <h2 id="loop-指令" class="headerLink">
     <a href="#loop-%e6%8c%87%e4%bb%a4" class="header-mark"></a>Loop 指令</h2><p>CPU 执行 loop 指令的时候，要进行两步操作：</p>
 <ol>
@@ -204,6 +206,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>标号 &ldquo;s&rdquo; 实际是一个地址，如果在执行 &ldquo;loop s&rdquo; 时，cx 减 1 后不为 0，指令 &ldquo;loop s&rdquo; 就会把 IP 设置为 &ldquo;s&rdquo; 指向的地址，从而使 CS:IP 指向循环执行的程序段。</p>
+<hr>
 <h2 id="loop-和-bx-的联合应用" class="headerLink">
     <a href="#loop-%e5%92%8c-bx-%e7%9a%84%e8%81%94%e5%90%88%e5%ba%94%e7%94%a8" class="header-mark"></a>Loop 和 [bx] 的联合应用</h2><p>编程目标：计算 ffff:0~ffff:b 单元中的数据的和，结果存储在 dx 中。</p>
 <p>分析问题：</p>
@@ -271,7 +274,8 @@
 </span></span><span class="line"><span class="cl"><span class="nf">end</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="段前缀" class="headerLink">
+</div><hr>
+<h2 id="段前缀" class="headerLink">
     <a href="#%e6%ae%b5%e5%89%8d%e7%bc%80" class="header-mark"></a>段前缀</h2><p>指令 <code>mov ax, [bx]</code> 中，内存单元的偏移地址由 bx 给出，而段地址默认在 ds 中。我们可以在访问内存单元的指令中显式地给出内存单元的段地址所在的段寄存器。比如：</p>
 <ol>
 <li><code>mov ax,ds:[bx]</code></li>
@@ -344,7 +348,8 @@
 </span></span><span class="line"><span class="cl"><span class="nf">end</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>因源始单元 ffff:X 和目标单元 0020:X 相距大于64KB，在不同的 64KB 段里。因此使用 es 存放目标空间 0020:0~0020:b 的段地址，用 ds 存放源始空间 ffff:O~ffff:b 的段地址。</p>
+</div><p>因源始单元 ffff:X 和目标单元 0020:X 相距大于64KB，在不同的 64KB 段里。因此使用 es 存放目标空间 0020:0~0020:b 的段地址，用 ds 存放源始空间 ffff:0~ffff:b 的段地址。</p>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

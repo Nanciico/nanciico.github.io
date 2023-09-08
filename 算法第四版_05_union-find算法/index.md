@@ -1,6 +1,8 @@
 # 「算法第四版」Union-Find 算法
 
 
+---
+
 ## 动态连通性问题及其应用
 
 若整数对 (p, q) 是“相连”的，则：
@@ -23,6 +25,8 @@
 
 将每个整数看做属于不同的数学集合，每一个整数对则需要先判断是否在同一数学集合中。若不是，则将 p 所属集合与 q 所属集合归并到同一集合。
 
+---
+
 ## Union-Find 算法的 API
 
 ``` Text
@@ -34,6 +38,8 @@ public class UF
     boolean  connected(int p, int q)    p 和 q 是否连通
         int  count()                    连通分量的数量
 ```
+
+---
 
 ## Union-Find 算法的实现
 
@@ -257,4 +263,6 @@ public class WeightedQuickUnionWithPathCompression {
 路经压缩的加权 Quick-Union 算法，find 方法能够得到几乎完全扁平化的树，使得算法的均摊成本**接近** O(1)。
 
 路经压缩的加权 Quick-Union 算法是本题的最优算法。
+
+---
 

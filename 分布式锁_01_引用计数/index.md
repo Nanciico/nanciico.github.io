@@ -1,6 +1,8 @@
 # 引用计数算法
 
 
+---
+
 ## 什么是引用计数
 
 > In computer science, reference counting is a programming technique of storing the number of references, pointers, or handles to a resource, such as an object, a block of memory, disk space, and others.
@@ -12,6 +14,8 @@
 引用计数也是实现基本的垃圾回收算法的方式。
 
 **如果一个对象在多线程环境中需要安全关闭，可以考虑使用引用计数算法。**
+
+---
 
 ## 引用计数算法的实现
 
@@ -87,6 +91,8 @@ public abstract class AbstractRefCounted implements RefCounted {
 }
 ```
 
+---
+
 ## 分布式锁设计中如何使用引用计数
 
 在分布式锁的设计中，本地锁生命周期通过引用计数进行管理，保证本地锁的安全关闭。
@@ -137,4 +143,6 @@ internal class LockEntry : AbstractRefCounted
     }
 }
 ```
+
+---
 

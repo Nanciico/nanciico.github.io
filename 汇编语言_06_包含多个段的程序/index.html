@@ -35,7 +35,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F\/"
-        },"genre": "posts","keywords": "「汇编语言」","wordcount":  0 ,
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  1036 ,
         "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F\/","datePublished": "2023-08-23T00:00:00+00:00","dateModified": "2023-08-23T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -118,12 +118,22 @@
 <main class="main">
             <div class="container"><div class="toc" id="toc-auto">
         <h2 class="toc-title">目录</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents"></nav></div>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</a>
+      <ul>
+        <li><a href="#定义多个段的方法">定义多个段的方法</a></li>
+        <li><a href="#对段地址的引用">对段地址的引用</a></li>
+        <li><a href="#代码段数据段栈段完全是我们的安排">“代码段”、“数据段”、“栈段”完全是我们的安排</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
     </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「汇编语言」包含多个段的程序</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><i class="far fa-folder fa-fw"></i>「汇编语言」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-23">2023-08-23</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-23">2023-08-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 0 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 0 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-23">2023-08-23</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-23">2023-08-23</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1036 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 「汇编语言」阅读笔记</span>
@@ -145,8 +155,135 @@
                     <span>目录</span>
                     <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
-            </div><div class="content" id="content"></div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</a>
+      <ul>
+        <li><a href="#定义多个段的方法">定义多个段的方法</a></li>
+        <li><a href="#对段地址的引用">对段地址的引用</a></li>
+        <li><a href="#代码段数据段栈段完全是我们的安排">“代码段”、“数据段”、“栈段”完全是我们的安排</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>在操作系统中，合法地通过操作系统取得的空间都是安全的。程序取得所需空间的方法有两种：</p>
+<ul>
+<li>在加载程序的时候为程序分配；</li>
+<li>在执行的过程中向系统申请（不讨论）；</li>
+</ul>
+<p>我们通过在源程序中定义段来进行内存空间的获取。</p>
+<hr>
+<h2 id="将数据代码栈放入不同的段" class="headerLink">
+    <a href="#%e5%b0%86%e6%95%b0%e6%8d%ae%e4%bb%a3%e7%a0%81%e6%a0%88%e6%94%be%e5%85%a5%e4%b8%8d%e5%90%8c%e7%9a%84%e6%ae%b5" class="header-mark"></a>将数据、代码、栈放入不同的段</h2><p>为何要将数据、代码、栈放入不同的段？</p>
+<ol>
+<li>把它们放到一个段中使程序显得混乱；</li>
+<li>如果数据、栈和代码需要的空间超过 64KB，就不能放在一个段中(8086 模式的限制，一个段的容量不能大于 64KB)。</li>
+</ol>
+<p>如下面的程序所示，这个程序将数据段定义的数据逆序存放。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code, ds:data, ss:stack
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">data segment
+</span></span><span class="line"><span class="cl">    dw 0123h, 0456h, 0789h, Oabch, Odefh, Ofedh, Ocbah, 0987h
+</span></span><span class="line"><span class="cl">data ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">stack segment
+</span></span><span class="line"><span class="cl">    dw 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+</span></span><span class="line"><span class="cl">stack ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">start:  mov ax,stack
+</span></span><span class="line"><span class="cl">        mov ss,ax
+</span></span><span class="line"><span class="cl">        mov sp,20h      ; 设置栈顶 ss:sp 指向 stack:20
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        mov ax,data
+</span></span><span class="line"><span class="cl">        mov ds,ax       ; ds 指向 data 段
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        mov bx, O       ; ds:bx 指向 data 段中的第一个单元
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        mov cx,8
+</span></span><span class="line"><span class="cl">    s:  push [bx]
+</span></span><span class="line"><span class="cl">        add bx,2
+</span></span><span class="line"><span class="cl">        loop s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        mov bx,O
+</span></span><span class="line"><span class="cl">        mov cx,8
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    sO: pop [bx]
+</span></span><span class="line"><span class="cl">        add bx,2
+</span></span><span class="line"><span class="cl">        loop sO
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        mov ax,4c00h
+</span></span><span class="line"><span class="cl">        int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start               ; 指明程序入口为 start，程序加载进内存后，CS:IP 指向该入口
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="定义多个段的方法" class="headerLink">
+    <a href="#%e5%ae%9a%e4%b9%89%e5%a4%9a%e4%b8%aa%e6%ae%b5%e7%9a%84%e6%96%b9%e6%b3%95" class="header-mark"></a>定义多个段的方法</h3><p>从代码中可看出，定义多个段只需要对每个段定义不同的段名即可。</p>
+<h3 id="对段地址的引用" class="headerLink">
+    <a href="#%e5%af%b9%e6%ae%b5%e5%9c%b0%e5%9d%80%e7%9a%84%e5%bc%95%e7%94%a8" class="header-mark"></a>对段地址的引用</h3><p>代码片段：<code>mov ax,stack</code> 和 <code>mov ax,data</code> 都是将名称为 stack 或 data 的段地址送入寄存器 ax。程序中对段名的引用，会被编译器处理为一个表示段地址的数值。</p>
+<h3 id="代码段数据段栈段完全是我们的安排" class="headerLink">
+    <a href="#%e4%bb%a3%e7%a0%81%e6%ae%b5%e6%95%b0%e6%8d%ae%e6%ae%b5%e6%a0%88%e6%ae%b5%e5%ae%8c%e5%85%a8%e6%98%af%e6%88%91%e4%bb%ac%e7%9a%84%e5%ae%89%e6%8e%92" class="header-mark"></a>“代码段”、“数据段”、“栈段”完全是我们的安排</h3><p>在上述程序中，定义了三个段，“code”、“data”和“stack”，我们分别安排它们存放代码、数据和栈。这是我们人为的安排：</p>
+<ol>
+<li>
+<p>我们在源程序中为这三个段起了具有含义的名称，数据段“data” ，代码段“code” ，栈段&quot;stack&quot;。但如此命名后 CPU 并不会去执行“code”段中的内容，处理“data”段中的数据，将“stack”当做栈。</p>
+</li>
+<li>
+<p>伪指令：<code>assume cs:code, ds:data, ss:stack</code> 将cs、ds 和 ss 分别和 code、data、stack 段相连。但 CPU 不会将 cs 指向 code，ds 指向 data, ss 指向 stack，从而按照我们的意图来处理这些段，因为 assume 是伪指令，是由编译器执行的，CPU 并不知道这些伪指令。</p>
+</li>
+<li>
+<p>若要让 CPU 按照我们的安排行事，需要用机器指令控制它，源程序中只有汇编指令是 CPU 要执行的内容。因此为了将 stack 段作为栈使用，需要设置 ss:sp 指向 stack:20。为了将 data 作为数据段，需要设置 ds 指向 data，用 bx 存放 data 段的偏移地址。</p>
+</li>
+</ol>
+<p>总之，CPU 到底如何处理我们定义的段中的内容，是当作指令执行，当作数据访问，还是当作栈空间，完全是靠程序中具体的汇编指令，和汇编指令对 CS:IP、SS:SP、DS 等寄存器的设置来决定的。</p>
+<hr>
+</div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">

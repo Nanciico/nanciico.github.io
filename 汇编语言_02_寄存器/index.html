@@ -186,9 +186,11 @@
 <li>控制器控制各种器件进行工作；</li>
 <li>内部总线连接各种器件，在它们之间进行数据的传送。</li>
 </ul>
+<hr>
 <h2 id="通用寄存器" class="headerLink">
     <a href="#%e9%80%9a%e7%94%a8%e5%af%84%e5%ad%98%e5%99%a8" class="header-mark"></a>通用寄存器</h2><p>8086CPU 的所有寄存器都是 16 位的，可以存放两个字节。AX、BX、CX、DX 这 4 个寄存器通常用来存放一般性的数据，被称为通用寄存器。</p>
 <p>8086CPU 的 AX、BX、CX 、DX 这 4 个寄存器都可分为两个可独立使用的 8 位寄存器来使用。</p>
+<hr>
 <h2 id="字在寄存器中的存储" class="headerLink">
     <a href="#%e5%ad%97%e5%9c%a8%e5%af%84%e5%ad%98%e5%99%a8%e4%b8%ad%e7%9a%84%e5%ad%98%e5%82%a8" class="header-mark"></a>字在寄存器中的存储</h2><p>字节：记为 byte，一个字节由 8 个 bit 组成，可以存在 8 位寄存器中。</p>
 <p>字：记为 word，一个字由两个字节组成，这两个字节分别称为这个字的高位字节和低位字节。</p>
@@ -204,7 +206,8 @@
 </span></span><span class="line"><span class="cl">0 1 0 0 1 1 1 0 | 0 0 1 0 0 0 0 0
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="几条汇编指令" class="headerLink">
+</div><hr>
+<h2 id="几条汇编指令" class="headerLink">
     <a href="#%e5%87%a0%e6%9d%a1%e6%b1%87%e7%bc%96%e6%8c%87%e4%bb%a4" class="header-mark"></a>几条汇编指令</h2><table>
 <thead>
 <tr>
@@ -241,6 +244,7 @@
 </tr>
 </tbody>
 </table>
+<hr>
 <h2 id="8086cpu-给出物理地址的方法" class="headerLink">
     <a href="#8086cpu-%e7%bb%99%e5%87%ba%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e6%96%b9%e6%b3%95" class="header-mark"></a>8086CPU 给出物理地址的方法</h2><h3 id="物理地址的概念" class="headerLink">
     <a href="#%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e6%a6%82%e5%bf%b5" class="header-mark"></a>物理地址的概念</h3><p>CPU 访问内存单元时，要给出内存单元的地址。所有的内存单元构成的存储空间是一个一维的线性空间，每一个内存单元在这个空间中都有唯一的地址，我们将这个唯一的地址称为物理地址。</p>
@@ -278,6 +282,7 @@
 <p>“段地址 × 16 + 偏移地址 = 物理地址” 的本质含义是：CPU 在访问内存时，用一个基础地址(段地址 × 16)和一个相对于基础地址的偏移地址相加，给出内存单元的物理地址。</p>
 <p>内存并没有分段，段的划分来自于 CPU，由于 8086CPU 用 “基础地址(段地址 x 16) + 偏移地址 = 物理地址” 的方式给出内存单元的物理地址，使得我们可以用分段的方式来管理内存。</p>
 <p>“基础地址 = 段地址 x 16”，因此段的起始地址也一定 16 的倍数；偏移地址为 16 位 ，16 位地址的寻址能力为 64KB ，所以一个段的长度最大为 64KB。</p>
+<hr>
 <h2 id="cs-和-ip" class="headerLink">
     <a href="#cs-%e5%92%8c-ip" class="header-mark"></a>CS 和 IP</h2><p>段地址在 8086CPU 的段寄存器中存放。8086CPU 有 4 个段寄存器：CS、DS、SS、ES。</p>
 <p>CS 和 IP 是8086CPU 中两个最关键的寄存器，它们指示了 CPU 当前要读取指令的地址。CS 为代码段寄存器，IP 为指令指针寄存器。</p>
@@ -310,6 +315,7 @@
 </ol>
 <p>在 8086CPU 加电启动或复位后(即 CPU 刚开始工作时) CS 和 IP 被设置为 CS=FFFFH，IP=0000H，即在 8086PC 机刚启动时，CPU 从内存 FFFFOH 单元中读取指令执行，FFFFOH 单元中的指令是 8086PC 机开机后执行的第一条指令。</p>
 <p>在内存中，指令和数据没有任何区别，都是二进制信息，CPU 在工作的时候把有的信息看作指令，有的信息看作数据。CPU 将 CS、IP 中的内容当作指令的段地址和偏移地址，用它们合成指令的物理地址，到内存中读取指令码，执行。</p>
+<hr>
 <h2 id="修改-csip-的指令" class="headerLink">
     <a href="#%e4%bf%ae%e6%94%b9-csip-%e7%9a%84%e6%8c%87%e4%bb%a4" class="header-mark"></a>修改 CS、IP 的指令</h2><p>程序员可以通过改变 CS、IP 中的内容来控制 CPU 执行目标指令。</p>
 <p>mov 指令不能用于设置 CS、IP 的值，mov 指令被称为传送指令。</p>
@@ -335,9 +341,11 @@
 </tr>
 </tbody>
 </table>
+<hr>
 <h2 id="代码段" class="headerLink">
     <a href="#%e4%bb%a3%e7%a0%81%e6%ae%b5" class="header-mark"></a>代码段</h2><p>对于 8086PC 机，在编程时，可以根据需要，将一组内存单元定义为一个段。我们可以将长度为 N（N ≤ 64KB）的一组代码，存在一组地址连续、起始地址为 16 的 倍数的内存单元中。我们可以认为，这段内存是用来存放代码的，从而定义了一个代码段。</p>
 <p>将一段内存当作代码段，仅仅是我们在编程时的一种安排，CPU 并不会由于这种安排，就自动地将我们定义的代码段中的指令当作指令来执行。</p>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

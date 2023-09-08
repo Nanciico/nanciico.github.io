@@ -1,6 +1,8 @@
 # Redis 字典(dict)
 
 
+---
+
 ## 字典结构定义
 
 ### 哈希表 dict
@@ -93,6 +95,11 @@ typedef struct dictType {
 } dictType;
 ```
 
+---
+
 ## 字典内存结构
 
 // TODO 内存结构图
+
+---
+

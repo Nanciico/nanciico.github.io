@@ -196,7 +196,8 @@
     <li><a href="#汇编程序从写出到执行的过程">汇编程序从写出到执行的过程</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="一个源程序从写出到执行的过程" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="一个源程序从写出到执行的过程" class="headerLink">
     <a href="#%e4%b8%80%e4%b8%aa%e6%ba%90%e7%a8%8b%e5%ba%8f%e4%bb%8e%e5%86%99%e5%87%ba%e5%88%b0%e6%89%a7%e8%a1%8c%e7%9a%84%e8%bf%87%e7%a8%8b" class="header-mark"></a>一个源程序从写出到执行的过程</h2><p>一个汇编语言程序从写出到最终执行的简要过程如下：</p>
 <ol>
 <li>编写汇编源程序，生成源程序文件</li>
@@ -213,6 +214,7 @@
             alt="汇编语言程序从写出到执行的过程">
     </a><figcaption class="image-caption">汇编语言程序从写出到执行的过程</figcaption>
     </figure>
+<hr>
 <h2 id="一个源程序" class="headerLink">
     <a href="#%e4%b8%80%e4%b8%aa%e6%ba%90%e7%a8%8b%e5%ba%8f" class="header-mark"></a>一个源程序</h2><p>一段简单的汇编语言源程序：</p>
 <div class="highlight"><div class="chroma">
@@ -308,6 +310,7 @@
 </tr>
 </tbody>
 </table>
+<hr>
 <h2 id="编译连接" class="headerLink">
     <a href="#%e7%bc%96%e8%af%91%e8%bf%9e%e6%8e%a5" class="header-mark"></a>编译连接</h2><p>编译的作用是通过源程序文件生成包含机器代码的目标文件(.obj 文件)。</p>
 <p>连接的作用如下：</p>
@@ -316,6 +319,7 @@
 <li>程序中调用了某个库文件中的子程序，需要将这个库文件和该程序生成的目标文件连接到一起，生成一个可执行文件;</li>
 <li>一个源程序编译后，得到了存有机器码的目标文件，目标文件中的有些内容还不能直接用来生成可执行文件，连接程序将这些内容处理为最终的可执行信息。所以，在只有一个源程序文件，而又不需要调用某个库中的子程序的情况下，也必须用连接程序对目标文件进行处理，生成可执行文件(.exe 文件)。</li>
 </ol>
+<hr>
 <h2 id="执行" class="headerLink">
     <a href="#%e6%89%a7%e8%a1%8c" class="header-mark"></a>执行</h2><p>DOS 中有一个程序 command.com，这个程序在 DOS 中称为命令解释器，也就是 DOS 系统的 shell。</p>
 <p>如果用户要执行一个程序，则输入该程序的可执行文件的名称，command 首先根据文件名找到可执行文件，然后将这个可执行文件中的程序加载入内存，设置 CS:IP 指向程序的入口。此后，command 暂停运行，CPU 运行程序。程序运行结束后，返回到 command 中，command 再次显示由当前盘符和当前路径组成的提示符，等待用户的输入。</p>
@@ -348,6 +352,7 @@
 <li>这个内存区的前 256 个字节中存放的是 PSP，DOS 用来和程序进行通信。从 256 字节处向后的空间存放的是程序；</li>
 <li>cs:ip 指向程序的第一条指令。</li>
 </ol>
+<hr>
 <h2 id="汇编程序从写出到执行的过程" class="headerLink">
     <a href="#%e6%b1%87%e7%bc%96%e7%a8%8b%e5%ba%8f%e4%bb%8e%e5%86%99%e5%87%ba%e5%88%b0%e6%89%a7%e8%a1%8c%e7%9a%84%e8%bf%87%e7%a8%8b" class="header-mark"></a>汇编程序从写出到执行的过程</h2><p>到此，完成了一个汇编程序从写出到执行的全部过程。</p>
 <figure><a class="lightgallery" href="/images/assembly_language/04_05.jpg" title="汇编程序从写出到执行的过程" data-thumbnail="/images/assembly_language/04_05.jpg" data-sub-html="<h2>汇编程序从写出到执行的过程</h2><p>汇编程序从写出到执行的过程</p>">
@@ -360,6 +365,7 @@
             alt="汇编程序从写出到执行的过程">
     </a><figcaption class="image-caption">汇编程序从写出到执行的过程</figcaption>
     </figure>
+<hr>
 </div>
 
         <div class="post-footer" id="post-footer">

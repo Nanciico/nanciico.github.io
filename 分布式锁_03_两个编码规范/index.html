@@ -153,7 +153,8 @@
     <li><a href="#区分判断与校验">区分“判断”与“校验”</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="不要生吞异常" class="headerLink">
+            </div><div class="content" id="content"><hr>
+<h2 id="不要生吞异常" class="headerLink">
     <a href="#%e4%b8%8d%e8%a6%81%e7%94%9f%e5%90%9e%e5%bc%82%e5%b8%b8" class="header-mark"></a>不要生吞异常</h2><p>Unlock 发送请求，如果发生 Socket 异常导致逻辑上解锁但实际上未解锁，是否需要将异常抛出？</p>
 <ul>
 <li>若不处理异常，Redis 中的 Key 会在设定的 30s 后过期，过期后可以将其与解锁看做等效，因此可以不处理异常；</li>
@@ -161,6 +162,7 @@
 </ul>
 <p>原则：不要在代码中假设某种异常不会发生，或者忽略某中异常是无所谓的。</p>
 <p>如果不将异常抛出或没有输出到日志，程序在出现莫名其妙的异常后会难以定位问题。因此不要忽略异常。</p>
+<hr>
 <h2 id="区分判断与校验" class="headerLink">
     <a href="#%e5%8c%ba%e5%88%86%e5%88%a4%e6%96%ad%e4%b8%8e%e6%a0%a1%e9%aa%8c" class="header-mark"></a>区分“判断”与“校验”</h2><p>在代码中，如果只有满足某种条件才能继续向后执行，应该使用校验。如果对于某个条件需要执行不同的分支，应该使用判断。</p>
 <p>不要用判断取代校验，这会导致忽略某些异常。</p>
@@ -216,7 +218,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div></div>
+</div><hr>
+</div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">
