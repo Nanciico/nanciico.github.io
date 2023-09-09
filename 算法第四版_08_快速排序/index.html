@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>「算法第四版」快速排序 - Nanciico&#39;s Blog</title><meta name="Description" content="快速排序"><meta property="og:title" content="「算法第四版」快速排序" />
+    <title>算法第四版 —— 快速排序 - Nanciico&#39;s Blog</title><meta name="Description" content="快速排序"><meta property="og:title" content="算法第四版 —— 快速排序" />
 <meta property="og:description" content="快速排序" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" /><meta property="article:section" content="posts" />
@@ -16,26 +16,24 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="「算法第四版」快速排序"/>
+<meta name="twitter:title" content="算法第四版 —— 快速排序"/>
 <meta name="twitter:description" content="快速排序"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" /><link rel="prev" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" /><link rel="next" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_09_%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" />
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" /><link rel="prev" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" /><link rel="next" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "「算法第四版」快速排序",
+        "headline": "算法第四版 —— 快速排序",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/Nanciico.github.io\/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F\/"
-        },"genre": "posts","keywords": "「算法第四版」, 排序算法","wordcount":  3462 ,
+        },"genre": "posts","keywords": "「算法第四版」, 排序算法","wordcount":  3472 ,
         "url": "https:\/\/Nanciico.github.io\/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F\/","datePublished": "2023-07-08T00:00:00+00:00","dateModified": "2023-07-08T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -46,7 +44,7 @@
     </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
 </head>
 
-<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
         function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
         function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
         function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
@@ -62,7 +60,7 @@
             <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/series"> 系列 </a><a class="menu-item" href="/about"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
                             <i class="fas fa-search fa-fw"></i>
@@ -104,7 +102,7 @@
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         取消
                     </a>
-                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/series" title="">系列</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -138,11 +136,11 @@
     </li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「算法第四版」快速排序</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">算法第四版 —— 快速排序</h1><div class="post-meta">
             <div class="post-meta-line">
-                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
-                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88/"><i class="far fa-folder fa-fw"></i>「算法第四版」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「算法第四版」阅读笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-08">2023-07-08</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-08">2023-07-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3462 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E7%AE%97%E6%B3%95/"><i class="far fa-folder fa-fw"></i>算法</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「算法第四版」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-08">2023-07-08</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-08">2023-07-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3472 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 「算法第四版」阅读笔记</span>
@@ -151,16 +149,16 @@
                                 <div class="details-content series-content">
                                     <nav>
                                         <ul>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/">「算法第四版」阅读开篇</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_01_%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">「算法第四版」二分查找</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_02_%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%9C%80%E5%A4%A7%E5%85%AC%E5%9B%A0%E6%95%B0/">「算法第四版」欧几里得算法求最大公因数</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_03_%E8%83%8C%E5%8C%85%E9%98%9F%E5%88%97%E5%92%8C%E6%A0%88/">「算法第四版」背包、队列和栈</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_04_%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">「算法第四版」算法分析</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_05_union-find%E7%AE%97%E6%B3%95/">「算法第四版」Union-Find 算法</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_06_%E5%88%9D%E7%BA%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">「算法第四版」初级排序算法</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/">「算法第四版」归并排序</a></li><li><span class="active">「算法第四版」快速排序</span></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_09_%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">「算法第四版」优先队列</a></li>
-                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_10_%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8/">「算法第四版」排序算法应用</a></li></ul>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_00_%E5%89%8D%E8%A8%80/">算法第四版 —— 前言</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_01_%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/">算法第四版 —— 二分查找</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_02_%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%9C%80%E5%A4%A7%E5%85%AC%E5%9B%A0%E6%95%B0/">算法第四版 —— 欧几里得算法求最大公因数</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_03_%E8%83%8C%E5%8C%85%E9%98%9F%E5%88%97%E5%92%8C%E6%A0%88/">算法第四版 —— 背包、队列和栈</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_04_%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90/">算法第四版 —— 算法分析</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_05_union-find%E7%AE%97%E6%B3%95/">算法第四版 —— Union-Find 算法</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_06_%E5%88%9D%E7%BA%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">算法第四版 —— 初级排序算法</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/">算法第四版 —— 归并排序</a></li><li><span class="active">算法第四版 —— 快速排序</span></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_09_%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">算法第四版 —— 优先队列</a></li>
+                                                    <li><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_10_%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E5%BA%94%E7%94%A8/">算法第四版 —— 排序算法应用</a></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -190,7 +188,7 @@
 </nav></div>
             </div><div class="content" id="content"><hr>
 <h2 id="快速排序的优点" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>快速排序的优点</h2><ol>
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a>1 快速排序的优点</h2><ol>
 <li>实现简单，适用于各种不同的输入数据，且在一般应用中比其他排序算法都要快的多；</li>
 <li>原地排序，只需要很小的辅助栈的额外空间；</li>
 <li>将长度为 N 的数组排序所需的时间和 N * lgN 成正比。</li>
@@ -198,7 +196,7 @@
 <p>快速排序的缺点是非常脆弱，在实现时要非常小心才能避免低劣的性能。</p>
 <hr>
 <h2 id="快速排序基本算法" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e5%9f%ba%e6%9c%ac%e7%ae%97%e6%b3%95" class="header-mark"></a>快速排序基本算法</h2><div class="highlight"><div class="chroma">
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e5%9f%ba%e6%9c%ac%e7%ae%97%e6%b3%95" class="header-mark"></a>2 快速排序基本算法</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -336,17 +334,17 @@
 <p>由于切分过程总是能排定一个元素，用归纳法可以证明递归能够正确地将数组排序：如果左子数组和右子数组都是有序的，那么由左子数组、切分元素和右子数组组成的结果数组也一定是有序的。</p>
 <hr>
 <h2 id="快速排序的性能特点" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e6%80%a7%e8%83%bd%e7%89%b9%e7%82%b9" class="header-mark"></a>快速排序的性能特点</h2><p>由于快速排序切分方法的内循环简洁短小，相比归并排序与希尔排序，其内循环中很少移动数据，因此快速排序性能一般比其他的排序算法性能高。</p>
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e6%80%a7%e8%83%bd%e7%89%b9%e7%82%b9" class="header-mark"></a>3 快速排序的性能特点</h2><p>由于快速排序切分方法的内循环简洁短小，相比归并排序与希尔排序，其内循环中很少移动数据，因此快速排序性能一般比其他的排序算法性能高。</p>
 <p>快速排序的另一个特点是比较次数很少，快速排序的最好情况是每次都正好能将数组对半分。</p>
 <hr>
 <h2 id="快速排序的算法改进" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e7%ae%97%e6%b3%95%e6%94%b9%e8%bf%9b" class="header-mark"></a>快速排序的算法改进</h2><ol>
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e7%ae%97%e6%b3%95%e6%94%b9%e8%bf%9b" class="header-mark"></a>4 快速排序的算法改进</h2><ol>
 <li>切换到插入排序。对于小数组，快速排序比插入排序慢。因为快速排序的 sort 递归方法在小数组中也会调用自己。</li>
 <li>三取样切分。能够使得快速排序的切分效果更好，但代价是需要计算中位数。同时可以将取样元素放在数组末尾作为“哨兵”来去掉切分方法的边界测试。</li>
 <li>熵最优排序。一个元素全部重复的子数组不需要继续排序，但是快速排序的基础算法还会继续将它切分为更小的数组。在含有大量重复元素的数组的情况下，快速排序会使元素全部重复的子数组经常出现，这部分的优化能够将当前线性对数级的性能提高到线性级别。</li>
 </ol>
 <h3 id="快速排序的哨兵" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e5%93%a8%e5%85%b5" class="header-mark"></a>快速排序的哨兵</h3><div class="highlight"><div class="chroma">
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e5%93%a8%e5%85%b5" class="header-mark"></a>4.1 快速排序的哨兵</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -443,7 +441,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="快速排序的非递归实现" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e9%9d%9e%e9%80%92%e5%bd%92%e5%ae%9e%e7%8e%b0" class="header-mark"></a>快速排序的非递归实现</h3><div class="highlight"><div class="chroma">
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e7%9a%84%e9%9d%9e%e9%80%92%e5%bd%92%e5%ae%9e%e7%8e%b0" class="header-mark"></a>4.2 快速排序的非递归实现</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -568,7 +566,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="快速排序优化代码的实现" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e4%bc%98%e5%8c%96%e4%bb%a3%e7%a0%81%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>快速排序优化代码的实现</h3><div class="highlight"><div class="chroma">
+    <a href="#%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f%e4%bc%98%e5%8c%96%e4%bb%a3%e7%a0%81%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>4.3 快速排序优化代码的实现</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -752,10 +750,10 @@
 </ul>
 <hr>
 <h2 id="三向切分的快速排序" class="headerLink">
-    <a href="#%e4%b8%89%e5%90%91%e5%88%87%e5%88%86%e7%9a%84%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f" class="header-mark"></a>三向切分的快速排序</h2><p>三向切分的快速排序适用于大量重复主键的随机数组。通过统计待排序数组的香农信息量，可以得出三向切分的快速排序所需要的比较次数的上下界。</p>
+    <a href="#%e4%b8%89%e5%90%91%e5%88%87%e5%88%86%e7%9a%84%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f" class="header-mark"></a>5 三向切分的快速排序</h2><p>三向切分的快速排序适用于大量重复主键的随机数组。通过统计待排序数组的香农信息量，可以得出三向切分的快速排序所需要的比较次数的上下界。</p>
 <p>三向切分的快速排序是<strong>信息量最优的</strong>。因为对于包含大量重复元素的数组，它将排序时间从<strong>线性对数级降低到了线性级别</strong>。三向切分的最坏情况正是所有主键均不相同。</p>
 <h3 id="dijkstra-三向切分的快速排序" class="headerLink">
-    <a href="#dijkstra-%e4%b8%89%e5%90%91%e5%88%87%e5%88%86%e7%9a%84%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f" class="header-mark"></a>Dijkstra 三向切分的快速排序</h3><div class="highlight"><div class="chroma">
+    <a href="#dijkstra-%e4%b8%89%e5%90%91%e5%88%87%e5%88%86%e7%9a%84%e5%bf%ab%e9%80%9f%e6%8e%92%e5%ba%8f" class="header-mark"></a>5.1 Dijkstra 三向切分的快速排序</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -839,7 +837,7 @@
 </ul>
 <p>在数组中重复元素不多的普通情况下它比标准的二分法多使用了很多次交换。J.Bently 和 D.Mcllrov 的快速排序方法，使得三向切分的快速排序比归并排序和其他排序方法在包括<strong>重复元素很多</strong>的实际应用中更快。</p>
 <h3 id="快速三向切分jbently-dmcllrov" class="headerLink">
-    <a href="#%e5%bf%ab%e9%80%9f%e4%b8%89%e5%90%91%e5%88%87%e5%88%86jbently-dmcllrov" class="header-mark"></a>快速三向切分（J.Bently, D.Mcllrov）</h3><div class="highlight"><div class="chroma">
+    <a href="#%e5%bf%ab%e9%80%9f%e4%b8%89%e5%90%91%e5%88%87%e5%88%86jbently-dmcllrov" class="header-mark"></a>5.2 快速三向切分（J.Bently, D.Mcllrov）</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -1080,9 +1078,8 @@
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
-                    </span></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序" data-hashtags="「算法第四版」,排序算法"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-hashtag="「算法第四版」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序" data-description="快速排序"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序" data-description="快速排序"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="「算法第四版」快速排序"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序" data-hashtags="「算法第四版」,排序算法"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-hashtag="「算法第四版」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序" data-description="快速排序"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序" data-description="快速排序"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-title="算法第四版 —— 快速排序"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
@@ -1093,12 +1090,12 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" class="prev" rel="prev" title="「算法第四版」归并排序"><i class="fas fa-angle-left fa-fw"></i>「算法第四版」归并排序</a>
-            <a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_09_%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" class="next" rel="next" title="「算法第四版」优先队列">「算法第四版」优先队列<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" class="prev" rel="prev" title="Redis 分布式锁设计 —— 需注意的两个编码规范"><i class="fas fa-angle-left fa-fw"></i>Redis 分布式锁设计 —— 需注意的两个编码规范</a>
+            <a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/" class="next" rel="next" title="汇编语言 —— 前言">汇编语言 —— 前言<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-<div id="comments"></div></article></div>
+</article></div>
         </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
             <div class="footer-line"></div>
             <div class="footer-line">
             </div>
@@ -1109,8 +1106,8 @@
         </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
             <i class="fas fa-comment fa-fw"></i>
         </a>
-    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
-        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
 </body>
 
 </html>

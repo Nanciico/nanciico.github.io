@@ -1,0 +1,935 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>Redis 快速列表(quicklist) - Nanciico&#39;s Blog</title><meta name="Description" content="阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。"><meta property="og:title" content="Redis 快速列表(quicklist)" />
+<meta property="og:description" content="阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-09-08T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Redis 快速列表(quicklist)"/>
+<meta name="twitter:description" content="阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" /><link rel="prev" href="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_05_%E8%B7%B3%E8%A1%A8zskiplist/" /><link rel="next" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Redis 快速列表(quicklist)",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist\/"
+        },"genre": "posts","keywords": "Redis, 缓存, Redis 数据结构","wordcount":  2877 ,
+        "url": "https:\/\/Nanciico.github.io\/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist\/","datePublished": "2023-09-08T00:00:00+00:00","dateModified": "2023-09-08T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。"
+    }
+    </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+</head>
+
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#quicklist-结构体定义">quicklist 结构体定义</a>
+      <ul>
+        <li><a href="#quicklistnode">quicklistNode</a></li>
+        <li><a href="#quicklistlzf">quicklistLZF</a></li>
+        <li><a href="#quicklistbookmark">quicklistBookmark</a></li>
+        <li><a href="#quicklist">quicklist</a></li>
+        <li><a href="#quicklistiter">quicklistIter</a></li>
+        <li><a href="#quicklistentry">quicklistEntry</a></li>
+      </ul>
+    </li>
+    <li><a href="#quicklist-api">quicklist API</a>
+      <ul>
+        <li><a href="#quicklistnew">quicklistNew</a></li>
+        <li><a href="#_quicklistinsert">_quicklistInsert</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis 快速列表(quicklist)</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/"><i class="far fa-folder fa-fw"></i>中间件技术</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/redis-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>Redis 源码阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-09-08">2023-09-08</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-09-08">2023-09-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2877 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - Redis 源码阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/redis%E6%BA%90%E7%A0%81_00_%E5%89%8D%E8%A8%80/">Redis 代码阅读开篇</a></li>
+                                                    <li><a href="/redis%E6%BA%90%E7%A0%81_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds/">Redis 简单动态字符串SDS</a></li>
+                                                    <li><a href="/redis%E6%BA%90%E7%A0%81_02_%E9%93%BE%E8%A1%A8adlist/">Redis 链表(adlist)</a></li>
+                                                    <li><a href="/redis%E6%BA%90%E7%A0%81_03_%E5%AD%97%E5%85%B8dict/">Redis 字典(dict)</a></li>
+                                                    <li><a href="/redis%E6%BA%90%E7%A0%81_04_%E7%B4%A7%E5%87%91%E5%88%97%E8%A1%A8listpack/">Redis 紧凑列表(listpack)</a></li>
+                                                    <li><a href="/redis%E6%BA%90%E7%A0%81_05_%E8%B7%B3%E8%A1%A8zskiplist/">Redis 跳表(zskiplist)</a></li><li><span class="active">Redis 快速列表(quicklist)</span></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#quicklist-结构体定义">quicklist 结构体定义</a>
+      <ul>
+        <li><a href="#quicklistnode">quicklistNode</a></li>
+        <li><a href="#quicklistlzf">quicklistLZF</a></li>
+        <li><a href="#quicklistbookmark">quicklistBookmark</a></li>
+        <li><a href="#quicklist">quicklist</a></li>
+        <li><a href="#quicklistiter">quicklistIter</a></li>
+        <li><a href="#quicklistentry">quicklistEntry</a></li>
+      </ul>
+    </li>
+    <li><a href="#quicklist-api">quicklist API</a>
+      <ul>
+        <li><a href="#quicklistnew">quicklistNew</a></li>
+        <li><a href="#_quicklistinsert">_quicklistInsert</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<h2 id="quicklist-结构体定义" class="headerLink">
+    <a href="#quicklist-%e7%bb%93%e6%9e%84%e4%bd%93%e5%ae%9a%e4%b9%89" class="header-mark"></a>1 quicklist 结构体定义</h2><h3 id="quicklistnode" class="headerLink">
+    <a href="#quicklistnode" class="header-mark"></a>1.1 quicklistNode</h3><p>quicklistNode 结构体定义了快速列表结点，它是一个 32 字节的结构体，包含指向前驱结点和后继结点的指针，一个数据指针 entry 指向实际存储数据的 listpack (或者一个压缩过后的 quicklistLZF)，另外还有一些描述结点元数据的成员。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Node, quicklist, and Iterator are the only data structures used currently. */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* quicklistNode is a 32 byte struct describing a listpack for a quicklist.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * We use bit fields keep the quicklistNode at 32 bytes.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * count: 16 bits, max 65536 (max lp bytes is 65k, so max count actually &lt; 32k).
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * encoding: 2 bits, RAW=1, LZF=2.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * container: 2 bits, PLAIN=1 (a single item as char array), PACKED=2 (listpack with multiple items).
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * recompress: 1 bit, bool, true if node is temporary decompressed for usage.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * attempted_compress: 1 bit, boolean, used for verifying during testing.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * extra: 10 bits, free for future use; pads out the remainder of 32 bits */</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">quicklistNode</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 前驱结点指针 8 bytes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 后继结点指针 8 bytes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 数据指针，指向 listpack 或者 quicklistLZF，8 bytes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">entry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// entry 占用字节大小 4 bytes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">size_t</span> <span class="n">sz</span><span class="p">;</span>             <span class="cm">/* entry size in bytes */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 16 bits，listpack 里的结点数量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">count</span> <span class="p">:</span> <span class="mi">16</span><span class="p">;</span>     <span class="cm">/* count of items in listpack */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2 bits，listpack 编码方式， RAW 表示原始 listpack， LZF 表示压缩后的 listpack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">encoding</span> <span class="p">:</span> <span class="mi">2</span><span class="p">;</span>   <span class="cm">/* RAW==1 or LZF==2 */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2 bits，表示 entry 中的元素类别是 PLAIN 还是 PACKED
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">container</span> <span class="p">:</span> <span class="mi">2</span><span class="p">;</span>  <span class="cm">/* PLAIN==1 or PACKED==2 */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1 bit，表示该结点在之前是否压缩过
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">recompress</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span> <span class="cm">/* was this node previous compressed? */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1 bit，表示该结点数据能否被压缩
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">attempted_compress</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span> <span class="cm">/* node can&#39;t compress; too small */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1 bit，标记该结点不进行压缩
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">dont_compress</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span> <span class="cm">/* prevent compression of entry that will be used later */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 9 bits，用于扩展
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">extra</span> <span class="p">:</span> <span class="mi">9</span><span class="p">;</span> <span class="cm">/* more bits to steal for future usage */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">quicklistNode</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="quicklistlzf" class="headerLink">
+    <a href="#quicklistlzf" class="header-mark"></a>1.2 quicklistLZF</h3><p>quicklistLZF 是 quicklistNode 中的 listpack 压缩后的结构：</p>
+<ul>
+<li>sz：指 compressed 数组的长度；</li>
+<li>compressed：柔性数组，存储着 listpack 被压缩后的具体的字节数组。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* quicklistLZF is a 8+N byte struct holding &#39;sz&#39; followed by &#39;compressed&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;sz&#39; is byte length of &#39;compressed&#39; field.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;compressed&#39; is LZF data with total (compressed) length &#39;sz&#39;
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * NOTE: uncompressed length is stored in quicklistNode-&gt;sz.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * When quicklistNode-&gt;entry is compressed, node-&gt;entry points to a quicklistLZF */</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// quicklistLZF 是一个 8+N 字节大小的结构体
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 压缩后的 listpack 大小存储在 LZF-&gt;sz 中，未压缩的长度存储在 quicklistNode-&gt;sz 中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">quicklistLZF</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">sz</span><span class="p">;</span> <span class="cm">/* LZF size in bytes*/</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">compressed</span><span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">quicklistLZF</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="quicklistbookmark" class="headerLink">
+    <a href="#quicklistbookmark" class="header-mark"></a>1.3 quicklistBookmark</h3><p>quicklistBookmark 会作为 quicklist 结构体的最后一个成员，是一个柔性数组。在需要迭代一个很长的 quicklist 时，可以利用此结构实现部分迭代。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Bookmarks are padded with realloc at the end of of the quicklist struct.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * They should only be used for very big lists if thousands of nodes were the
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * excess memory usage is negligible, and there&#39;s a real need to iterate on them
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * in portions.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * When not used, they don&#39;t add any memory overhead, but when used and then
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * deleted, some overhead remains (to avoid resonance).
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The number of bookmarks used should be kept to minimum since it also adds
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * overhead on node deletion (searching for a bookmark to update). */</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">quicklistBookmark</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">node</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">quicklistBookmark</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="quicklist" class="headerLink">
+    <a href="#quicklist" class="header-mark"></a>1.4 quicklist</h3><p>quicklist 是一个 40 字节大小的结构体(64 位操作系统下)，同时也是一个双向链表。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* quicklist is a 40 byte struct (on 64-bit systems) describing a quicklist.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;count&#39; is the number of total entries.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;len&#39; is the number of quicklist nodes.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;compress&#39; is: 0 if compression disabled, otherwise it&#39;s the number
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *                of quicklistNodes to leave uncompressed at ends of quicklist.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;fill&#39; is the user-requested (or default) fill factor.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;bookmarks are an optional feature that is used by realloc this struct,
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *      so that they don&#39;t consume memory when not used. */</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">quicklist</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 8 bytes，头指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 8 bytes，尾指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">tail</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 8 bytes，所有 listpacks 中所有结点总数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">count</span><span class="p">;</span>        <span class="cm">/* total count of all entries in all listpacks */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 8 bytes，快速列表结点数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">len</span><span class="p">;</span>          <span class="cm">/* number of quicklistNodes */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 16 bits (64 位操作系统)，每个结点的填充因数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">signed</span> <span class="kt">int</span> <span class="nl">fill</span> <span class="p">:</span> <span class="n">QL_FILL_BITS</span><span class="p">;</span>       <span class="cm">/* fill factor for individual nodes */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 16 bits (64 位操作系统)，两端结点不压缩的深度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">compress</span> <span class="p">:</span> <span class="n">QL_COMP_BITS</span><span class="p">;</span> <span class="cm">/* depth of end nodes not to compress;0=off */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4 bits，bookmarks 数组大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="nl">bookmark_count</span><span class="p">:</span> <span class="n">QL_BM_BITS</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 柔性数组，用于重新分配 quicklist 空间，不使用时不消耗内存
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklistBookmark</span> <span class="n">bookmarks</span><span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">quicklist</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="quicklistiter" class="headerLink">
+    <a href="#quicklistiter" class="header-mark"></a>1.5 quicklistIter</h3><p>quicklistIter 是快速列表的迭代器，用于遍历 quicklist。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">quicklistIter</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 迭代的 quicklist
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 当前迭代的 quicklistNode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">current</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 当前迭代的 listpack 中的 element 的指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">zi</span><span class="p">;</span> <span class="cm">/* points to the current element */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 当前 listpack 的偏移量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">long</span> <span class="n">offset</span><span class="p">;</span> <span class="cm">/* offset in current listpack */</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 迭代方向
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">direction</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">quicklistIter</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="quicklistentry" class="headerLink">
+    <a href="#quicklistentry" class="header-mark"></a>1.6 quicklistEntry</h3><p>quicklistEntry 用来描述一个 listpack 的 一个 element。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">quicklistEntry</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 指向 listpack element 所属 quicklist
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">const</span> <span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 指向 listpack element 所属 quicklistNode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">node</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 指向 listpack element 所属 listpack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">zi</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 若 listpack element 保存类型为字符串类型，value 和 sz 保存该值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 若 listpack element 保存类型为整形，longval 保存该值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">long</span> <span class="kt">long</span> <span class="n">longval</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">size_t</span> <span class="n">sz</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 标识 listpack element 在所处 listpack (即 zi 所指向的 listpack) 中的偏移量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 表示该 element 是该 listpack 的第几个元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">offset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">quicklistEntry</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="quicklist-api" class="headerLink">
+    <a href="#quicklist-api" class="header-mark"></a>2 quicklist API</h2><h3 id="quicklistnew" class="headerLink">
+    <a href="#quicklistnew" class="header-mark"></a>2.1 quicklistNew</h3><p>quicklistNew 创建一个赋默认值的 quicklist：</p>
+<ol>
+<li>
+<p>调用 quicklistCreate 创建一个空的快速列表；</p>
+</li>
+<li>
+<p>为快速列表设置默认值：</p>
+<ul>
+<li>设置每个结点的默认填充因数；</li>
+<li>设置每个结点的默认压缩深度。</li>
+</ul>
+</li>
+<li>
+<p>返回快速列表</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Create a new quicklist with some default parameters. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">quicklist</span> <span class="o">*</span><span class="nf">quicklistNew</span><span class="p">(</span><span class="kt">int</span> <span class="n">fill</span><span class="p">,</span> <span class="kt">int</span> <span class="n">compress</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span> <span class="o">=</span> <span class="n">quicklistCreate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklistSetOptions</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="n">compress</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">quicklist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Create a new quicklist.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Free with quicklistRelease(). */</span>
+</span></span><span class="line"><span class="cl"><span class="n">quicklist</span> <span class="o">*</span><span class="nf">quicklistCreate</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span> <span class="o">=</span> <span class="n">zmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">quicklist</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">tail</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">compress</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">fill</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">bookmark_count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">quicklist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">quicklistSetOptions</span><span class="p">(</span><span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fill</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklistSetFill</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">fill</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklistSetCompressDepth</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">depth</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#define FILL_MAX ((1 &lt;&lt; (QL_FILL_BITS-1))-1)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">void</span> <span class="nf">quicklistSetFill</span><span class="p">(</span><span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fill</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fill</span> <span class="o">&gt;</span> <span class="n">FILL_MAX</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fill</span> <span class="o">=</span> <span class="n">FILL_MAX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">fill</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fill</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">fill</span> <span class="o">=</span> <span class="n">fill</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#define COMPRESS_MAX ((1 &lt;&lt; QL_COMP_BITS)-1)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">void</span> <span class="nf">quicklistSetCompressDepth</span><span class="p">(</span><span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span><span class="p">,</span> <span class="kt">int</span> <span class="n">compress</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">compress</span> <span class="o">&gt;</span> <span class="n">COMPRESS_MAX</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">compress</span> <span class="o">=</span> <span class="n">COMPRESS_MAX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">compress</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">compress</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">compress</span> <span class="o">=</span> <span class="n">compress</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="_quicklistinsert" class="headerLink">
+    <a href="#_quicklistinsert" class="header-mark"></a>2.2 _quicklistInsert</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cm">/* Insert a new entry before or after existing entry &#39;entry&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * If after==1, the new value is inserted after &#39;entry&#39;, otherwise
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * the new value is inserted before &#39;entry&#39;. */</span>
+</span></span><span class="line"><span class="cl"><span class="n">REDIS_STATIC</span> <span class="kt">void</span> <span class="nf">_quicklistInsert</span><span class="p">(</span><span class="n">quicklistIter</span> <span class="o">*</span><span class="n">iter</span><span class="p">,</span> <span class="n">quicklistEntry</span> <span class="o">*</span><span class="n">entry</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                   <span class="kt">void</span> <span class="o">*</span><span class="n">value</span><span class="p">,</span> <span class="k">const</span> <span class="n">size_t</span> <span class="n">sz</span><span class="p">,</span> <span class="kt">int</span> <span class="n">after</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 插入 entry 的目标 quicklist
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklist</span> <span class="o">*</span><span class="n">quicklist</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">quicklist</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">full</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">at_tail</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">at_head</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">avail_next</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">avail_prev</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">fill</span> <span class="o">=</span> <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">fill</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 当前 entry 所属 quicklistNode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">node</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">new_node</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* we have no reference node, so let&#39;s create only node in the list */</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 当前 entry 没有所属 quicklistNode，因此需要在快速列表中创建一个结点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">D</span><span class="p">(</span><span class="s">&#34;No node given!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">unlikely</span><span class="p">(</span><span class="n">isLargeElement</span><span class="p">(</span><span class="n">sz</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// sz 超过阈值，向 quicklist 插入一个 PlainNode（quicklist-&gt;container = 1）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">__quicklistInsertPlainNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">tail</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 创建一个新的空结点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">new_node</span> <span class="o">=</span> <span class="n">quicklistCreateNode</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 创建一个新 listpack，将 sz 大小的 value 插入 listpack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// 新结点的 entry 指向新的 listpack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpPrepend</span><span class="p">(</span><span class="n">lpNew</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 向 quicklist 插入新结点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">__quicklistInsertNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 更新维护相关计数器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Populate accounting flags for easier boolean checks later */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_quicklistNodeAllowInsert</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="n">sz</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;Current node is full with count %d with requested fill %d&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">node</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">,</span> <span class="n">fill</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 通过填充因数 fill 判断能否将 sz 大小的数据插入 node 中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// 不能插入，则标记 full = 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">full</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// entry-&gt;offset：listpack element 在 listpack 中的偏移量
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// node-&gt;count：quicklistNode 中元素个数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 如果 after = 1，listpack element 在所处 listpack 最后
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 则标记 at_tail = 1 表示 entry 在当前 listpack 最后
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 如果 quicklistNode 的下一个结点允许插入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// 则标记 avail_next = 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">after</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">entry</span><span class="o">-&gt;</span><span class="n">offset</span> <span class="o">==</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">count</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">offset</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;At Tail of current listpack&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">at_tail</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">_quicklistNodeAllowInsert</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="n">sz</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">D</span><span class="p">(</span><span class="s">&#34;Next node is available.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">avail_next</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">after</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">entry</span><span class="o">-&gt;</span><span class="n">offset</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">offset</span> <span class="o">==</span> <span class="o">-</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;At Head&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">at_head</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">_quicklistNodeAllowInsert</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">prev</span><span class="p">,</span> <span class="n">fill</span><span class="p">,</span> <span class="n">sz</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">D</span><span class="p">(</span><span class="s">&#34;Prev node is available.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">avail_prev</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">unlikely</span><span class="p">(</span><span class="n">isLargeElement</span><span class="p">(</span><span class="n">sz</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">QL_NODE_IS_PLAIN</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">at_tail</span> <span class="o">&amp;&amp;</span> <span class="n">after</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">at_head</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">after</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">__quicklistInsertPlainNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">quicklistDecompressNodeForUse</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_node</span> <span class="o">=</span> <span class="n">_quicklistSplitNode</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">offset</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">quicklistNode</span> <span class="o">*</span><span class="n">entry_node</span> <span class="o">=</span> <span class="n">__quicklistCreatePlainNode</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">__quicklistInsertNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">entry_node</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">__quicklistInsertNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">entry_node</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Now determine where and how to insert the new element */</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">full</span> <span class="o">&amp;&amp;</span> <span class="n">after</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;Not full, inserting after current position.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistDecompressNodeForUse</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpInsertString</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">entry</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">zi</span><span class="p">,</span> <span class="n">LP_AFTER</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistNodeUpdateSz</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistRecompressOnly</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">full</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">after</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;Not full, inserting before current position.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistDecompressNodeForUse</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpInsertString</span><span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">entry</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">zi</span><span class="p">,</span> <span class="n">LP_BEFORE</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistNodeUpdateSz</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistRecompressOnly</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">full</span> <span class="o">&amp;&amp;</span> <span class="n">at_tail</span> <span class="o">&amp;&amp;</span> <span class="n">avail_next</span> <span class="o">&amp;&amp;</span> <span class="n">after</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* If we are: at tail, next has free space, and inserting after:
+</span></span></span><span class="line"><span class="cl"><span class="cm">         *   - insert entry at head of next node. */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;Full and tail, but next isn&#39;t full; inserting next node head&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistDecompressNodeForUse</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpPrepend</span><span class="p">(</span><span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistNodeUpdateSz</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistRecompressOnly</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistRecompressOnly</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">full</span> <span class="o">&amp;&amp;</span> <span class="n">at_head</span> <span class="o">&amp;&amp;</span> <span class="n">avail_prev</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">after</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* If we are: at head, previous has free space, and inserting before:
+</span></span></span><span class="line"><span class="cl"><span class="cm">         *   - insert entry at tail of previous node. */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;Full and head, but prev isn&#39;t full, inserting prev node tail&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">prev</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistDecompressNodeForUse</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpAppend</span><span class="p">(</span><span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistNodeUpdateSz</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistRecompressOnly</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistRecompressOnly</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">full</span> <span class="o">&amp;&amp;</span> <span class="p">((</span><span class="n">at_tail</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">avail_next</span> <span class="o">&amp;&amp;</span> <span class="n">after</span><span class="p">)</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">                        <span class="p">(</span><span class="n">at_head</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">avail_prev</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">after</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* If we are: full, and our prev/next has no available space, then:
+</span></span></span><span class="line"><span class="cl"><span class="cm">         *   - create new node and attach to quicklist */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\t</span><span class="s">provisioning new node...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span> <span class="o">=</span> <span class="n">quicklistCreateNode</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpPrepend</span><span class="p">(</span><span class="n">lpNew</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistNodeUpdateSz</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__quicklistInsertNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">full</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* else, node is full we need to split it. */</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* covers both after and !after cases */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">D</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\t</span><span class="s">splitting node...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistDecompressNodeForUse</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span> <span class="o">=</span> <span class="n">_quicklistSplitNode</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">entry</span><span class="o">-&gt;</span><span class="n">offset</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">after</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpPrepend</span><span class="p">(</span><span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span> <span class="o">=</span> <span class="n">lpAppend</span><span class="p">(</span><span class="n">new_node</span><span class="o">-&gt;</span><span class="n">entry</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">sz</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">quicklistNodeUpdateSz</span><span class="p">(</span><span class="n">new_node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__quicklistInsertNode</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">after</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">_quicklistMergeNodes</span><span class="p">(</span><span class="n">quicklist</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">quicklist</span><span class="o">-&gt;</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* In any case, we reset iterator to forbid use of iterator after insert.
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * Notice: iter-&gt;current has been compressed in _quicklistInsert(). */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">resetIterator</span><span class="p">(</span><span class="n">iter</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-09-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)" data-hashtags="Redis,缓存,Redis 数据结构"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)" data-description="阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)" data-description="阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/" data-title="Redis 快速列表(quicklist)"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/redis/">Redis</a>,&nbsp;<a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a>,&nbsp;<a href="/tags/redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">Redis 数据结构</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/redis%E6%BA%90%E7%A0%81_05_%E8%B7%B3%E8%A1%A8zskiplist/" class="prev" rel="prev" title="Redis 跳表(zskiplist)"><i class="fas fa-angle-left fa-fw"></i>Redis 跳表(zskiplist)</a>
+            <a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/" class="next" rel="next" title="汇编语言 —— 更灵活的定位内存地址的方法">汇编语言 —— 更灵活的定位内存地址的方法<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>

@@ -7,8 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>「汇编语言」寄存器 - Nanciico&#39;s Blog</title><meta name="Description" content="「汇编语言」寄存器"><meta property="og:title" content="「汇编语言」寄存器" />
-<meta property="og:description" content="「汇编语言」寄存器" />
+    <title>汇编语言 —— 寄存器 - Nanciico&#39;s Blog</title><meta name="Description" content="汇编语言 —— 寄存器"><meta property="og:title" content="汇编语言 —— 寄存器" />
+<meta property="og:description" content="汇编语言 —— 寄存器" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-07-16T00:00:00+00:00" />
@@ -16,37 +16,35 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="「汇编语言」寄存器"/>
-<meta name="twitter:description" content="「汇编语言」寄存器"/>
+<meta name="twitter:title" content="汇编语言 —— 寄存器"/>
+<meta name="twitter:description" content="汇编语言 —— 寄存器"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" /><link rel="next" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" />
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" /><link rel="next" href="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_00_%E5%89%8D%E8%A8%80/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "「汇编语言」寄存器",
+        "headline": "汇编语言 —— 寄存器",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8\/"
-        },"genre": "posts","keywords": "「汇编语言」","wordcount":  2323 ,
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  2333 ,
         "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8\/","datePublished": "2023-07-16T00:00:00+00:00","dateModified": "2023-07-16T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico"
-            },"description": "「汇编语言」寄存器"
+            },"description": "汇编语言 —— 寄存器"
     }
     </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
 </head>
 
-<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
         function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
         function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
         function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
@@ -62,7 +60,7 @@
             <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/series"> 系列 </a><a class="menu-item" href="/about"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
                             <i class="fas fa-search fa-fw"></i>
@@ -104,7 +102,7 @@
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         取消
                     </a>
-                </div><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/series" title="">系列</a><a class="menu-item" href="/about" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -135,11 +133,11 @@
     <li><a href="#代码段">代码段</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">「汇编语言」寄存器</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编语言 —— 寄存器</h1><div class="post-meta">
             <div class="post-meta-line">
-                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">Nanciico</a>
-                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/"><i class="far fa-folder fa-fw"></i>「汇编语言」</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-16">2023-07-16</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-16">2023-07-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2323 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>计算机体系结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-16">2023-07-16</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-16">2023-07-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2333 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 「汇编语言」阅读笔记</span>
@@ -148,12 +146,13 @@
                                 <div class="details-content series-content">
                                     <nav>
                                         <ul>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E9%98%85%E8%AF%BB%E5%BC%80%E7%AF%87/">「汇编语言」阅读开篇</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">「汇编语言」基础知识</a></li><li><span class="active">「汇编语言」寄存器</span></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">「汇编语言」寄存器(内存访问)</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/">「汇编语言」第一个完整的程序</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">「汇编语言」[BX]和loop指令</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/">「汇编语言」包含多个段的程序</a></li></ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/">汇编语言 —— 前言</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">汇编语言 —— 基础知识</a></li><li><span class="active">汇编语言 —— 寄存器</span></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">汇编语言 —— 寄存器(内存访问)</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/">汇编语言 —— 第一个完整的程序</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">汇编语言 —— [BX]和loop指令</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/">汇编语言 —— 包含多个段的程序</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/">汇编语言 —— 更灵活的定位内存地址的方法</a></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -188,11 +187,11 @@
 </ul>
 <hr>
 <h2 id="通用寄存器" class="headerLink">
-    <a href="#%e9%80%9a%e7%94%a8%e5%af%84%e5%ad%98%e5%99%a8" class="header-mark"></a>通用寄存器</h2><p>8086CPU 的所有寄存器都是 16 位的，可以存放两个字节。AX、BX、CX、DX 这 4 个寄存器通常用来存放一般性的数据，被称为通用寄存器。</p>
+    <a href="#%e9%80%9a%e7%94%a8%e5%af%84%e5%ad%98%e5%99%a8" class="header-mark"></a>1 通用寄存器</h2><p>8086CPU 的所有寄存器都是 16 位的，可以存放两个字节。AX、BX、CX、DX 这 4 个寄存器通常用来存放一般性的数据，被称为通用寄存器。</p>
 <p>8086CPU 的 AX、BX、CX 、DX 这 4 个寄存器都可分为两个可独立使用的 8 位寄存器来使用。</p>
 <hr>
 <h2 id="字在寄存器中的存储" class="headerLink">
-    <a href="#%e5%ad%97%e5%9c%a8%e5%af%84%e5%ad%98%e5%99%a8%e4%b8%ad%e7%9a%84%e5%ad%98%e5%82%a8" class="header-mark"></a>字在寄存器中的存储</h2><p>字节：记为 byte，一个字节由 8 个 bit 组成，可以存在 8 位寄存器中。</p>
+    <a href="#%e5%ad%97%e5%9c%a8%e5%af%84%e5%ad%98%e5%99%a8%e4%b8%ad%e7%9a%84%e5%ad%98%e5%82%a8" class="header-mark"></a>2 字在寄存器中的存储</h2><p>字节：记为 byte，一个字节由 8 个 bit 组成，可以存在 8 位寄存器中。</p>
 <p>字：记为 word，一个字由两个字节组成，这两个字节分别称为这个字的高位字节和低位字节。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -208,7 +207,7 @@
 </div>
 </div><hr>
 <h2 id="几条汇编指令" class="headerLink">
-    <a href="#%e5%87%a0%e6%9d%a1%e6%b1%87%e7%bc%96%e6%8c%87%e4%bb%a4" class="header-mark"></a>几条汇编指令</h2><table>
+    <a href="#%e5%87%a0%e6%9d%a1%e6%b1%87%e7%bc%96%e6%8c%87%e4%bb%a4" class="header-mark"></a>3 几条汇编指令</h2><table>
 <thead>
 <tr>
 <th style="text-align:center">汇编指令</th>
@@ -246,11 +245,11 @@
 </table>
 <hr>
 <h2 id="8086cpu-给出物理地址的方法" class="headerLink">
-    <a href="#8086cpu-%e7%bb%99%e5%87%ba%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e6%96%b9%e6%b3%95" class="header-mark"></a>8086CPU 给出物理地址的方法</h2><h3 id="物理地址的概念" class="headerLink">
-    <a href="#%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e6%a6%82%e5%bf%b5" class="header-mark"></a>物理地址的概念</h3><p>CPU 访问内存单元时，要给出内存单元的地址。所有的内存单元构成的存储空间是一个一维的线性空间，每一个内存单元在这个空间中都有唯一的地址，我们将这个唯一的地址称为物理地址。</p>
+    <a href="#8086cpu-%e7%bb%99%e5%87%ba%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e6%96%b9%e6%b3%95" class="header-mark"></a>4 8086CPU 给出物理地址的方法</h2><h3 id="物理地址的概念" class="headerLink">
+    <a href="#%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e6%a6%82%e5%bf%b5" class="header-mark"></a>4.1 物理地址的概念</h3><p>CPU 访问内存单元时，要给出内存单元的地址。所有的内存单元构成的存储空间是一个一维的线性空间，每一个内存单元在这个空间中都有唯一的地址，我们将这个唯一的地址称为物理地址。</p>
 <p>CPU 通过地址总线送入存储器的，必须是一个内存单元的物理地址。在 CPU 向地址总线上发出物理地址之前，必须要在内部先形成这个物理地址。不同的 CPU 可以有不同的形成物理地址的方式。</p>
 <h3 id="8086cpu-的结构" class="headerLink">
-    <a href="#8086cpu-%e7%9a%84%e7%bb%93%e6%9e%84" class="header-mark"></a>8086CPU 的结构</h3><p>8086CPU 是 16 位结构的 CPU：</p>
+    <a href="#8086cpu-%e7%9a%84%e7%bb%93%e6%9e%84" class="header-mark"></a>4.2 8086CPU 的结构</h3><p>8086CPU 是 16 位结构的 CPU：</p>
 <ul>
 <li>运算器一次最多可以处理 16 位的数据；</li>
 <li>寄存器的最大宽度为 16 位；</li>
@@ -259,7 +258,7 @@
 <p>内存单元的地址在送上地址总线之前，必须在 CPU 中处理、传输、暂时存放，对于 16 位 CPU，能一次性处理、传输、暂时存储 16 位的地址。</p>
 <p>8086CPU 有 20 位地址总线，可以传送 20 位地址，达到 1MB 寻址能力。</p>
 <h3 id="8086cpu-生成物理地址的过程" class="headerLink">
-    <a href="#8086cpu-%e7%94%9f%e6%88%90%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e8%bf%87%e7%a8%8b" class="header-mark"></a>8086CPU 生成物理地址的过程</h3><p>8086CPU 采用一种在内部用两个 16 位地址合成的方法来形成一个 20 位的物理地址:</p>
+    <a href="#8086cpu-%e7%94%9f%e6%88%90%e7%89%a9%e7%90%86%e5%9c%b0%e5%9d%80%e7%9a%84%e8%bf%87%e7%a8%8b" class="header-mark"></a>4.3 8086CPU 生成物理地址的过程</h3><p>8086CPU 采用一种在内部用两个 16 位地址合成的方法来形成一个 20 位的物理地址:</p>
 <ol>
 <li>CPU 中的相关部件提供两个 16 位的地址，一个称为段地址，另一个称为偏移地址；</li>
 <li>段地址和偏移地址通过内部总线送入一个称为地址加法器的部件；</li>
@@ -284,7 +283,7 @@
 <p>“基础地址 = 段地址 x 16”，因此段的起始地址也一定 16 的倍数；偏移地址为 16 位 ，16 位地址的寻址能力为 64KB ，所以一个段的长度最大为 64KB。</p>
 <hr>
 <h2 id="cs-和-ip" class="headerLink">
-    <a href="#cs-%e5%92%8c-ip" class="header-mark"></a>CS 和 IP</h2><p>段地址在 8086CPU 的段寄存器中存放。8086CPU 有 4 个段寄存器：CS、DS、SS、ES。</p>
+    <a href="#cs-%e5%92%8c-ip" class="header-mark"></a>5 CS 和 IP</h2><p>段地址在 8086CPU 的段寄存器中存放。8086CPU 有 4 个段寄存器：CS、DS、SS、ES。</p>
 <p>CS 和 IP 是8086CPU 中两个最关键的寄存器，它们指示了 CPU 当前要读取指令的地址。CS 为代码段寄存器，IP 为指令指针寄存器。</p>
 <p>8086 机中，任意时刻，CPU 将 CS:IP 指向的内容当作指令执行。</p>
 <figure><a class="lightgallery" href="/images/assembly_language/02_02.jpg" title="8086PC 读取和执行指令的相关部件" data-thumbnail="/images/assembly_language/02_02.jpg" data-sub-html="<h2>8086PC 读取和执行指令的相关部件</h2><p>8086PC 读取和执行指令的相关部件</p>">
@@ -317,7 +316,7 @@
 <p>在内存中，指令和数据没有任何区别，都是二进制信息，CPU 在工作的时候把有的信息看作指令，有的信息看作数据。CPU 将 CS、IP 中的内容当作指令的段地址和偏移地址，用它们合成指令的物理地址，到内存中读取指令码，执行。</p>
 <hr>
 <h2 id="修改-csip-的指令" class="headerLink">
-    <a href="#%e4%bf%ae%e6%94%b9-csip-%e7%9a%84%e6%8c%87%e4%bb%a4" class="header-mark"></a>修改 CS、IP 的指令</h2><p>程序员可以通过改变 CS、IP 中的内容来控制 CPU 执行目标指令。</p>
+    <a href="#%e4%bf%ae%e6%94%b9-csip-%e7%9a%84%e6%8c%87%e4%bb%a4" class="header-mark"></a>6 修改 CS、IP 的指令</h2><p>程序员可以通过改变 CS、IP 中的内容来控制 CPU 执行目标指令。</p>
 <p>mov 指令不能用于设置 CS、IP 的值，mov 指令被称为传送指令。</p>
 <p>jmp 指令可以用于设置 CS、IP 的值。能够改变 CS、IP 的 内容的指令被统称为转移指令。</p>
 <table>
@@ -343,7 +342,7 @@
 </table>
 <hr>
 <h2 id="代码段" class="headerLink">
-    <a href="#%e4%bb%a3%e7%a0%81%e6%ae%b5" class="header-mark"></a>代码段</h2><p>对于 8086PC 机，在编程时，可以根据需要，将一组内存单元定义为一个段。我们可以将长度为 N（N ≤ 64KB）的一组代码，存在一组地址连续、起始地址为 16 的 倍数的内存单元中。我们可以认为，这段内存是用来存放代码的，从而定义了一个代码段。</p>
+    <a href="#%e4%bb%a3%e7%a0%81%e6%ae%b5" class="header-mark"></a>7 代码段</h2><p>对于 8086PC 机，在编程时，可以根据需要，将一组内存单元定义为一个段。我们可以将长度为 N（N ≤ 64KB）的一组代码，存在一组地址连续、起始地址为 16 的 倍数的内存单元中。我们可以认为，这段内存是用来存放代码的，从而定义了一个代码段。</p>
 <p>将一段内存当作代码段，仅仅是我们在编程时的一种安排，CPU 并不会由于这种安排，就自动地将我们定义的代码段中的指令当作指令来执行。</p>
 <hr>
 </div>
@@ -357,9 +356,8 @@
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
-                    </span></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器" data-description="「汇编语言」寄存器"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器" data-description="「汇编语言」寄存器"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="「汇编语言」寄存器"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器" data-description="汇编语言 —— 寄存器"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器" data-description="汇编语言 —— 寄存器"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/" data-title="汇编语言 —— 寄存器"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
@@ -370,12 +368,12 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="prev" rel="prev" title="「汇编语言」基础知识"><i class="fas fa-angle-left fa-fw"></i>「汇编语言」基础知识</a>
-            <a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" class="next" rel="next" title="「汇编语言」寄存器(内存访问)">「汇编语言」寄存器(内存访问)<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" class="prev" rel="prev" title="汇编语言 —— 基础知识"><i class="fas fa-angle-left fa-fw"></i>汇编语言 —— 基础知识</a>
+            <a href="/redis%E6%BA%90%E7%A0%81_00_%E5%89%8D%E8%A8%80/" class="next" rel="next" title="Redis 代码阅读开篇">Redis 代码阅读开篇<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
-<div id="comments"></div></article></div>
+</article></div>
         </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
             <div class="footer-line"></div>
             <div class="footer-line">
             </div>
@@ -386,8 +384,8 @@
         </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
             <i class="fas fa-comment fa-fw"></i>
         </a>
-    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
-        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
 </body>
 
 </html>
