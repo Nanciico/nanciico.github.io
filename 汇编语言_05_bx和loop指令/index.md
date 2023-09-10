@@ -42,7 +42,11 @@ s:
 
 ## Loop 和 [bx] 的联合应用
 
+{{< admonition type=question title="问题" open=true >}}
+
 编程目标：计算 ffff:0~ffff:b 单元中的数据的和，结果存储在 dx 中。
+
+{{< /admonition >}}
 
 分析问题：
 

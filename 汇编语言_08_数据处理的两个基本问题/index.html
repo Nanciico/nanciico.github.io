@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>汇编语言 —— 数据处理的两个基本问题 - Nanciico&#39;s Blog</title><meta name="Description" content="汇编语言 —— 数据处理的两个基本问题"><meta property="og:title" content="汇编语言 —— 数据处理的两个基本问题" />
+<meta property="og:description" content="汇编语言 —— 数据处理的两个基本问题" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-09-10T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="汇编语言 —— 数据处理的两个基本问题"/>
+<meta name="twitter:description" content="汇编语言 —— 数据处理的两个基本问题"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编语言 —— 数据处理的两个基本问题",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  1620 ,
+        "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98\/","datePublished": "2023-09-10T00:00:00+00:00","dateModified": "2023-09-10T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "汇编语言 —— 数据处理的两个基本问题"
+    }
+    </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+</head>
+
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#定位处理的数据">定位处理的数据</a>
+      <ul>
+        <li><a href="#bx-si-di-和-bp">bx, si, di 和 bp</a></li>
+        <li><a href="#汇编语言中数据位置的表达">汇编语言中数据位置的表达</a></li>
+        <li><a href="#寻址方式">寻址方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#确定数据的长度">确定数据的长度</a>
+      <ul>
+        <li><a href="#通过寄存器名指明要处理的数据的尺寸">通过寄存器名指明要处理的数据的尺寸</a></li>
+        <li><a href="#用操作符指明内存单元的长度">用操作符指明内存单元的长度</a></li>
+        <li><a href="#其他方法">其他方法</a></li>
+      </ul>
+    </li>
+    <li><a href="#学习三个指令">学习三个指令</a>
+      <ul>
+        <li><a href="#div-指令">div 指令</a></li>
+        <li><a href="#伪指令-dd">伪指令 dd</a></li>
+        <li><a href="#dup-操作符">dup 操作符</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编语言 —— 数据处理的两个基本问题</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>计算机体系结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-09-10">2023-09-10</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-09-10">2023-09-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1620 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/">汇编语言 —— 前言</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">汇编语言 —— 基础知识</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/">汇编语言 —— 寄存器</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">汇编语言 —— 寄存器(内存访问)</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/">汇编语言 —— 第一个完整的程序</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">汇编语言 —— [BX]和loop指令</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/">汇编语言 —— 包含多个段的程序</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/">汇编语言 —— 更灵活的定位内存地址的方法</a></li><li><span class="active">汇编语言 —— 数据处理的两个基本问题</span></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#定位处理的数据">定位处理的数据</a>
+      <ul>
+        <li><a href="#bx-si-di-和-bp">bx, si, di 和 bp</a></li>
+        <li><a href="#汇编语言中数据位置的表达">汇编语言中数据位置的表达</a></li>
+        <li><a href="#寻址方式">寻址方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#确定数据的长度">确定数据的长度</a>
+      <ul>
+        <li><a href="#通过寄存器名指明要处理的数据的尺寸">通过寄存器名指明要处理的数据的尺寸</a></li>
+        <li><a href="#用操作符指明内存单元的长度">用操作符指明内存单元的长度</a></li>
+        <li><a href="#其他方法">其他方法</a></li>
+      </ul>
+    </li>
+    <li><a href="#学习三个指令">学习三个指令</a>
+      <ul>
+        <li><a href="#div-指令">div 指令</a></li>
+        <li><a href="#伪指令-dd">伪指令 dd</a></li>
+        <li><a href="#dup-操作符">dup 操作符</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>本章对前面的所有内容是具有总结性的。</p>
+<p>计算机是进行数据处理、运算的机器，那么有两个基本的问题就包含在其中：</p>
+<ol>
+<li>处理的数据在什么地方？</li>
+<li>要处理的数据有多长？</li>
+</ol>
+<hr>
+<h2 id="定位处理的数据" class="headerLink">
+    <a href="#%e5%ae%9a%e4%bd%8d%e5%a4%84%e7%90%86%e7%9a%84%e6%95%b0%e6%8d%ae" class="header-mark"></a>1 定位处理的数据</h2><h3 id="bx-si-di-和-bp" class="headerLink">
+    <a href="#bx-si-di-%e5%92%8c-bp" class="header-mark"></a>1.1 bx, si, di 和 bp</h3><p>对这四个寄存器进行一个总结：</p>
+<ol>
+<li>在 8086CPU 中，只有这 4 个寄存器可以用在 “[&hellip;]” 中来进行内存单元的寻址；</li>
+<li>在 “[&hellip;]” 中，这 4 个寄存器可以单个出现，或只能以 4 种组合出现：
+<ul>
+<li>bx 和 si</li>
+<li>bx 和 di</li>
+<li>bp 和 si</li>
+<li>bp 和 di</li>
+</ul>
+</li>
+<li>只要在 “[&hellip;]” 中使用寄存器 bp，而指令中没有显性地给出段地址，段地址就默认在 ss 中。</li>
+</ol>
+<h3 id="汇编语言中数据位置的表达" class="headerLink">
+    <a href="#%e6%b1%87%e7%bc%96%e8%af%ad%e8%a8%80%e4%b8%ad%e6%95%b0%e6%8d%ae%e4%bd%8d%e7%bd%ae%e7%9a%84%e8%a1%a8%e8%be%be" class="header-mark"></a>1.2 汇编语言中数据位置的表达</h3><p>汇编语言中用 3 个概念来表达数据的位置：</p>
+<ol>
+<li>立即数(idata)：直接包含在机器指令中的数据(执行前在 CPU 的指令缓冲器中)；</li>
+<li>寄存器：指令要处理的数据在寄存器中，在汇编指令中给出相应的寄存器名；</li>
+<li>段地址(SA)和偏移地址(EA)：指令要处理的数据在内存中，在汇编指令中可用 “<i class="far fa-check-square fa-fw"></i> ” 的格式给出 EA，SA 在某个段寄存器中。</li>
+</ol>
+<h3 id="寻址方式" class="headerLink">
+    <a href="#%e5%af%bb%e5%9d%80%e6%96%b9%e5%bc%8f" class="header-mark"></a>1.3 寻址方式</h3><p>当数据存放在内存中的时候，我们可以用多种方式来给定这个内存单元的偏移地址：</p>
+<figure><a class="lightgallery" href="/images/assembly_language/08_01.jpg" title="寻址方式小结" data-thumbnail="/images/assembly_language/08_01.jpg" data-sub-html="<h2>寻址方式小结</h2><p>寻址方式小结</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/08_01.jpg"
+            srcset="/images/assembly_language/08_01.jpg, /images/assembly_language/08_01.jpg 1.5x, /images/assembly_language/08_01.jpg 2x"
+            sizes="auto"
+            alt="寻址方式小结">
+    </a><figcaption class="image-caption">寻址方式小结</figcaption>
+    </figure>
+<hr>
+<h2 id="确定数据的长度" class="headerLink">
+    <a href="#%e7%a1%ae%e5%ae%9a%e6%95%b0%e6%8d%ae%e7%9a%84%e9%95%bf%e5%ba%a6" class="header-mark"></a>2 确定数据的长度</h2><p>8086CPU 的指令，可以处理两种尺寸的数据，byte 和 word。所以在机器指令中要指明，指令进行的是字操作还是字节操作。汇编语言中用以下方法处理：</p>
+<h3 id="通过寄存器名指明要处理的数据的尺寸" class="headerLink">
+    <a href="#%e9%80%9a%e8%bf%87%e5%af%84%e5%ad%98%e5%99%a8%e5%90%8d%e6%8c%87%e6%98%8e%e8%a6%81%e5%a4%84%e7%90%86%e7%9a%84%e6%95%b0%e6%8d%ae%e7%9a%84%e5%b0%ba%e5%af%b8" class="header-mark"></a>2.1 通过寄存器名指明要处理的数据的尺寸</h3><p>下面的指令中，寄存器指明了指令进行的是字操作。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov ax, 1
+</span></span><span class="line"><span class="cl">mov bx, ds:[0]
+</span></span><span class="line"><span class="cl">mov ds, ax
+</span></span><span class="line"><span class="cl">mov ds:[0], ax
+</span></span><span class="line"><span class="cl">inc ax
+</span></span><span class="line"><span class="cl">add ax, 1000
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下面的指令中，寄存器指明了指令进行的是字节操作。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov al, 1
+</span></span><span class="line"><span class="cl">mov al, b1
+</span></span><span class="line"><span class="cl">mov al, ds:[0]
+</span></span><span class="line"><span class="cl">mov ds:[0], al
+</span></span><span class="line"><span class="cl">inc al
+</span></span><span class="line"><span class="cl">add al, 100
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="用操作符指明内存单元的长度" class="headerLink">
+    <a href="#%e7%94%a8%e6%93%8d%e4%bd%9c%e7%ac%a6%e6%8c%87%e6%98%8e%e5%86%85%e5%ad%98%e5%8d%95%e5%85%83%e7%9a%84%e9%95%bf%e5%ba%a6" class="header-mark"></a>2.2 用操作符指明内存单元的长度</h3><p>在没有寄存器名存在的情况下，用操作符 X ptr 指明内存单元的长度，在汇编指令中可以为 word 或 byte。</p>
+<p>下面的指令中，用 word ptr 指明了指令访问的内存单元是一个字单元。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov word ptr ds:[0], 1
+</span></span><span class="line"><span class="cl">inc word ptr [bx]
+</span></span><span class="line"><span class="cl">inc word ptr ds:[0]
+</span></span><span class="line"><span class="cl">add word ptr [bx],2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>下面的指令中，用 byte ptr 指明了指令访问的内存单元是一个字节单元。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov byte ptr ds:[0], 1
+</span></span><span class="line"><span class="cl">inc byte ptr [bx]
+</span></span><span class="line"><span class="cl">inc byte ptr ds:[0]
+</span></span><span class="line"><span class="cl">add byte ptr [bx], 2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="其他方法" class="headerLink">
+    <a href="#%e5%85%b6%e4%bb%96%e6%96%b9%e6%b3%95" class="header-mark"></a>2.3 其他方法</h3><p>有些指令默认了访问的是字单元还是字节单元，比如，<code>push [1000H]</code> 就不用指明访问的是字单元还是字节单元，因为 push 指令只进行字操作。</p>
+<hr>
+<h2 id="学习三个指令" class="headerLink">
+    <a href="#%e5%ad%a6%e4%b9%a0%e4%b8%89%e4%b8%aa%e6%8c%87%e4%bb%a4" class="header-mark"></a>3 学习三个指令</h2><h3 id="div-指令" class="headerLink">
+    <a href="#div-%e6%8c%87%e4%bb%a4" class="header-mark"></a>3.1 div 指令</h3><p>div 是除法指令，使用 div 做除法的时候应注意以下问题：</p>
+<ol>
+<li>除数：有 8 位和 16 位两种， 在一个 reg 或内存单元中；</li>
+<li>被除数：默认放在 AX 或 (DX 和 AX) 中：
+<ul>
+<li>若除数 8 位，被除数则为 16 位，默认在 AX 中存放；</li>
+<li>若除数为 16 位，被除数则为 32 位，在 DX 和 AX 中存放，DX 存放高 16 位，AX 存放低 16 位。</li>
+</ul>
+</li>
+<li>结果：
+<ul>
+<li>若除数 8 位，则 AL 存储除法操作的商，AH 存储除法操作的余数；</li>
+<li>若除数为 16 位，则 AX 存储除法操作的商，DX 存储除法操作的余数。</li>
+</ul>
+</li>
+</ol>
+<p>格式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">div reg
+</span></span><span class="line"><span class="cl">div 内存单元
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>16 位除法编程练习<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>编程，利用除法指令计算 100001 / 100：</p>
+<p>首先分析一下，被除数 100001 大于 65535，不能用 ax 寄存器存放，所以只能用 dx 和 ax 两个寄存器联合存放 100001，也就是说要进行 16 位的除法。除数 100 小于 255, 可以在一个 8 位寄存器中存放，但是，因为被除数是 32 位的，除数应为 16 位，所以要用一个 16 位寄存器来存放除数 100。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov dx, 1
+</span></span><span class="line"><span class="cl">mov ax, 86A1H ; (dx) * 10000H + (ax) = 100001
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">mov bx, 100
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">div bx
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>8 位除法编程练习<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>编程，利用除法指令计算 1001 / 100：</p>
+<p>首先分析一下，被除数 1001 可用 ax 寄存器存放，除数 100 可用 8 位寄存器存放，也就是说，要进行 8 位的除法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov ax, 1001
+</span></span><span class="line"><span class="cl">mov bl,100
+</span></span><span class="line"><span class="cl">div bl
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<h3 id="伪指令-dd" class="headerLink">
+    <a href="#%e4%bc%aa%e6%8c%87%e4%bb%a4-dd" class="header-mark"></a>3.2 伪指令 dd</h3><p>前面我们用 db 和 dw 定义字节型数据和字型数据。dd 是用来定义 dword (double word，双字) 型数据的。比如:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">data segment
+</span></span><span class="line"><span class="cl">db 1                ; 数据为 01H，在 data:0 处，占 1 个字节
+</span></span><span class="line"><span class="cl">dw 1                ; 数据为 0001H，在 data:1 处，占 1 个字
+</span></span><span class="line"><span class="cl">dd 1                ; 数据为 00000001H，在 data:3 处，占 2 个字
+</span></span><span class="line"><span class="cl">data ends
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="dup-操作符" class="headerLink">
+    <a href="#dup-%e6%93%8d%e4%bd%9c%e7%ac%a6" class="header-mark"></a>3.3 dup 操作符</h3><p>dup 是一个操作符，在汇编语言中同 db、dw、dd 等一样，也是由编译器识别处理的符号。它是和 db、dw、dd 等数据定义伪指令配合使用的，用来进行数据的重复。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">db 3 dup (0)                ; 定义了 3 个字节，它们的值都是 0，相当于 db 0,0,0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">db 3 dup (0,1,2)            ; 定义了 9 个字节，相当于db 0,1,2,0,1,2,0,1,2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">db 3 dup (&#39;abc&#39;, &#39;ABC&#39;)     ; 定义了 18 个字节，相当于 db &#39;abcABCabcABCabcABC&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-09-10</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题" data-description="汇编语言 —— 数据处理的两个基本问题"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题" data-description="汇编语言 —— 数据处理的两个基本问题"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/" data-title="汇编语言 —— 数据处理的两个基本问题"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/" class="prev" rel="prev" title="汇编语言 —— 更灵活的定位内存地址的方法"><i class="fas fa-angle-left fa-fw"></i>汇编语言 —— 更灵活的定位内存地址的方法</a></div>
+</div>
+</article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>
