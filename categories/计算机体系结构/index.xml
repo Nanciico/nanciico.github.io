@@ -4,7 +4,21 @@
         <link>https://Nanciico.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
         <description>计算机体系结构 - 分类 - Nanciico&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
-            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Sun, 10 Sep 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Sat, 23 Sep 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml" /><item>
+    <title>汇编语言 —— CALL和RET指令</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_10_call%E5%92%8Cret%E6%8C%87%E4%BB%A4/</link>
+    <pubDate>Sat, 23 Sep 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_10_call%E5%92%8Cret%E6%8C%87%E4%BB%A4/</guid>
+    <description><![CDATA[汇编语言 —— CALL和RET指令]]></description>
+</item><item>
+    <title>汇编语言 —— 转移指令的原理</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_09_%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</link>
+    <pubDate>Sun, 17 Sep 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_09_%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</guid>
+    <description><![CDATA[汇编语言 —— 转移指令的原理]]></description>
+</item><item>
     <title>汇编语言 —— 数据处理的两个基本问题</title>
     <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</link>
     <pubDate>Sun, 10 Sep 2023 00:00:00 &#43;0000</pubDate><author>
@@ -60,12 +74,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
     <description><![CDATA[汇编语言 —— 基础知识]]></description>
-</item><item>
-    <title>汇编语言 —— 前言</title>
-    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/</link>
-    <pubDate>Sun, 09 Jul 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/</guid>
-    <description><![CDATA[汇编语言 —— 前言]]></description>
 </item></channel>
 </rss>
