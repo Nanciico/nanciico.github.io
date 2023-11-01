@@ -258,3 +258,4 @@ robj *tryObjectEncodingEx(robj *o, int try_trim) {
 ``` C
 
 ```
+
