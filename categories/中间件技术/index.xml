@@ -4,7 +4,21 @@
         <link>https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/</link>
         <description>中间件技术 - 分类 - Nanciico&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
-            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Fri, 08 Sep 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Tue, 17 Oct 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml" /><item>
+    <title>Redis 对象(redisObject)</title>
+    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/</link>
+    <pubDate>Tue, 17 Oct 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/</guid>
+    <description><![CDATA[阅读 Redis 对象 redisObject 相关代码，了解 Redis 中对象的数据结构。]]></description>
+</item><item>
+    <title>Redis 整数集合(intset)</title>
+    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</link>
+    <pubDate>Thu, 12 Oct 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</guid>
+    <description><![CDATA[阅读 Redis 整数集合 intset 相关代码，了解 Redis 中整数集合的实现。]]></description>
+</item><item>
     <title>Redis 快速列表(quicklist)</title>
     <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/</link>
     <pubDate>Fri, 08 Sep 2023 00:00:00 &#43;0000</pubDate><author>
@@ -60,19 +74,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_02_%E5%86%85%E5%AD%98%E7%A2%8E%E7%89%87/</guid>
     <description><![CDATA[分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。]]></description>
-</item><item>
-    <title>Redis 异步删除解决大 Key 过期阻塞问题可行性分析</title>
-    <link>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_01_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/</link>
-    <pubDate>Sat, 04 Mar 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_01_%E5%BC%82%E6%AD%A5%E5%88%A0%E9%99%A4/</guid>
-    <description><![CDATA[通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。]]></description>
-</item><item>
-    <title>Redis 升级 —— 前言</title>
-    <link>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_00_%E5%BC%80%E7%AF%87/</link>
-    <pubDate>Fri, 03 Mar 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E5%8D%87%E7%BA%A7_00_%E5%BC%80%E7%AF%87/</guid>
-    <description><![CDATA[记录Redis升级流程。]]></description>
 </item></channel>
 </rss>

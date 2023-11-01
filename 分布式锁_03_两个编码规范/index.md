@@ -26,17 +26,18 @@ Unlock 发送请求，如果发生 Socket 异常导致逻辑上解锁但实际�
 // 校验，正确的用法
 internal void Unlock(string name)
 {
-    if (!(_lockEntries.TryGetValue(name, out var entry) && entry.IsEntered()))
+    if (! (_lockEntries.TryGetValue(name, out var entry) && entry.IsEntered()))
     {
-        throw new ExitLocalLockException("Exit local lock occurs an exception, " +
-            "the local lock is missing or the local lock is not held by the current thread. " +
+        throw new InvalidStateException("The local lock is missing or the local lock is not held by the current thread. " +
             $"LockName: [{name}]");
     }
 
     entry.Exit();
     entry.DecRef();
 }
+```
 
+``` C#
 // 判断，会忽略异常。
 internal void Unlock(string name)
 {

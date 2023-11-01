@@ -4,7 +4,21 @@
         <link>https://Nanciico.github.io/tags/redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
         <description>Redis 数据结构 - 标签 - Nanciico&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
-            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Fri, 08 Sep 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Tue, 17 Oct 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/redis-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml" /><item>
+    <title>Redis 对象(redisObject)</title>
+    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/</link>
+    <pubDate>Tue, 17 Oct 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/</guid>
+    <description><![CDATA[阅读 Redis 对象 redisObject 相关代码，了解 Redis 中对象的数据结构。]]></description>
+</item><item>
+    <title>Redis 整数集合(intset)</title>
+    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</link>
+    <pubDate>Thu, 12 Oct 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</guid>
+    <description><![CDATA[阅读 Redis 整数集合 intset 相关代码，了解 Redis 中整数集合的实现。]]></description>
+</item><item>
     <title>Redis 快速列表(quicklist)</title>
     <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/</link>
     <pubDate>Fri, 08 Sep 2023 00:00:00 &#43;0000</pubDate><author>
