@@ -165,7 +165,10 @@
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/">汇编语言 —— 数据处理的两个基本问题</a></li>
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_09_%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/">汇编语言 —— 转移指令的原理</a></li>
                                                     <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_10_call%E5%92%8Cret%E6%8C%87%E4%BB%A4/">汇编语言 —— CALL和RET指令</a></li>
-                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/">汇编语言 —— 标志寄存器</a></li></ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/">汇编语言 —— 标志寄存器</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/">汇编语言 —— 内中断</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_13_int%E6%8C%87%E4%BB%A4/">汇编语言 —— INT指令</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_14_%E7%AB%AF%E5%8F%A3/">汇编语言 —— 端口</a></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -237,19 +240,19 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">codesg</span>        <span class="c">; 将用作代码段的段 codesg 和 CPU 中的段寄存器 cs 联系起来
-</span></span></span><span class="line"><span class="cl"><span class="c"></span>
-</span></span><span class="line"><span class="cl"><span class="nf">codesg</span> <span class="no">segment</span>          <span class="c">; 定义一个段，段的名称为 “codesg”，这个段从此开始
-</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0123</span><span class="no">H</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0456</span><span class="no">H</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="no">ax</span><span class="p">,</span> <span class="no">bx</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">add</span> <span class="no">ax</span><span class="p">,</span> <span class="no">ax</span>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:codesg        ; 将用作代码段的段 codesg 和 CPU 中的段寄存器 cs 联系起来
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">4</span><span class="no">c00H</span>       <span class="c">; 程序返回
-</span></span></span><span class="line"><span class="cl"><span class="c"></span>    <span class="no">int</span> <span class="mi">21</span><span class="no">H</span>
-</span></span><span class="line"><span class="cl"><span class="nf">codesg</span> <span class="no">ends</span>             <span class="c">; 名称为 “codesg” 的段到此结束
-</span></span></span><span class="line"><span class="cl"><span class="c"></span>
-</span></span><span class="line"><span class="cl"><span class="nf">end</span>
+</span></span><span class="line"><span class="cl">codesg segment          ; 定义一个段，段的名称为 “codesg”，这个段从此开始
+</span></span><span class="line"><span class="cl">    mov ax, 0123H
+</span></span><span class="line"><span class="cl">    mov bx, 0456H
+</span></span><span class="line"><span class="cl">    add ax, bx
+</span></span><span class="line"><span class="cl">    add ax, ax
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    mov ax, 4c00H       ; 程序返回
+</span></span><span class="line"><span class="cl">    int 21H
+</span></span><span class="line"><span class="cl">codesg ends             ; 名称为 “codesg” 的段到此结束
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="伪指令" class="headerLink">

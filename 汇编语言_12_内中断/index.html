@@ -1,0 +1,586 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>汇编语言 —— 内中断 - Nanciico&#39;s Blog</title><meta name="Description" content="汇编语言 —— 内中断"><meta property="og:title" content="汇编语言 —— 内中断" />
+<meta property="og:description" content="汇编语言 —— 内中断" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-11-13T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="汇编语言 —— 内中断"/>
+<meta name="twitter:description" content="汇编语言 —— 内中断"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" /><link rel="prev" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="next" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_13_int%E6%8C%87%E4%BB%A4/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编语言 —— 内中断",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  4644 ,
+        "url": "https:\/\/Nanciico.github.io\/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD\/","datePublished": "2023-11-13T00:00:00+00:00","dateModified": "2023-11-13T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "汇编语言 —— 内中断"
+    }
+    </script><script src="//instant.page/5.2.0" defer type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+</head>
+
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="/about" title="关于"> 关于 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="/about" title="关于">关于</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#内中断的产生">内中断的产生</a></li>
+    <li><a href="#中断处理程序">中断处理程序</a></li>
+    <li><a href="#中断向量表">中断向量表</a></li>
+    <li><a href="#中断过程">中断过程</a></li>
+    <li><a href="#中断处理程序和-iret-指令">中断处理程序和 iret 指令</a></li>
+    <li><a href="#除法错误中断的处理">除法错误中断的处理</a></li>
+    <li><a href="#编程处理-0-号中断">编程处理 0 号中断</a>
+      <ul>
+        <li><a href="#分析">分析</a></li>
+        <li><a href="#安装-do0-中断处理程序">安装 do0 中断处理程序</a></li>
+        <li><a href="#编写-do0-程序">编写 do0 程序</a></li>
+        <li><a href="#设置中断向量">设置中断向量</a></li>
+      </ul>
+    </li>
+    <li><a href="#单步中断">单步中断</a></li>
+    <li><a href="#响应中断的特殊情况">响应中断的特殊情况</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编语言 —— 内中断</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>计算机体系结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-11-13">2023-11-13</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-11-13">2023-11-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4644 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_00_%E5%89%8D%E8%A8%80/">汇编语言 —— 前言</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_01_%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">汇编语言 —— 基础知识</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_02_%E5%AF%84%E5%AD%98%E5%99%A8/">汇编语言 —— 寄存器</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_03_%E5%AF%84%E5%AD%98%E5%99%A8%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">汇编语言 —— 寄存器(内存访问)</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_04_%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%AE%8C%E6%95%B4%E7%9A%84%E7%A8%8B%E5%BA%8F/">汇编语言 —— 第一个完整的程序</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_05_bx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/">汇编语言 —— [BX]和loop指令</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_06_%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/">汇编语言 —— 包含多个段的程序</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_07_%E6%9B%B4%E7%81%B5%E6%B4%BB%E7%9A%84%E5%AE%9A%E4%BD%8D%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80%E7%9A%84%E6%96%B9%E6%B3%95/">汇编语言 —— 更灵活的定位内存地址的方法</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/">汇编语言 —— 数据处理的两个基本问题</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_09_%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/">汇编语言 —— 转移指令的原理</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_10_call%E5%92%8Cret%E6%8C%87%E4%BB%A4/">汇编语言 —— CALL和RET指令</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/">汇编语言 —— 标志寄存器</a></li><li><span class="active">汇编语言 —— 内中断</span></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_13_int%E6%8C%87%E4%BB%A4/">汇编语言 —— INT指令</a></li>
+                                                    <li><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_14_%E7%AB%AF%E5%8F%A3/">汇编语言 —— 端口</a></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#内中断的产生">内中断的产生</a></li>
+    <li><a href="#中断处理程序">中断处理程序</a></li>
+    <li><a href="#中断向量表">中断向量表</a></li>
+    <li><a href="#中断过程">中断过程</a></li>
+    <li><a href="#中断处理程序和-iret-指令">中断处理程序和 iret 指令</a></li>
+    <li><a href="#除法错误中断的处理">除法错误中断的处理</a></li>
+    <li><a href="#编程处理-0-号中断">编程处理 0 号中断</a>
+      <ul>
+        <li><a href="#分析">分析</a></li>
+        <li><a href="#安装-do0-中断处理程序">安装 do0 中断处理程序</a></li>
+        <li><a href="#编写-do0-程序">编写 do0 程序</a></li>
+        <li><a href="#设置中断向量">设置中断向量</a></li>
+      </ul>
+    </li>
+    <li><a href="#单步中断">单步中断</a></li>
+    <li><a href="#响应中断的特殊情况">响应中断的特殊情况</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>任何一个通用的 CPU，比如 8086，都具备一种能力，可以在执行完当前正在执行的指令之后，检测到从 CPU 外部发送过来的或内部产生的一种特殊信息，并且可以立即对所接收到的信息进行处理。这种特殊的信息，我们可以称其为：中断信息。中断的意思是指，CPU 不再接着(刚执行完的指令)向下执行，而是转去处理这个特殊信息。</p>
+<p>中断信息是对几个具有先后顺序的硬件操作所产生的事件的统一描述。“中断信息” 是要求 CPU 马上进行某种处理，并向所要进行的该种处理提供了必备的参数的通知信息。中断信息可以来自 CPU 的内部和外部，这一章中，我们主要讨论来自于CPU内部的中断信息。</p>
+<hr>
+<h2 id="内中断的产生" class="headerLink">
+    <a href="#%e5%86%85%e4%b8%ad%e6%96%ad%e7%9a%84%e4%ba%a7%e7%94%9f" class="header-mark"></a>1 内中断的产生</h2><p>对于 8086CPU，当 CPU 内部有下面的情况发生的时候，将产生相应的中断信息：</p>
+<ul>
+<li>除法错误，比如，执行 div 指令产生的除法溢出；</li>
+<li>单步执行；</li>
+<li>执行 into 指令；</li>
+<li>执行 int 指令。</li>
+</ul>
+<p>中断信息的来源称为中断源，上述的 4 种中断源，在 8086CPU 中的中断类型码如下：</p>
+<ul>
+<li>除法错误：0</li>
+<li>单步执行：1</li>
+<li>执行 into 指令：4</li>
+<li>执行 int 指令，该指令的格式为 int n，指令中的 n 为字节型立即数，是提供给 CPU 的中断类型码。</li>
+</ul>
+<p>中断类型码为一个字节型数据，可以表示 256 种中断信息的来源。</p>
+<hr>
+<h2 id="中断处理程序" class="headerLink">
+    <a href="#%e4%b8%ad%e6%96%ad%e5%a4%84%e7%90%86%e7%a8%8b%e5%ba%8f" class="header-mark"></a>2 中断处理程序</h2><p>CPU 在收到中断信息后，应该转去执行该中断信息的处理程序。若要 8086CPU 执行某处的程序，就要将 CS:IP 指向它的入口(即程序第一条指令的地址)。</p>
+<p>可见 首要的问题是，CPU 在收到中断信息后，如何根据中断信息确定其处理程序的入口。</p>
+<hr>
+<h2 id="中断向量表" class="headerLink">
+    <a href="#%e4%b8%ad%e6%96%ad%e5%90%91%e9%87%8f%e8%a1%a8" class="header-mark"></a>3 中断向量表</h2><p>CPU 用 8 位的中断类型码通过中断向量表找到相应的中断处理程序的入口地址。</p>
+<p>中断向量表就是中断向量的列表。中断向量就是中断处理程序的入口地址。因此，<strong>中断向量表，就是中断处理程序入口地址的列表</strong>。</p>
+<p>CPU 用中断类型码，通过查找中断向量表，就可以得到中断处理程序的入口地址。</p>
+<p>中断向量表在内存中存放，对于 8086PC 机，中断向量表指定放在内存地址 0 处。从内存 0000:0000 到 0000:03FF 的 1024 个单元中存放着中断向量表。</p>
+<p>在中断向量表中，一个表项存放一个中断向量，也就是一个中断处理程序的入口地址。这个入口地址包括段地址和偏移地址，所以一个表项占两个字，高地址字存放段地址，低地址字存放偏移地址。</p>
+<hr>
+<h2 id="中断过程" class="headerLink">
+    <a href="#%e4%b8%ad%e6%96%ad%e8%bf%87%e7%a8%8b" class="header-mark"></a>4 中断过程</h2><p>由上面的讲解可知，可以用中断类型码，在中断向量表中找到中断处理程序的入口。找到这个入口地址的最终目的是用它设置 CS 和 IP，使 CPU 执行中断处理程序。用中断类型码找到中断向量，并用它设置 CS 和 IP，这个工作是由 CPU 的硬件自动完成的。CPU 硬件完成这个工作的过程被称为中断过程。</p>
+<p>CPU 收到中断信息后，要对中断信息进行处理，首先将引发中断过程。硬件在完成中断过程后，CS: IP 将指向中断处理程序的入口，CPU 开始执行中断处理程序。</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">有一个问题需要考虑，CPU 在执行完中断处理程序后，应该返回原来的执行点继续执行下面的指令。所以在中断过程中，在设置 CS:IP 之前，还要将原来的 CS 和 IP 的值保存起来。在使用 call 指令调用子程序时有同样的问题，子程序执行后还要返回到原来的执行点继续执行，所以，call 指令先保存当前 CS 和 IP 的值，然后再设置 CS 和 IP。</div>
+        </div>
+    </div>
+<p>下面是 8086CPU 在收到中断信息后，所引发的中断过程：</p>
+<ol>
+<li>(从中断信息中)取得中断类型码；</li>
+<li>标志寄存器的值入栈(因为在中断过程中要改变标志寄存器的值，所以先将其保存在栈中)；</li>
+<li>设置标志寄存器的第 8 位 TF 和第 9 位 IF 的值为0(这一步的目的后面将介绍)；</li>
+<li>CS 的内容入栈；</li>
+<li>IP 的内容入栈；</li>
+<li>从内存地址为 中断类型码x4 和 中断类型码x4+2 的两个字单元中读取中断处理程序的入口地址设置 IP 和 CS。</li>
+</ol>
+<p>CPU 在收到中断信息之后，如果处理该中断信息，就完成一个由硬件自动执行的中断过程(程序员无法改变这个过程中所要做的工作)。中断过程的主要任务就是用中断类型码在中断向量表中找到中断处理程序的入口地址，设置 CS 和 IP。完成后，CPU 还要回过头来继续执行被中断的程序，所以要在设置 CS、IP 之前，先将它们的值保存起来。可以看到 CPU 将它们保存在栈中。在中断过程中还要做的一个工作就是设置标志寄存器的 TF、IF 位（下一章中进行讨论）。因为在执行完中断处理程序后，需要恢复在进入中断处理程序之前的 CPU 现场(某一时刻，CPU 中各个寄存器的值)。所以应该在修改标记寄存器之前，将 它的值入栈保存。</p>
+<hr>
+<h2 id="中断处理程序和-iret-指令" class="headerLink">
+    <a href="#%e4%b8%ad%e6%96%ad%e5%a4%84%e7%90%86%e7%a8%8b%e5%ba%8f%e5%92%8c-iret-%e6%8c%87%e4%bb%a4" class="header-mark"></a>5 中断处理程序和 iret 指令</h2><p>中断处理程序的编写方法和子程序的比较相似，下面是常规的步骤：</p>
+<ol>
+<li>保存用到的寄存器；</li>
+<li>处理中断；</li>
+<li>恢复用到的寄存器；</li>
+<li>用 iret 指令返回。</li>
+</ol>
+<p>iret 通常和硬件自动完成的中断过程配合使用。在中断过程中，寄存器入栈的顺序是标志寄存器、CS、IP，而 iret 的出栈顺序是 IP、CS、标志寄存器，刚好和其相对应，实现了用执行中断处理程序前的CPU 现场恢复标志寄存器和 CS、IP 的工作。 iret 指令执行后，CPU 回到执行中断处理程序前的执行点继续执行程序。</p>
+<hr>
+<h2 id="除法错误中断的处理" class="headerLink">
+    <a href="#%e9%99%a4%e6%b3%95%e9%94%99%e8%af%af%e4%b8%ad%e6%96%ad%e7%9a%84%e5%a4%84%e7%90%86" class="header-mark"></a>6 除法错误中断的处理</h2><p>当 CPU 执行 div 等除法指令的时候，如果发生了除法溢出错误，将产生中断类型码为 0 的中断信息，CPU 将检测到这个信息，然后引发中断过程，转去执行 0 号中断所对应的中断处理程序。</p>
+<figure><a class="lightgallery" href="/images/assembly_language/12_01.jpg" title="系统对 0 号中断的处理" data-thumbnail="/images/assembly_language/12_01.jpg" data-sub-html="<h2>系统对 0 号中断的处理</h2><p>系统对 0 号中断的处理</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/12_01.jpg"
+            srcset="/images/assembly_language/12_01.jpg, /images/assembly_language/12_01.jpg 1.5x, /images/assembly_language/12_01.jpg 2x"
+            sizes="auto"
+            alt="系统对 0 号中断的处理">
+    </a><figcaption class="image-caption">系统对 0 号中断的处理</figcaption>
+    </figure>
+<p>可以看到，当 CPU 执行 div bh 时，发生了除法溢出错误，产生 0 号中断信息，从而引发中断过程，CPU 执行 0 号中断处理程序。我们从图中可以看出系统中的 0 号中断处理程序的功能：显示提示信息“Divide overflow” 后，返回到操作系统中。</p>
+<hr>
+<h2 id="编程处理-0-号中断" class="headerLink">
+    <a href="#%e7%bc%96%e7%a8%8b%e5%a4%84%e7%90%86-0-%e5%8f%b7%e4%b8%ad%e6%96%ad" class="header-mark"></a>7 编程处理 0 号中断</h2><p>编程：当发生除法溢出时，在屏幕中间显示 “overflow!”，返回 DOS。</p>
+<h3 id="分析" class="headerLink">
+    <a href="#%e5%88%86%e6%9e%90" class="header-mark"></a>7.1 分析</h3><p>(1) 当发生除法溢出的时候，产生 0 号中断信息，从而引发中断过程。</p>
+<p>此时，CPU 将进行以下工作：</p>
+<ol>
+<li>取得中断类型码 0；</li>
+<li>标志寄存器入栈，TF、IF设置为0；</li>
+<li>CS、IP 入栈；</li>
+<li>(IP)=(0x4), (CS)=(0x4+2)。</li>
+</ol>
+<p>(2) 当中断 0 发生时，CPU 将转去执行中断处理程序。</p>
+<p>只要按如下步骤编写中断处理程序，当中断 0 发生时，即可显示 “overflow!”：</p>
+<ol>
+<li>相关处理；</li>
+<li>向显示缓冲区送字符串 “overflow!”；</li>
+<li>返回 DOS。</li>
+</ol>
+<p>我们将这段程序称为：do0。</p>
+<p>(3) do0 应存放在内存中的什么地方？</p>
+<p>我们只需找到一块别的程序不会用到的内存区，将 do0 传送到其中即可。</p>
+<p>一般情况下，从 0000:0200 至 0000:02FF 的 256 个字节的空间所对应的中断向量表项都是空的，操作系统和其他应用程序都不占用。</p>
+<p>我们可以将 do0 传送到内存 0000:0200 处。</p>
+<p>(4) 将 do0 的入口地址，即 0000:0200 登记在中断向量表的对应表项中。</p>
+<p>因为除法溢出对应的中断类型码为 0，它的中断处理程序的入口地址应该从 0x4 地址单元开始存放，段地址存放在 0x4+2 字单元中，偏移地址存放在 0x4 字单元中。也就是说要将 do0 的段地址 0 存放在 0000:0002 字单元中，将偏移地址 200H 存放在 0000:0000 字单元中。</p>
+<p>综上，我们需要做以下事情：</p>
+<ol>
+<li>编写可以显示“overflow!”的中断处理程序：do0；</li>
+<li>将 do0 送入内存 0000:0200 处；</li>
+<li>将 do0 的入口地址 0000:0200 存储在中断向量表 0 号表项中。</li>
+</ol>
+<h3 id="安装-do0-中断处理程序" class="headerLink">
+    <a href="#%e5%ae%89%e8%a3%85-do0-%e4%b8%ad%e6%96%ad%e5%a4%84%e7%90%86%e7%a8%8b%e5%ba%8f" class="header-mark"></a>7.2 安装 do0 中断处理程序</h3><p>安装 do0 中断处理程序，就是将 do0 的代码送入 0:200 处，可以使用 movsb 指令完成安装。程序如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, cs
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">            mov si, offset do0                  ; 设置 ds:si 指向源地址
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov di, 200h                        ; 设置 es:di 指向目的地址 0:200
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov cx, offset do0end-offset do0    ; 设置 cx 为传输长度
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            cld                                 ; 设置传输方向为正
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            rep movsb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            ; TODO 设置中断向量表
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      do0:
+</span></span><span class="line"><span class="cl">            ; TODO 显示字符串“overflow!”
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   do0end:
+</span></span><span class="line"><span class="cl">            nop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">此处的代码仅仅是将代码 do0 传入 0:200 处，并未执行 do0！</div>
+        </div>
+    </div>
+<p>此处我们利用编译器来计算 do0 的长度，<code>offset do0end-offset do0</code>，“_” 是编译器识别的运算符号，编译器可以用它来进行两个常数的减法。</p>
+<p>汇编编译器可以处理表达式。比如，指令：<code>mov ax，(5+3)*5/10</code>，被编译器处理为指令：<code>mov ax, 4</code>。</p>
+<h3 id="编写-do0-程序" class="headerLink">
+    <a href="#%e7%bc%96%e5%86%99-do0-%e7%a8%8b%e5%ba%8f" class="header-mark"></a>7.3 编写 do0 程序</h3><p>do0 程序的主要任务是显示字符串，这里特别需要<strong>注意字符串“overflow!”存放的位置</strong>，程序如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, cs
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">            mov si, offset do0                  ; 设置 ds:si 指向源地址
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov di, 200h                        ; 设置 es:di 指向目的地址
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov cx, offset do0end-offset do0    ; 设置 cx 为传输长度
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            cld                                 ; 设置传输方向为正
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            rep movsb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            ; TODO 设置中断向量表
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      do0:
+</span></span><span class="line"><span class="cl">            jmp short do0start
+</span></span><span class="line"><span class="cl">            db &#34;overflow!&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> do0start:
+</span></span><span class="line"><span class="cl">            mov ax, cs
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">            mov si, 202h                        ; 设置 ds:si 指向字符串
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0b800h
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov di, 12*160+36*2                 ; 设置 es:di 指向显存空间的中间位置
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov cx, 9                           ; 设置 cx 为字符串长度
+</span></span><span class="line"><span class="cl">        s:
+</span></span><span class="line"><span class="cl">            mov al, [si]
+</span></span><span class="line"><span class="cl">            mov es:[di], al
+</span></span><span class="line"><span class="cl">            inc si
+</span></span><span class="line"><span class="cl">            add di, 2
+</span></span><span class="line"><span class="cl">            loop s                              ; 循环将字符串写入显存
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   do0end:
+</span></span><span class="line"><span class="cl">            nop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此处将“overflow!”存放到 do0 程序中，而不是存放到 data 段中，是因为如果存放到 data 段中，在执行完 start 代码后返回，它锁占用的内存空间会被系统释放，其中存放的“overflow!”信息也可能被别的信息覆盖，所以需要将字符串存放在一段不会被覆盖的空间中。此处的代码会随着代码段 do0 的转移，将字符串存入 0:202h 地址处（因为 0:200h 处的指令为 <code>jmp short do0start</code>，这条指令占两个字节，所以“overflow!”的偏移地址为 202h）。</p>
+<h3 id="设置中断向量" class="headerLink">
+    <a href="#%e8%ae%be%e7%bd%ae%e4%b8%ad%e6%96%ad%e5%90%91%e9%87%8f" class="header-mark"></a>7.4 设置中断向量</h3><p>下面，将 do0 的入口地址 0:200，写入中断向量表的 0 号表项中，使 do0 成为 0 号中断的中断处理程序。</p>
+<p>0 号表项的地址为 0:0，其中 0:0 字单元存放偏移地址，0:2 字单元存放段地址。程序如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov ax, 0
+</span></span><span class="line"><span class="cl">mov es, ax
+</span></span><span class="line"><span class="cl">mov word ptr es:[0*4], 200h
+</span></span><span class="line"><span class="cl">mov word ptr es:[0*4+2], 0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="单步中断" class="headerLink">
+    <a href="#%e5%8d%95%e6%ad%a5%e4%b8%ad%e6%96%ad" class="header-mark"></a>8 单步中断</h2><p>CPU 在执行完一条指令之后，如果检测到标志寄存器的 TF 位为 1，则产生单步中断，引发中断过程。单步中断的中断类型码为 1，则它所引发的中断过程如下：</p>
+<ol>
+<li>取得中断类型码 1；</li>
+<li>标志寄存器入栈，TF、IF 设置为 0；</li>
+<li>CS、IP 入栈；</li>
+<li>(IP)=(1x4), (CS)=(1x4+2)。</li>
+</ol>
+<p>如果 TF=1，则执行一条指令后，CPU 就要转去执行 1 号中断处理程序。CPU 为什么要提供这样的功能呢？</p>
+<p><strong>CPU 提供单步中断功能的原因就是，为单步跟踪程序的执行过程，提供了实现机制。</strong></p>
+<p>在使用 Debug 的 t 命令的时候，Debug 如何能让 CPU 在执行一条指令后，就显示各个寄存器的状态？</p>
+<p>Debug 利用了 CPU 提供的单步中断功能。首先，Debug 提供了单步中断的中断处理程序，功能为显示所有寄存器中的内容后等待输入命令。然后，在使用 t 命令执行指令时，Debug 将 TF 设置 1，使得CPU 工作于单步中断方式下，则在 CPU 执行完这条指令后就引发单步中断，执行单步中断的中断处理程序，所有寄存器中的内容被显示在屏幕上，并且等待输入命令。</p>
+<p>当 TF=1 时，CPU 在执行完一条指令后将引发单步中断，转去执行中断处理程序。注意，中断处理程序也是由一条条指令组成的，如果在执行中断处理程序之前，TF=1，则 CPU 在执行完中断处理程序的第一条指令后，又要产生单步中断，则又要转去执行单步中断的中断处理程序，在执行完中断处理程序的第一条指令后，又要产生单步中断，则又要转去执行单步中断的中断处理程序······</p>
+<p>CPU 不能让这种情况发生，解决的办法就是，在进入中断处理程序之前，设置 TF=0。从而避免 CPU 在执行中断处理程序的时候发生单步中断。这就是为什么在中断过程中有 TF=0 这个步骤。</p>
+<hr>
+<h2 id="响应中断的特殊情况" class="headerLink">
+    <a href="#%e5%93%8d%e5%ba%94%e4%b8%ad%e6%96%ad%e7%9a%84%e7%89%b9%e6%ae%8a%e6%83%85%e5%86%b5" class="header-mark"></a>9 响应中断的特殊情况</h2><p>一般情况下，CPU 在执行完当前指令后，如果检测到中断信息，就响应中断，引发中断过程。可是，在有些情况下，CPU 在执行完当前指令后，即便是发生中断，也不会响应。</p>
+<p>在执行完向 ss 寄存器传送数据的指令后，即便是发生中断，CPU 也不会响应。这样做的主要原因是，ss:sp 联合指向栈顶，而对它们的设置应该连续完成。如果在执行完设置 ss 的指令后，CPU 响应中断，引发中断过程，要在栈中压入标志寄存器、CS 和 IP 的值。而 ss 改变，sp 并未改变，ss:sp 指向的不是正确的栈顶，将引起错误。所以 CPU 在执行完设置 ss 的指令后，不响应中断。这给连续设置 ss 和 sp 指向正确的栈顶提供了一个时机。我们应该利用这个特性，将设置 ss 和 sp 的指令连续存放，使得设置 sp 的指令紧接着设置 ss 的指令执行，而在此之间，CPU 不会引发中断过程。</p>
+<hr>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-11-13</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断" data-description="汇编语言 —— 内中断"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断" data-description="汇编语言 —— 内中断"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_12_%E5%86%85%E4%B8%AD%E6%96%AD/" data-title="汇编语言 —— 内中断"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" class="prev" rel="prev" title="汇编语言 —— 标志寄存器"><i class="fas fa-angle-left fa-fw"></i>汇编语言 —— 标志寄存器</a>
+            <a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_13_int%E6%8C%87%E4%BB%A4/" class="next" rel="next" title="汇编语言 —— INT指令">汇编语言 —— INT指令<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>

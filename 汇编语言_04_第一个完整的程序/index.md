@@ -19,7 +19,7 @@
 
 一段简单的汇编语言源程序：
 
-``` asm
+``` text
 assume cs:codesg        ; 将用作代码段的段 codesg 和 CPU 中的段寄存器 cs 联系起来
 
 codesg segment          ; 定义一个段，段的名称为 “codesg”，这个段从此开始
