@@ -4,9 +4,30 @@
         <link>https://Nanciico.github.io/</link>
         <description>这是我的全新 Hugo 网站</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
-            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Thu, 16 Nov 2023 00:00:00 &#43;0000</lastBuildDate>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Thu, 23 Nov 2023 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://Nanciico.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>汇编语言 —— 使用BIOS进行键盘输入和磁盘读写</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_17_%E4%BD%BF%E7%94%A8bios%E8%BF%9B%E8%A1%8C%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E5%92%8C%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99/</link>
+    <pubDate>Thu, 23 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_17_%E4%BD%BF%E7%94%A8bios%E8%BF%9B%E8%A1%8C%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E5%92%8C%E7%A3%81%E7%9B%98%E8%AF%BB%E5%86%99/</guid>
+    <description><![CDATA[汇编语言 —— 使用BIOS进行键盘输入和磁盘读写]]></description>
+</item><item>
+    <title>汇编语言 —— 直接定址表</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_16_%E7%9B%B4%E6%8E%A5%E5%AE%9A%E5%9D%80%E8%A1%A8/</link>
+    <pubDate>Wed, 22 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_16_%E7%9B%B4%E6%8E%A5%E5%AE%9A%E5%9D%80%E8%A1%A8/</guid>
+    <description><![CDATA[汇编语言 —— 直接定址表]]></description>
+</item><item>
+    <title>汇编语言 —— 外中断</title>
+    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_15_%E5%A4%96%E4%B8%AD%E6%96%AD/</link>
+    <pubDate>Fri, 17 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_15_%E5%A4%96%E4%B8%AD%E6%96%AD/</guid>
+    <description><![CDATA[汇编语言 —— 外中断]]></description>
+</item><item>
     <title>汇编语言 —— 端口</title>
     <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_14_%E7%AB%AF%E5%8F%A3/</link>
     <pubDate>Thu, 16 Nov 2023 00:00:00 &#43;0000</pubDate><author>
@@ -55,26 +76,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</guid>
     <description><![CDATA[阅读 Redis 整数集合 intset 相关代码，了解 Redis 中整数集合的实现。]]></description>
-</item><item>
-    <title>汇编语言 —— CALL和RET指令</title>
-    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_10_call%E5%92%8Cret%E6%8C%87%E4%BB%A4/</link>
-    <pubDate>Sat, 23 Sep 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_10_call%E5%92%8Cret%E6%8C%87%E4%BB%A4/</guid>
-    <description><![CDATA[汇编语言 —— CALL和RET指令]]></description>
-</item><item>
-    <title>汇编语言 —— 转移指令的原理</title>
-    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_09_%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</link>
-    <pubDate>Sun, 17 Sep 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_09_%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8E%9F%E7%90%86/</guid>
-    <description><![CDATA[汇编语言 —— 转移指令的原理]]></description>
-</item><item>
-    <title>汇编语言 —— 数据处理的两个基本问题</title>
-    <link>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</link>
-    <pubDate>Sun, 10 Sep 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_08_%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98/</guid>
-    <description><![CDATA[汇编语言 —— 数据处理的两个基本问题]]></description>
 </item></channel>
 </rss>
