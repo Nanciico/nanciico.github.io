@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>「深入理解计算机系统」 - 标签 - Nanciico&#39;s Blog</title>
+        <link>https://Nanciico.github.io/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/</link>
+        <description>「深入理解计算机系统」 - 标签 - Nanciico&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml" /><item>
+    <title>深入理解计算机系统 —— 计算机系统漫游</title>
+    <link>https://Nanciico.github.io/csapp_01_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</link>
+    <pubDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/csapp_01_%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/</guid>
+    <description><![CDATA[深入理解计算机系统 —— 计算机系统漫游]]></description>
+</item><item>
+    <title>深入理解计算机系统 —— 前言</title>
+    <link>https://Nanciico.github.io/csapp_00_%E5%89%8D%E8%A8%80/</link>
+    <pubDate>Fri, 24 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/csapp_00_%E5%89%8D%E8%A8%80/</guid>
+    <description><![CDATA[深入理解计算机系统 —— 前言]]></description>
+</item></channel>
+</rss>

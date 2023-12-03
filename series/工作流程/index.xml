@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>工作流程 - 系列 - Nanciico&#39;s Blog</title>
+        <link>https://Nanciico.github.io/series/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/</link>
+        <description>工作流程 - 系列 - Nanciico&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Wed, 29 Nov 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B/" rel="self" type="application/rss+xml" /><item>
+    <title>工作流程 —— 开发流程</title>
+    <link>https://Nanciico.github.io/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_01_%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/</link>
+    <pubDate>Wed, 29 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_01_%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B/</guid>
+    <description><![CDATA[记录工作流程。]]></description>
+</item><item>
+    <title>工作流程 —— 前言</title>
+    <link>https://Nanciico.github.io/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_00_%E5%BC%80%E7%AF%87/</link>
+    <pubDate>Wed, 29 Nov 2023 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B_00_%E5%BC%80%E7%AF%87/</guid>
+    <description><![CDATA[记录工作流程。]]></description>
+</item></channel>
+</rss>
