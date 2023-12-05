@@ -7,39 +7,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>Redis 分布式锁设计 —— 分布式锁介绍 - Nanciico&#39;s Blog</title><meta name="Description" content="记录基于Redis的分布式锁设计流程。"><meta property="og:title" content="Redis 分布式锁设计 —— 分布式锁介绍" />
-<meta property="og:description" content="记录基于Redis的分布式锁设计流程。" />
+    <title>Redis 分布式锁设计 —— 内存泄漏问题排查 - Nanciico&#39;s Blog</title><meta name="Description" content="记录使用 WinDBG 排查内存泄漏问题的过程。"><meta property="og:title" content="Redis 分布式锁设计 —— 内存泄漏问题排查" />
+<meta property="og:description" content="记录使用 WinDBG 排查内存泄漏问题的过程。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-06-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-06-22T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+<meta property="og:url" content="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-10-31T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Redis 分布式锁设计 —— 分布式锁介绍"/>
-<meta name="twitter:description" content="记录基于Redis的分布式锁设计流程。"/>
+<meta name="twitter:title" content="Redis 分布式锁设计 —— 内存泄漏问题排查"/>
+<meta name="twitter:description" content="记录使用 WinDBG 排查内存泄漏问题的过程。"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" /><link rel="prev" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" /><link rel="next" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" />
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" /><link rel="prev" href="https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/" /><link rel="next" href="https://Nanciico.github.io/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Redis 分布式锁设计 —— 分布式锁介绍",
+        "headline": "Redis 分布式锁设计 —— 内存泄漏问题排查",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D\/"
-        },"genre": "posts","keywords": "Redis, 分布式锁","wordcount":  598 ,
-        "url": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D\/","datePublished": "2023-06-22T00:00:00+00:00","dateModified": "2023-06-22T00:00:00+00:00","publisher": {
+            "@id": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5\/"
+        },"genre": "posts","keywords": "Redis, 分布式锁","wordcount":  696 ,
+        "url": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5\/","datePublished": "2023-10-31T00:00:00+00:00","dateModified": "2023-10-31T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico"
-            },"description": "记录基于Redis的分布式锁设计流程。"
+            },"description": "记录使用 WinDBG 排查内存泄漏问题的过程。"
     }
     </script></head>
 
@@ -117,15 +117,17 @@
         <h2 class="toc-title">目录</h2>
         <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#分布式锁的使用场景">分布式锁的使用场景</a></li>
-    <li><a href="#分布式锁的特性">分布式锁的特性</a></li>
+    <li><a href="#内存泄漏现象">内存泄漏现象</a></li>
+    <li><a href="#内存泄漏排查">内存泄漏排查</a></li>
+    <li><a href="#eventhandler-内存泄漏问题">EventHandler 内存泄漏问题</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis 分布式锁设计 —— 分布式锁介绍</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis 分布式锁设计 —— 内存泄漏问题排查</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>系统设计</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"><i class="far fa-list-alt fa-fw"></i>分布式锁设计与实现</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-22">2023-06-22</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-06-22">2023-06-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 598 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-10-31">2023-10-31</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-10-31">2023-10-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 696 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 分布式锁设计与实现</span>
@@ -133,12 +135,12 @@
                                 </div>
                                 <div class="details-content series-content">
                                     <nav>
-                                        <ul><li><span class="active">Redis 分布式锁设计 —— 分布式锁介绍</span></li>
+                                        <ul>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/">Redis 分布式锁设计 —— 分布式锁介绍</a></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">Redis 分布式锁设计 —— 基本特性的设计与实现</a></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E5%8A%A0%E9%94%81%E4%B8%BB%E6%B5%81%E7%A8%8B/">Redis 分布式锁设计 —— 加锁主流程</a></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E5%BC%82%E6%AD%A5%E7%BB%AD%E7%BA%A6%E6%9C%BA%E5%88%B6/">Redis 分布式锁设计 —— 异步续约机制</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Redis 分布式锁设计 —— 两个编码规范</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">Redis 分布式锁设计 —— 内存泄漏问题排查</a></li></ul>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Redis 分布式锁设计 —— 两个编码规范</a></li><li><span class="active">Redis 分布式锁设计 —— 内存泄漏问题排查</span></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -148,32 +150,70 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#分布式锁的使用场景">分布式锁的使用场景</a></li>
-    <li><a href="#分布式锁的特性">分布式锁的特性</a></li>
+    <li><a href="#内存泄漏现象">内存泄漏现象</a></li>
+    <li><a href="#内存泄漏排查">内存泄漏排查</a></li>
+    <li><a href="#eventhandler-内存泄漏问题">EventHandler 内存泄漏问题</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><hr>
-<h2 id="分布式锁的使用场景" class="headerLink">
-    <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e7%9a%84%e4%bd%bf%e7%94%a8%e5%9c%ba%e6%99%af" class="header-mark"></a>1 分布式锁的使用场景</h2><p>分布式系统要访问共享资源，为了避免并发访问资源带来错误，我们为共享资源添加一把锁，让各个访问互斥，保证并发访问的安全性，这就是使用分布式锁的原因。</p>
+<h2 id="内存泄漏现象" class="headerLink">
+    <a href="#%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f%e7%8e%b0%e8%b1%a1" class="header-mark"></a>1 内存泄漏现象</h2><p>在进行性能测试的过程中，发现分布式锁测试程序的内存一直在上涨。起初怀疑是续约线程阻塞未消费续约对象导致续约对象堆积从而使内存上涨，然而事实并没有这么简单。</p>
+<figure><a class="lightgallery" href="/images/distributed_lock/05_01.jpg" title="分布式锁测试 —— 内存暴涨" data-thumbnail="/images/distributed_lock/05_01.jpg" data-sub-html="<h2>分布式锁测试 —— 内存暴涨</h2><p>分布式锁测试 —— 内存暴涨</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/distributed_lock/05_01.jpg"
+            srcset="/images/distributed_lock/05_01.jpg, /images/distributed_lock/05_01.jpg 1.5x, /images/distributed_lock/05_01.jpg 2x"
+            sizes="auto"
+            alt="分布式锁测试 —— 内存暴涨">
+    </a><figcaption class="image-caption">分布式锁测试 —— 内存暴涨</figcaption>
+    </figure>
+<p>怀疑分布式锁存在内存泄漏问题，于是获取程序内存 Dump，通过 WinDBG 分析内存问题。</p>
 <hr>
-<h2 id="分布式锁的特性" class="headerLink">
-    <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e7%9a%84%e7%89%b9%e6%80%a7" class="header-mark"></a>2 分布式锁的特性</h2><p>一个可靠的分布式锁系统，应该满足以下三个最低保障：</p>
+<h2 id="内存泄漏排查" class="headerLink">
+    <a href="#%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f%e6%8e%92%e6%9f%a5" class="header-mark"></a>2 内存泄漏排查</h2><p>内存泄漏大部分是因为某些对象仍然存在指针指向它，从而未被垃圾回收器识别并清理。因此排查思路就是：</p>
 <ol>
-<li>相互排斥。在任何场景下，只能有一个客户端能够持有分布式锁；</li>
-<li>避免死锁。即使已经获取分布式锁的客户端崩溃，其他的客户端也应该能够获取分布式锁；</li>
-<li>高可用性。锁服务（Redis 集群）是高可用的，当一个 Redis 结点出现问题，能够自动切换到另一个 Redis 结点。并且，即使客户端释放锁的代码逻辑出现问题，锁最终会被释放，不会影响其他线程对共享资源的访问。</li>
+<li>查找内存中占用内存最大、最多的对象；</li>
+<li>排查该对象是否存在 gcroot 指向的路径。</li>
 </ol>
-<p>在满足以上条件下，我们设计的分布式锁还满足以下特性：</p>
-<ol>
-<li>可重入性。一个线程获取分布式锁后，还可以再次获取锁；</li>
-<li>非阻塞。提供非阻塞接口（TryLock），如果获取不到锁，不会无限期等待；</li>
-<li>异步续约，Watch Dog 机制。如果操作共享资源的线程未执行完毕，Watch Dog 会不断地延长锁的过期时间，保证锁不会因为超时而被释放；</li>
-<li>锁失效通知。如果探测到分布式锁失效，能够通知到客户端；</li>
-<li>与本地锁相同的使用机制。分布式锁的使用方法与本地锁相同，提供与本地锁相同的抽象，即多线程争抢同一分布式锁对象的机制；</li>
-<li>对 Redis 服务的低请求量。分布式锁的实现优化了不必要的锁争抢，从而降低 Redis 服务端的压力。</li>
-</ol>
+<p>首先使用 <code>!dumpheap -stat</code> 命令查看内存中占用最大或者最多的对象。</p>
+<figure><a class="lightgallery" href="/images/distributed_lock/05_02.jpg" title="内存中占用最大或者最多的对象" data-thumbnail="/images/distributed_lock/05_02.jpg" data-sub-html="<h2>内存中占用最大或者最多的对象</h2><p>内存中占用最大或者最多的对象</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/distributed_lock/05_02.jpg"
+            srcset="/images/distributed_lock/05_02.jpg, /images/distributed_lock/05_02.jpg 1.5x, /images/distributed_lock/05_02.jpg 2x"
+            sizes="auto"
+            alt="内存中占用最大或者最多的对象">
+    </a><figcaption class="image-caption">内存中占用最大或者最多的对象</figcaption>
+    </figure>
+<p>可以看到占用内存最多的对象类型是 <code>System.Object[]</code> 类型。</p>
+<p>其次使用命令 <code>!DumpHeap /d -mt 000007fef6155e70</code> 查看该类所有对象的地址、大小信息。</p>
+<p>最后任意从上一步选择一个对象的地址，使用 <code>!gcroot 0000000008355cc8</code> 命令查看对象的 GC 指针信息。</p>
+<figure><a class="lightgallery" href="/images/distributed_lock/05_03.jpg" title="对象 GC 指针引用信息" data-thumbnail="/images/distributed_lock/05_03.jpg" data-sub-html="<h2>对象 GC 指针引用信息</h2><p>对象 GC 指针引用信息</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/distributed_lock/05_03.jpg"
+            srcset="/images/distributed_lock/05_03.jpg, /images/distributed_lock/05_03.jpg 1.5x, /images/distributed_lock/05_03.jpg 2x"
+            sizes="auto"
+            alt="对象 GC 指针引用信息">
+    </a><figcaption class="image-caption">对象 GC 指针引用信息</figcaption>
+    </figure>
+<p>这里能够判断是 <code>System.EventHandler</code> 导致的内存泄漏问题。</p>
 <hr>
-<p>接下来的章节，会根据以上介绍的分布式锁的基本特性，逐步介绍本分布式锁的设计与实现。</p>
+<h2 id="eventhandler-内存泄漏问题" class="headerLink">
+    <a href="#eventhandler-%e5%86%85%e5%ad%98%e6%b3%84%e6%bc%8f%e9%97%ae%e9%a2%98" class="header-mark"></a>3 EventHandler 内存泄漏问题</h2><p>EventHandler 导致内存泄漏问题，是 .NET 中一个非常常见的问题。</p>
+<p>原因很容易解释：当 EventHandler 被订阅时，事件的发布者通过 EventHandler 委托持有对订阅者的引用（假设委托是一个实例方法）。</p>
+<p>如果发布者的生存时间比订阅者长，那么即使没有其他对订阅者的引用，它也会使订阅者保持被引用状态。</p>
+<p>如果使用相同的处理程序取消订阅事件，这将删除处理程序和可能的泄漏。然而，这实际上很少是一个问题，因为通常发布者和订阅者无论如何都有大致相同的生命周期。</p>
+<p>在这个问题上，由于事件发布者是一个单例，生命周期是整个程序运行时间，事件的订阅者是 DistributedLock 对象，因此发布者一直持有订阅者的引用，从而使得订阅者无法被垃圾回收，导致内存泄漏。</p>
+<hr>
+<h2 id="参考资料" class="headerLink">
+    <a href="#%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99" class="header-mark"></a>4 参考资料</h2><p><a href="https://stackoverflow.com/questions/4526829/why-and-how-to-avoid-event-handler-memory-leaks" target="_blank" rel="noopener noreferrer">Why and How to avoid Event Handler memory leaks?</a></p>
+<p><a href="https://www.spicelogic.com/Blog/net-event-handler-memory-leak-16" target="_blank" rel="noopener noreferrer">Are you afraid of event handlers because of C# memory leak? Fear not!
+</a></p>
 <hr>
 </div>
 
@@ -181,13 +221,13 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2023-06-22</span>
+                <span>更新于 2023-10-31</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-hashtags="Redis,分布式锁"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-description="记录基于Redis的分布式锁设计流程。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-description="记录基于Redis的分布式锁设计流程。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查" data-hashtags="Redis,分布式锁"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查" data-description="记录使用 WinDBG 排查内存泄漏问题的过程。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查" data-description="记录使用 WinDBG 排查内存泄漏问题的过程。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" data-title="Redis 分布式锁设计 —— 内存泄漏问题排查"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
@@ -198,8 +238,8 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" class="prev" rel="prev" title="算法第四版 —— 归并排序"><i class="fas fa-angle-left fa-fw"></i>算法第四版 —— 归并排序</a>
-            <a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="next" rel="next" title="Redis 分布式锁设计 —— 基本特性的设计与实现">Redis 分布式锁设计 —— 基本特性的设计与实现<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/" class="prev" rel="prev" title="Redis 对象(redisObject)"><i class="fas fa-angle-left fa-fw"></i>Redis 对象(redisObject)</a>
+            <a href="/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80_11_%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" class="next" rel="next" title="汇编语言 —— 标志寄存器">汇编语言 —— 标志寄存器<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
         </main><footer class="footer">

@@ -7,39 +7,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>Redis 分布式锁设计 —— 分布式锁介绍 - Nanciico&#39;s Blog</title><meta name="Description" content="记录基于Redis的分布式锁设计流程。"><meta property="og:title" content="Redis 分布式锁设计 —— 分布式锁介绍" />
-<meta property="og:description" content="记录基于Redis的分布式锁设计流程。" />
+    <title>Redis 分布式锁设计 —— 两个编码规范 - Nanciico&#39;s Blog</title><meta name="Description" content="记录在分布式锁开发中的两个编码规范。"><meta property="og:title" content="Redis 分布式锁设计 —— 两个编码规范" />
+<meta property="og:description" content="记录在分布式锁开发中的两个编码规范。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-06-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-06-22T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+<meta property="og:url" content="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-06-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-06-26T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Redis 分布式锁设计 —— 分布式锁介绍"/>
-<meta name="twitter:description" content="记录基于Redis的分布式锁设计流程。"/>
+<meta name="twitter:title" content="Redis 分布式锁设计 —— 两个编码规范"/>
+<meta name="twitter:description" content="记录在分布式锁开发中的两个编码规范。"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" /><link rel="prev" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" /><link rel="next" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" />
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" /><link rel="prev" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E5%BC%82%E6%AD%A5%E7%BB%AD%E7%BA%A6%E6%9C%BA%E5%88%B6/" /><link rel="next" href="https://Nanciico.github.io/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "Redis 分布式锁设计 —— 分布式锁介绍",
+        "headline": "Redis 分布式锁设计 —— 两个编码规范",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D\/"
-        },"genre": "posts","keywords": "Redis, 分布式锁","wordcount":  598 ,
-        "url": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D\/","datePublished": "2023-06-22T00:00:00+00:00","dateModified": "2023-06-22T00:00:00+00:00","publisher": {
+            "@id": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83\/"
+        },"genre": "posts","keywords": "Redis, 分布式锁","wordcount":  438 ,
+        "url": "https:\/\/Nanciico.github.io\/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83\/","datePublished": "2023-06-26T00:00:00+00:00","dateModified": "2023-06-26T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico"
-            },"description": "记录基于Redis的分布式锁设计流程。"
+            },"description": "记录在分布式锁开发中的两个编码规范。"
     }
     </script></head>
 
@@ -117,15 +117,15 @@
         <h2 class="toc-title">目录</h2>
         <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#分布式锁的使用场景">分布式锁的使用场景</a></li>
-    <li><a href="#分布式锁的特性">分布式锁的特性</a></li>
+    <li><a href="#不要生吞异常">不要生吞异常</a></li>
+    <li><a href="#区分判断与校验">区分“判断”与“校验”</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis 分布式锁设计 —— 分布式锁介绍</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis 分布式锁设计 —— 两个编码规范</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>系统设计</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/"><i class="far fa-list-alt fa-fw"></i>分布式锁设计与实现</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-22">2023-06-22</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-06-22">2023-06-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 598 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-26">2023-06-26</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-06-26">2023-06-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 438 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 分布式锁设计与实现</span>
@@ -133,11 +133,11 @@
                                 </div>
                                 <div class="details-content series-content">
                                     <nav>
-                                        <ul><li><span class="active">Redis 分布式锁设计 —— 分布式锁介绍</span></li>
+                                        <ul>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/">Redis 分布式锁设计 —— 分布式锁介绍</a></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">Redis 分布式锁设计 —— 基本特性的设计与实现</a></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E5%8A%A0%E9%94%81%E4%B8%BB%E6%B5%81%E7%A8%8B/">Redis 分布式锁设计 —— 加锁主流程</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E5%BC%82%E6%AD%A5%E7%BB%AD%E7%BA%A6%E6%9C%BA%E5%88%B6/">Redis 分布式锁设计 —— 异步续约机制</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Redis 分布式锁设计 —— 两个编码规范</a></li>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E5%BC%82%E6%AD%A5%E7%BB%AD%E7%BA%A6%E6%9C%BA%E5%88%B6/">Redis 分布式锁设计 —— 异步续约机制</a></li><li><span class="active">Redis 分布式锁设计 —— 两个编码规范</span></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">Redis 分布式锁设计 —— 内存泄漏问题排查</a></li></ul>
                                     </nav>
                                 </div>
@@ -148,46 +148,92 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#分布式锁的使用场景">分布式锁的使用场景</a></li>
-    <li><a href="#分布式锁的特性">分布式锁的特性</a></li>
+    <li><a href="#不要生吞异常">不要生吞异常</a></li>
+    <li><a href="#区分判断与校验">区分“判断”与“校验”</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><hr>
-<h2 id="分布式锁的使用场景" class="headerLink">
-    <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e7%9a%84%e4%bd%bf%e7%94%a8%e5%9c%ba%e6%99%af" class="header-mark"></a>1 分布式锁的使用场景</h2><p>分布式系统要访问共享资源，为了避免并发访问资源带来错误，我们为共享资源添加一把锁，让各个访问互斥，保证并发访问的安全性，这就是使用分布式锁的原因。</p>
+            </div><div class="content" id="content"><p>记录两个在编码过程中应该注意的编码规范，作为今后的编码原则。</p>
 <hr>
-<h2 id="分布式锁的特性" class="headerLink">
-    <a href="#%e5%88%86%e5%b8%83%e5%bc%8f%e9%94%81%e7%9a%84%e7%89%b9%e6%80%a7" class="header-mark"></a>2 分布式锁的特性</h2><p>一个可靠的分布式锁系统，应该满足以下三个最低保障：</p>
-<ol>
-<li>相互排斥。在任何场景下，只能有一个客户端能够持有分布式锁；</li>
-<li>避免死锁。即使已经获取分布式锁的客户端崩溃，其他的客户端也应该能够获取分布式锁；</li>
-<li>高可用性。锁服务（Redis 集群）是高可用的，当一个 Redis 结点出现问题，能够自动切换到另一个 Redis 结点。并且，即使客户端释放锁的代码逻辑出现问题，锁最终会被释放，不会影响其他线程对共享资源的访问。</li>
-</ol>
-<p>在满足以上条件下，我们设计的分布式锁还满足以下特性：</p>
-<ol>
-<li>可重入性。一个线程获取分布式锁后，还可以再次获取锁；</li>
-<li>非阻塞。提供非阻塞接口（TryLock），如果获取不到锁，不会无限期等待；</li>
-<li>异步续约，Watch Dog 机制。如果操作共享资源的线程未执行完毕，Watch Dog 会不断地延长锁的过期时间，保证锁不会因为超时而被释放；</li>
-<li>锁失效通知。如果探测到分布式锁失效，能够通知到客户端；</li>
-<li>与本地锁相同的使用机制。分布式锁的使用方法与本地锁相同，提供与本地锁相同的抽象，即多线程争抢同一分布式锁对象的机制；</li>
-<li>对 Redis 服务的低请求量。分布式锁的实现优化了不必要的锁争抢，从而降低 Redis 服务端的压力。</li>
-</ol>
+<h2 id="不要生吞异常" class="headerLink">
+    <a href="#%e4%b8%8d%e8%a6%81%e7%94%9f%e5%90%9e%e5%bc%82%e5%b8%b8" class="header-mark"></a>1 不要生吞异常</h2><p>Unlock 发送请求，如果发生 Socket 异常导致逻辑上解锁但实际上未解锁，是否需要将异常抛出？</p>
+<ul>
+<li>若不处理异常，Redis 中的 Key 会在设定的 30s 后过期，过期后可以将其与解锁看做等效，因此可以不处理异常；</li>
+<li>若需要处理异常，则将该异常抛出，用户在使用 Unlock 时需要处理该异常。</li>
+</ul>
+<p>原则：不要在代码中假设某种异常不会发生，或者忽略某中异常是无所谓的。</p>
+<p>如果不将异常抛出或没有输出到日志，程序在出现莫名其妙的异常后会难以定位问题。因此不要忽略异常。</p>
 <hr>
-<p>接下来的章节，会根据以上介绍的分布式锁的基本特性，逐步介绍本分布式锁的设计与实现。</p>
-<hr>
+<h2 id="区分判断与校验" class="headerLink">
+    <a href="#%e5%8c%ba%e5%88%86%e5%88%a4%e6%96%ad%e4%b8%8e%e6%a0%a1%e9%aa%8c" class="header-mark"></a>2 区分“判断”与“校验”</h2><p>在代码中，如果只有满足某种条件才能继续向后执行，应该使用校验。如果对于某个条件需要执行不同的分支，应该使用判断。</p>
+<p>不要用判断取代校验，这会导致忽略某些异常。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="c1">// 校验，将异常抛出</span>
+</span></span><span class="line"><span class="cl"><span class="k">internal</span> <span class="k">void</span> <span class="n">Unlock</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(!</span> <span class="p">(</span><span class="n">_lockEntries</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">entry</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">entry</span><span class="p">.</span><span class="n">IsEntered</span><span class="p">()))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">throw</span> <span class="k">new</span> <span class="n">InvalidStateException</span><span class="p">(</span><span class="s">&#34;The local lock is missing or the local lock is not held by the current thread. &#34;</span> <span class="p">+</span>
+</span></span><span class="line"><span class="cl">            <span class="s">$&#34;LockName: [{name}]&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">entry</span><span class="p">.</span><span class="n">Exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">entry</span><span class="p">.</span><span class="n">DecRef</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="c1">// 判断，会忽略异常，不便于今后的问题排查</span>
+</span></span><span class="line"><span class="cl"><span class="k">internal</span> <span class="k">void</span> <span class="n">Unlock</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">_lockEntries</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">out</span> <span class="kt">var</span> <span class="n">entry</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">entry</span><span class="p">.</span><span class="n">IsEntered</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">entry</span><span class="p">.</span><span class="n">Exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">entry</span><span class="p">.</span><span class="n">DecRef</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
 </div>
 
         <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2023-06-22</span>
+                <span>更新于 2023-06-26</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-hashtags="Redis,分布式锁"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-description="记录基于Redis的分布式锁设计流程。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍" data-description="记录基于Redis的分布式锁设计流程。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" data-title="Redis 分布式锁设计 —— 分布式锁介绍"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范" data-hashtags="Redis,分布式锁"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范" data-description="记录在分布式锁开发中的两个编码规范。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范" data-description="记录在分布式锁开发中的两个编码规范。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/" data-title="Redis 分布式锁设计 —— 两个编码规范"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
@@ -198,8 +244,8 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_07_%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" class="prev" rel="prev" title="算法第四版 —— 归并排序"><i class="fas fa-angle-left fa-fw"></i>算法第四版 —— 归并排序</a>
-            <a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="next" rel="next" title="Redis 分布式锁设计 —— 基本特性的设计与实现">Redis 分布式锁设计 —— 基本特性的设计与实现<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E5%BC%82%E6%AD%A5%E7%BB%AD%E7%BA%A6%E6%9C%BA%E5%88%B6/" class="prev" rel="prev" title="Redis 分布式锁设计 —— 异步续约机制"><i class="fas fa-angle-left fa-fw"></i>Redis 分布式锁设计 —— 异步续约机制</a>
+            <a href="/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88_08_%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" class="next" rel="next" title="算法第四版 —— 快速排序">算法第四版 —— 快速排序<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
         </main><footer class="footer">

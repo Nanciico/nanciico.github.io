@@ -51,6 +51,7 @@ public override void Lock(long leaseTime)
     }
 
     // 获取分布式锁失败，需要获取内部锁后，轮询请求分布式锁
+    // 只有一个线程会持有内部锁，保证只有一个线程进入轮询代码块
     LocalLockManager.Instance.Lock(_entryName);
     try
     {
@@ -174,4 +175,46 @@ internal abstract class AbstractRefCounted : IRefCounted
 }
 ```
 
-### 
+DecRef 方法能够保证在引用计数降至 0 时执行一次 CloseInternal 方法，由于 `Interlocked.Decrement()` 是原子操作，因此在多线程环境下能够保证只有一个线程执行 CloseInternal 方法，即保证引用计数对象的安全关闭。
+
+---
+
+## TryLockInternal 方法
+
+简单介绍一下 TryLockInternal 方法。
+
+TryLockInternal 方法向 Redis 服务端发送一次加锁请求，如果加锁成功，执行续约与重入相关代码，返回 true，否则返回 false。
+
+``` csharp
+protected bool TryLockInternal(long leaseTime)
+{
+    // 向 Redis 发送加锁请求
+    var pttl = LuaHelper.TryLock(_keyspace, _tenantId, _lockName, GetClientId(), leaseTime);
+
+    // 加锁成功
+    // 在正常情况下，只有一个线程能够加锁成功，即只有一个线程能进入该代码块
+    if (pttl > 0)
+    {
+        if (TryGetRenewEntry(out var oldEntry))
+        {
+            // 已注册续约队列，则仅增加重入次数
+            oldEntry.IncreaseReentrantCount();
+        }
+        else
+        {
+            var renewEntry = new RenewEntry(this, GetClientId(), leaseTime, pttl);
+            _threadIds.TryAdd(Thread.CurrentThread.ManagedThreadId, renewEntry);
+
+            // 未注册续约队列，则加入到续约队列
+            RenewManager.Instance.AddEntry(renewEntry);
+        }
+
+        return true;
+    }
+
+    return false;
+}
+```
+
+---
+

@@ -7,8 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>Redis 分布式锁设计 —— 基本特性的设计与实现 - Nanciico&#39;s Blog</title><meta name="Description" content="记录基于Redis的分布式锁设计流程。"><meta property="og:title" content="Redis 分布式锁设计 —— 基本特性的设计与实现" />
-<meta property="og:description" content="记录基于Redis的分布式锁设计流程。" />
+    <title>Redis 分布式锁设计 —— 基本特性的设计与实现 - Nanciico&#39;s Blog</title><meta name="Description" content="记录基于 Redis 的分布式锁的基本特性。"><meta property="og:title" content="Redis 分布式锁设计 —— 基本特性的设计与实现" />
+<meta property="og:description" content="记录基于 Redis 的分布式锁的基本特性。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-06-23T00:00:00+00:00" />
@@ -17,11 +17,11 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Redis 分布式锁设计 —— 基本特性的设计与实现"/>
-<meta name="twitter:description" content="记录基于Redis的分布式锁设计流程。"/>
+<meta name="twitter:description" content="记录基于 Redis 的分布式锁的基本特性。"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" /><link rel="prev" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/" /><link rel="next" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E9%98%BB%E5%A1%9E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" />
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" /><link rel="prev" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" /><link rel="next" href="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E5%8A%A0%E9%94%81%E4%B8%BB%E6%B5%81%E7%A8%8B/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
@@ -39,7 +39,7 @@
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico"
-            },"description": "记录基于Redis的分布式锁设计流程。"
+            },"description": "记录基于 Redis 的分布式锁的基本特性。"
     }
     </script></head>
 
@@ -137,11 +137,10 @@
                                     <nav>
                                         <ul>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/">Redis 分布式锁设计 —— 分布式锁介绍</a></li><li><span class="active">Redis 分布式锁设计 —— 基本特性的设计与实现</span></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/">Redis 分布式锁设计 —— 引用计数算法</a></li>
                                                     <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E5%8A%A0%E9%94%81%E4%B8%BB%E6%B5%81%E7%A8%8B/">Redis 分布式锁设计 —— 加锁主流程</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E9%98%BB%E5%A1%9E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">Redis 分布式锁设计 —— 阻塞优先队列</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Redis 分布式锁设计 —— 需注意的两个编码规范</a></li>
-                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">Redis 分布式锁设计 —— 内存泄漏问题排查</a></li></ul>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_03_%E5%BC%82%E6%AD%A5%E7%BB%AD%E7%BA%A6%E6%9C%BA%E5%88%B6/">Redis 分布式锁设计 —— 异步续约机制</a></li>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_04_%E4%B8%A4%E4%B8%AA%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83/">Redis 分布式锁设计 —— 两个编码规范</a></li>
+                                                    <li><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_05_%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/">Redis 分布式锁设计 —— 内存泄漏问题排查</a></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -255,7 +254,7 @@
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-hashtags="Redis,分布式锁"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-description="记录基于Redis的分布式锁设计流程。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-description="记录基于Redis的分布式锁设计流程。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-hashtags="Redis,分布式锁"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-hashtag="Redis"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-description="记录基于 Redis 的分布式锁的基本特性。"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现" data-description="记录基于 Redis 的分布式锁的基本特性。"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%9F%BA%E6%9C%AC%E7%89%B9%E6%80%A7%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" data-title="Redis 分布式锁设计 —— 基本特性的设计与实现"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
@@ -266,8 +265,8 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_01_%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0/" class="prev" rel="prev" title="Redis 分布式锁设计 —— 引用计数算法"><i class="fas fa-angle-left fa-fw"></i>Redis 分布式锁设计 —— 引用计数算法</a>
-            <a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E9%98%BB%E5%A1%9E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" class="next" rel="next" title="Redis 分布式锁设计 —— 阻塞优先队列">Redis 分布式锁设计 —— 阻塞优先队列<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_00_%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E4%BB%8B%E7%BB%8D/" class="prev" rel="prev" title="Redis 分布式锁设计 —— 分布式锁介绍"><i class="fas fa-angle-left fa-fw"></i>Redis 分布式锁设计 —— 分布式锁介绍</a>
+            <a href="/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81_02_%E5%8A%A0%E9%94%81%E4%B8%BB%E6%B5%81%E7%A8%8B/" class="next" rel="next" title="Redis 分布式锁设计 —— 加锁主流程">Redis 分布式锁设计 —— 加锁主流程<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
         </main><footer class="footer">
