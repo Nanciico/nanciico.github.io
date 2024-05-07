@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>汇编语言 —— 更灵活的定位内存地址的方法 - Nanciico&#39;s Blog</title><meta name="Description" content="汇编语言 —— 更灵活的定位内存地址的方法"><meta property="og:title" content="汇编语言 —— 更灵活的定位内存地址的方法" />
+<meta property="og:description" content="汇编语言 —— 更灵活的定位内存地址的方法" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-09-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-09-09T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="汇编语言 —— 更灵活的定位内存地址的方法"/>
+<meta name="twitter:description" content="汇编语言 —— 更灵活的定位内存地址的方法"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" /><link rel="prev" href="https://Nanciico.github.io/posts/redis_source_code/redis_source_code_06/" /><link rel="next" href="https://Nanciico.github.io/posts/assemply_language/assemply_language_08/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编语言 —— 更灵活的定位内存地址的方法",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/posts\/assemply_language\/assemply_language_07\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  1917 ,
+        "url": "https:\/\/Nanciico.github.io\/posts\/assemply_language\/assemply_language_07\/","datePublished": "2023-09-09T00:00:00+00:00","dateModified": "2023-09-09T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "汇编语言 —— 更灵活的定位内存地址的方法"
+    }
+    </script></head>
+
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="/about" title="关于"> 关于 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="所有文章">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="/about" title="关于">关于</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#大小写转换的问题">大小写转换的问题</a>
+      <ul>
+        <li><a href="#and-和-or-指令">and 和 or 指令</a></li>
+        <li><a href="#ascii-码">ASCII 码</a></li>
+        <li><a href="#以字符形式给出的数据">以字符形式给出的数据</a></li>
+        <li><a href="#大小写转换">大小写转换</a></li>
+      </ul>
+    </li>
+    <li><a href="#更灵活的定位内存地址方法">更灵活的定位内存地址方法</a>
+      <ul>
+        <li><a href="#bx--idata">[bx + idata]</a></li>
+        <li><a href="#bx--si-和-bx--di">[bx + si] 和 [bx + di]</a></li>
+        <li><a href="#bx--si--idata-和-bx--di--idata">[bx + si + idata] 和 [bx + di + idata]</a></li>
+      </ul>
+    </li>
+    <li><a href="#不同寻址方式的灵活应用">不同寻址方式的灵活应用</a>
+      <ul>
+        <li><a href="#寻址方式编程练习">寻址方式编程练习</a></li>
+      </ul>
+    </li>
+    <li><a href="#重点小结">重点小结</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编语言 —— 更灵活的定位内存地址的方法</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>计算机体系结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-09-09">2023-09-09</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-09-09">2023-09-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1917 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/posts/assemply_language/assemply_language_00/">汇编语言 —— 前言</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_01/">汇编语言 —— 基础知识</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_02/">汇编语言 —— 寄存器</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_03/">汇编语言 —— 寄存器(内存访问)</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_04/">汇编语言 —— 第一个完整的程序</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_05/">汇编语言 —— [BX]和loop指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_06/">汇编语言 —— 包含多个段的程序</a></li><li><span class="active">汇编语言 —— 更灵活的定位内存地址的方法</span></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_08/">汇编语言 —— 数据处理的两个基本问题</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_09/">汇编语言 —— 转移指令的原理</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_10/">汇编语言 —— CALL和RET指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_11/">汇编语言 —— 标志寄存器</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_12/">汇编语言 —— 内中断</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_13/">汇编语言 —— INT指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_14/">汇编语言 —— 端口</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_15/">汇编语言 —— 外中断</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_16/">汇编语言 —— 直接定址表</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_17/">汇编语言 —— 使用BIOS进行键盘输入和磁盘读写</a></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#大小写转换的问题">大小写转换的问题</a>
+      <ul>
+        <li><a href="#and-和-or-指令">and 和 or 指令</a></li>
+        <li><a href="#ascii-码">ASCII 码</a></li>
+        <li><a href="#以字符形式给出的数据">以字符形式给出的数据</a></li>
+        <li><a href="#大小写转换">大小写转换</a></li>
+      </ul>
+    </li>
+    <li><a href="#更灵活的定位内存地址方法">更灵活的定位内存地址方法</a>
+      <ul>
+        <li><a href="#bx--idata">[bx + idata]</a></li>
+        <li><a href="#bx--si-和-bx--di">[bx + si] 和 [bx + di]</a></li>
+        <li><a href="#bx--si--idata-和-bx--di--idata">[bx + si + idata] 和 [bx + di + idata]</a></li>
+      </ul>
+    </li>
+    <li><a href="#不同寻址方式的灵活应用">不同寻址方式的灵活应用</a>
+      <ul>
+        <li><a href="#寻址方式编程练习">寻址方式编程练习</a></li>
+      </ul>
+    </li>
+    <li><a href="#重点小结">重点小结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<h2 id="大小写转换的问题" class="headerLink">
+    <a href="#%e5%a4%a7%e5%b0%8f%e5%86%99%e8%bd%ac%e6%8d%a2%e7%9a%84%e9%97%ae%e9%a2%98" class="header-mark"></a>1 大小写转换的问题</h2><h3 id="and-和-or-指令" class="headerLink">
+    <a href="#and-%e5%92%8c-or-%e6%8c%87%e4%bb%a4" class="header-mark"></a>1.1 and 和 or 指令</h3><ul>
+<li>and 指令：逻辑与指令，按位进行与运算；</li>
+<li>or  指令：逻辑或指令，按位进行或运算。</li>
+</ul>
+<h3 id="ascii-码" class="headerLink">
+    <a href="#ascii-%e7%a0%81" class="header-mark"></a>1.2 ASCII 码</h3><p>一个文本编辑过程中，就包含着按照 ASCII 编码规则进行的编码和解码。在文本编辑过程中，我们按一下键盘的 a 键，就会在屏幕上看到 “a”。</p>
+<p>我们按下键盘的 a 键，这个按键的信息被送入计算机，计算机用 ASCII 码的规则对其进行编码，将其转化为 61H 存储在内存的指定空间中；文本编辑软件从内存中取出 61H，将其送到显卡上的显存中；工作在文本模式下的显卡，用 ASCII 码的规则解释显存中的内容， 61H 被当作字符 “a”，显卡驱动显示器，将字符 “a” 的图像画在屏幕上。</p>
+<h3 id="以字符形式给出的数据" class="headerLink">
+    <a href="#%e4%bb%a5%e5%ad%97%e7%ac%a6%e5%bd%a2%e5%bc%8f%e7%bb%99%e5%87%ba%e7%9a%84%e6%95%b0%e6%8d%ae" class="header-mark"></a>1.3 以字符形式给出的数据</h3><p>在汇编程序中，用 &lsquo;&hellip;&hellip;&rsquo; 的方式指明数据是以字符的形式给出的，编译器将把它们转化为相对应的 ASCII 码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code, ds:data
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">data segment
+</span></span><span class="line"><span class="cl">    db &#39;unTY&#39;       ; 相当于 &#34;db 75H,6EH,49H,58H&#34; 
+</span></span><span class="line"><span class="cl">    db &#39;fORK&#39;       ; 相当于 &#34;db 66H,6FH,52H,4BH&#34; 
+</span></span><span class="line"><span class="cl">data ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:  ...
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="大小写转换" class="headerLink">
+    <a href="#%e5%a4%a7%e5%b0%8f%e5%86%99%e8%bd%ac%e6%8d%a2" class="header-mark"></a>1.4 大小写转换</h3><p>要改变一个字母的大小写，实际上就是要改变它所对应的 ASCII 码，一些字母的 ASCII 码如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">大写 / 小写</th>
+<th style="text-align:center">大写十六进制</th>
+<th style="text-align:center">大写二进制</th>
+<th style="text-align:center">小写十六进制</th>
+<th style="text-align:center">小写二进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">A / a</td>
+<td style="text-align:center">41</td>
+<td style="text-align:center">01000001</td>
+<td style="text-align:center">61</td>
+<td style="text-align:center">01100001</td>
+</tr>
+<tr>
+<td style="text-align:center">B / b</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">01000010</td>
+<td style="text-align:center">62</td>
+<td style="text-align:center">01100010</td>
+</tr>
+<tr>
+<td style="text-align:center">C / c</td>
+<td style="text-align:center">43</td>
+<td style="text-align:center">01000011</td>
+<td style="text-align:center">63</td>
+<td style="text-align:center">01100011</td>
+</tr>
+<tr>
+<td style="text-align:center">D / d</td>
+<td style="text-align:center">44</td>
+<td style="text-align:center">01000100</td>
+<td style="text-align:center">64</td>
+<td style="text-align:center">01100100</td>
+</tr>
+<tr>
+<td style="text-align:center">E / e</td>
+<td style="text-align:center">45</td>
+<td style="text-align:center">01000101</td>
+<td style="text-align:center">65</td>
+<td style="text-align:center">01100101</td>
+</tr>
+<tr>
+<td style="text-align:center">F / f</td>
+<td style="text-align:center">46</td>
+<td style="text-align:center">01000110</td>
+<td style="text-align:center">66</td>
+<td style="text-align:center">01100110</td>
+</tr>
+</tbody>
+</table>
+<p>由上表可以得出大小写字母 ASCII 码的规律：</p>
+<ol>
+<li>小写字母的 ASCII 码值比大写字母的 ASCII 码值大 20H；</li>
+<li>大写字母 ASCII 码的第 5 位为 0，小写字母的第 5 位为 1，其余各位都一样。</li>
+</ol>
+<p>我们通过规律 2，配合 and 和 or 指令，可以实现字母的大小写转换。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">and al, 11011111B       ; 将 al 中的 ASCII 码的第 5 位置为 0，变为大写字母
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">or  al, 00100000B       ; 将 al 中的 ASCII 码的第 5 位置为 1，变为小写字母
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="更灵活的定位内存地址方法" class="headerLink">
+    <a href="#%e6%9b%b4%e7%81%b5%e6%b4%bb%e7%9a%84%e5%ae%9a%e4%bd%8d%e5%86%85%e5%ad%98%e5%9c%b0%e5%9d%80%e6%96%b9%e6%b3%95" class="header-mark"></a>2 更灵活的定位内存地址方法</h2><p>之前，我们使用 [bx] 方式来指明一个内存单元。现在介绍几种更加灵活的定位内存地址的方式。</p>
+<h3 id="bx--idata" class="headerLink">
+    <a href="#bx--idata" class="header-mark"></a>2.1 [bx + idata]</h3><p>[bx + idata] 表示一个内存单元，它的偏移地址为(bx) + idata (bx 中的数值加上 idata)。</p>
+<p>指令 <code>mov ax,[bx+200]</code>，表示：</p>
+<ul>
+<li>将一个内存单元的内容送入 ax，这个内存单元的长度为 2 个字节(字单元)，存放一个字，偏移地址为 bx 中的数值加上 200，段地址在 ds 中。</li>
+</ul>
+<p>该指令也可以写成如下格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov ax, [200+bx]
+</span></span><span class="line"><span class="cl">mov ax, 200[bx]
+</span></span><span class="line"><span class="cl">mov ax, [bx].200
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>汇编语言中 [bx + idata] 的表示方式，为高级语言实现数组提供了便利机制</strong>：</p>
+<ul>
+<li>C 语言：a[i]</li>
+<li>汇编语言：200[bx]</li>
+</ul>
+<h3 id="bx--si-和-bx--di" class="headerLink">
+    <a href="#bx--si-%e5%92%8c-bx--di" class="header-mark"></a>2.2 [bx + si] 和 [bx + di]</h3><p>si 和 di 是 8086CPU 中和 bx 功能相近的寄存器，区别是 si 和 di 不能够分成两个 8 位寄存器来使用。</p>
+<p>表示一个内存单元，它的偏移地址为 (6x)+(si) (即 bx 中的数值加上 si 中的数值)。</p>
+<p>指令 <code>mov ax,[bx+si]</code> 表示：</p>
+<ul>
+<li>将一个内存单元的内容送入 ax，这个内存单元的长度为 2 字节(字单元)，存放一个字，偏移地址为 bx 中的数值加上 si 中的数值，段地址在 ds 中。</li>
+</ul>
+<p>该指令也可以写成如下格式：<code>mov ax, [bx][si]</code>。</p>
+<p>[bx + di] 含义与 [bx + si] 相同。</p>
+<h3 id="bx--si--idata-和-bx--di--idata" class="headerLink">
+    <a href="#bx--si--idata-%e5%92%8c-bx--di--idata" class="header-mark"></a>2.3 [bx + si + idata] 和 [bx + di + idata]</h3><p>[bx + si + idata] 表示一个内存单元，它的偏移地址为 (bx)+(si)+idata (即 bx 中的数值加上 si 中的数值再加上 idata)。</p>
+<p>指令 <code>mov ax, [bx+si+idata]</code> 表示：</p>
+<p>将一个内存单元的内容送入 ax，这个内存单元的长度为 2 字节(字单元)，存放一个字，偏移地址为 bx 中的数值加上 si 中的数值再加上 idata，段地址在 ds 中。</p>
+<p>该指令也可以写成如下格式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov ax, [bx+200+si]
+</span></span><span class="line"><span class="cl">mov ax, [200+bx+si]
+</span></span><span class="line"><span class="cl">mov ax, 200[bx][si]
+</span></span><span class="line"><span class="cl">mov ax, [bx].200[si]
+</span></span><span class="line"><span class="cl">mov ax, [bx][si].200
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>[bx + di + idata] 含义与 [bx + si + idata] 相同。</p>
+<hr>
+<h2 id="不同寻址方式的灵活应用" class="headerLink">
+    <a href="#%e4%b8%8d%e5%90%8c%e5%af%bb%e5%9d%80%e6%96%b9%e5%bc%8f%e7%9a%84%e7%81%b5%e6%b4%bb%e5%ba%94%e7%94%a8" class="header-mark"></a>3 不同寻址方式的灵活应用</h2><p>首先对目前学习过的寻址方式做一个小结：</p>
+<ol>
+<li>[idata] 用一个常量来表示地址，可用于直接定位一个内存单元；</li>
+<li>[bx] 用一个变量来表示内存地址，可用于间按定位 一个内存单元；</li>
+<li>[bx+idata] 用一个变量和常量表示地址，可在一个起始地址的基础上用变量间接定位一个内存单元；</li>
+<li>[bx+si] 用两个变量表示地址；</li>
+<li>[bx+si+idata] 用两个变量和一个常量表示地址。</li>
+</ol>
+<p>从 [idata] 一直到 [bx+si+idata]，我们可以用更加灵活的方式来定位一个内存单元的地址。这使我们可以从更加结构化的角度来看待所要处理的数据。</p>
+<h3 id="寻址方式编程练习" class="headerLink">
+    <a href="#%e5%af%bb%e5%9d%80%e6%96%b9%e5%bc%8f%e7%bc%96%e7%a8%8b%e7%bb%83%e4%b9%a0" class="header-mark"></a>3.1 寻址方式编程练习</h3><div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>将 datasg 段中每个单词的前 4 个字母改为大写字母。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">datasg segment
+</span></span><span class="line"><span class="cl">    db &#39;1. display      &#39;
+</span></span><span class="line"><span class="cl">    db &#39;2. brows        &#39;
+</span></span><span class="line"><span class="cl">    db &#39;3. replace      &#39;
+</span></span><span class="line"><span class="cl">    db &#39;4. modify       &#39;
+</span></span><span class="line"><span class="cl">datasg ends
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<p>分析：datasg 中的数据的存储结构如下图所示：</p>
+<figure><a class="lightgallery" href="/images/assembly_language/07_01.jpg" title="datasg 中的数据的存储结构" data-thumbnail="/images/assembly_language/07_01.jpg" data-sub-html="<h2>datasg 中的数据的存储结构</h2><p>datasg 中的数据的存储结构</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/07_01.jpg"
+            srcset="/images/assembly_language/07_01.jpg, /images/assembly_language/07_01.jpg 1.5x, /images/assembly_language/07_01.jpg 2x"
+            sizes="auto"
+            alt="datasg 中的数据的存储结构">
+    </a><figcaption class="image-caption">datasg 中的数据的存储结构</figcaption>
+    </figure>
+<p>经分析，我们需要进行 4x4 次的二重循环来处理数据：</p>
+<ul>
+<li>用 bx 来作变量，定位每行的起始地址，用 si 定位要修改的列，用 [bx+3+si] 的方式来对目标单元进行寻址；</li>
+<li>用栈来暂存外层循环的 cx 值。</li>
+</ul>
+<p>代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:codesg, ss:stacksg, ds:datasg
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">stacksg segment
+</span></span><span class="line"><span class="cl">    dw 0,0,0,0,0,0,0,0
+</span></span><span class="line"><span class="cl">stacksg ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">datasg segment
+</span></span><span class="line"><span class="cl">    db &#39;1. display      &#39;
+</span></span><span class="line"><span class="cl">    db &#39;2. brows        &#39;
+</span></span><span class="line"><span class="cl">    db &#39;3. replace      &#39;
+</span></span><span class="line"><span class="cl">    db &#39;4. modify       &#39;
+</span></span><span class="line"><span class="cl">datasg ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">codesg segment
+</span></span><span class="line"><span class="cl">    start:  mov ax, stacksg
+</span></span><span class="line"><span class="cl">            mov ss, ax
+</span></span><span class="line"><span class="cl">            mov sp, 16
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, datasg
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov bx, 0               ; bx 定位每行的起始地址
+</span></span><span class="line"><span class="cl">            mov cx, 4
+</span></span><span class="line"><span class="cl">        s0: push cx                 ; 将外层循环的 cx 值压栈
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov cx, 4
+</span></span><span class="line"><span class="cl">            mov si, 0               ; si 定位相对于起始列(3)要修改的列
+</span></span><span class="line"><span class="cl">        s:  mov al, [bx+si+3]
+</span></span><span class="line"><span class="cl">            and al, 11011111B
+</span></span><span class="line"><span class="cl">            mov [bx+si+3], al
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            inc si
+</span></span><span class="line"><span class="cl">            loop s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            add bx, 16
+</span></span><span class="line"><span class="cl">            pop cx                  ; 恢复外层循环 cx
+</span></span><span class="line"><span class="cl">            loop s0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00H
+</span></span><span class="line"><span class="cl">            int 21H
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">codesg ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="重点小结" class="headerLink">
+    <a href="#%e9%87%8d%e7%82%b9%e5%b0%8f%e7%bb%93" class="header-mark"></a>4 重点小结</h2><ul>
+<li>and、or 指令；</li>
+<li>大小写转化的方法；</li>
+<li>寻址方式 的意义和应用；</li>
+<li>二重循环问题的处理；</li>
+<li>栈的应用：一般来说，在需要暂存数据的时候，我们都应该使用栈。</li>
+</ul>
+<hr>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-09-09</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法" data-description="汇编语言 —— 更灵活的定位内存地址的方法"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法" data-description="汇编语言 —— 更灵活的定位内存地址的方法"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_07/" data-title="汇编语言 —— 更灵活的定位内存地址的方法"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/redis_source_code/redis_source_code_06/" class="prev" rel="prev" title="Redis 快速列表 (quicklist)"><i class="fas fa-angle-left fa-fw"></i>Redis 快速列表 (quicklist)</a>
+            <a href="/posts/assemply_language/assemply_language_08/" class="next" rel="next" title="汇编语言 —— 数据处理的两个基本问题">汇编语言 —— 数据处理的两个基本问题<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>

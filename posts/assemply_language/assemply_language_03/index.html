@@ -1,0 +1,448 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>汇编语言 —— 寄存器(内存访问) - Nanciico&#39;s Blog</title><meta name="Description" content="汇编语言 —— 寄存器(内存访问)"><meta property="og:title" content="汇编语言 —— 寄存器(内存访问)" />
+<meta property="og:description" content="汇编语言 —— 寄存器(内存访问)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-08-03T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="汇编语言 —— 寄存器(内存访问)"/>
+<meta name="twitter:description" content="汇编语言 —— 寄存器(内存访问)"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" /><link rel="prev" href="https://Nanciico.github.io/posts/redis_source_code/redis_source_code_01/" /><link rel="next" href="https://Nanciico.github.io/posts/algs4/algs4_09/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编语言 —— 寄存器(内存访问)",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/posts\/assemply_language\/assemply_language_03\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  2008 ,
+        "url": "https:\/\/Nanciico.github.io\/posts\/assemply_language\/assemply_language_03\/","datePublished": "2023-08-03T00:00:00+00:00","dateModified": "2023-08-03T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "汇编语言 —— 寄存器(内存访问)"
+    }
+    </script></head>
+
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="/about" title="关于"> 关于 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="所有文章">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="/about" title="关于">关于</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#内存中字的存储">内存中字的存储</a></li>
+    <li><a href="#ds-和-address">DS 和 [address]</a></li>
+    <li><a href="#字的传送">字的传送</a></li>
+    <li><a href="#movaddsub-指令">mov、add、sub 指令</a></li>
+    <li><a href="#数据段">数据段</a></li>
+    <li><a href="#cpu-提供的栈机制">CPU 提供的栈机制</a>
+      <ul>
+        <li><a href="#push-操作">PUSH 操作</a></li>
+        <li><a href="#pop-操作">POP 操作</a></li>
+        <li><a href="#栈空时-sssp-的指向">栈空时 SS:SP 的指向</a></li>
+        <li><a href="#栈顶超界问题">栈顶超界问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#pushpop-指令">PUSH、POP 指令</a></li>
+    <li><a href="#段的综述">段的综述</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编语言 —— 寄存器(内存访问)</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>计算机体系结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-03">2023-08-03</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-03">2023-08-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2008 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/posts/assemply_language/assemply_language_00/">汇编语言 —— 前言</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_01/">汇编语言 —— 基础知识</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_02/">汇编语言 —— 寄存器</a></li><li><span class="active">汇编语言 —— 寄存器(内存访问)</span></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_04/">汇编语言 —— 第一个完整的程序</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_05/">汇编语言 —— [BX]和loop指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_06/">汇编语言 —— 包含多个段的程序</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_07/">汇编语言 —— 更灵活的定位内存地址的方法</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_08/">汇编语言 —— 数据处理的两个基本问题</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_09/">汇编语言 —— 转移指令的原理</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_10/">汇编语言 —— CALL和RET指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_11/">汇编语言 —— 标志寄存器</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_12/">汇编语言 —— 内中断</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_13/">汇编语言 —— INT指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_14/">汇编语言 —— 端口</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_15/">汇编语言 —— 外中断</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_16/">汇编语言 —— 直接定址表</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_17/">汇编语言 —— 使用BIOS进行键盘输入和磁盘读写</a></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#内存中字的存储">内存中字的存储</a></li>
+    <li><a href="#ds-和-address">DS 和 [address]</a></li>
+    <li><a href="#字的传送">字的传送</a></li>
+    <li><a href="#movaddsub-指令">mov、add、sub 指令</a></li>
+    <li><a href="#数据段">数据段</a></li>
+    <li><a href="#cpu-提供的栈机制">CPU 提供的栈机制</a>
+      <ul>
+        <li><a href="#push-操作">PUSH 操作</a></li>
+        <li><a href="#pop-操作">POP 操作</a></li>
+        <li><a href="#栈空时-sssp-的指向">栈空时 SS:SP 的指向</a></li>
+        <li><a href="#栈顶超界问题">栈顶超界问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#pushpop-指令">PUSH、POP 指令</a></li>
+    <li><a href="#段的综述">段的综述</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<h2 id="内存中字的存储" class="headerLink">
+    <a href="#%e5%86%85%e5%ad%98%e4%b8%ad%e5%ad%97%e7%9a%84%e5%ad%98%e5%82%a8" class="header-mark"></a>1 内存中字的存储</h2><p>CPU 中，用 16 位寄存器来存储一个字。高 8 位存放高位字节，低 8 位存放低位字节。</p>
+<p>字单元：即存放一个字型数据(16 位)的内存单元，由两个地址连续的内存单元组成。高地址内存单元中存放字型数据的高位字节，低地址内存单元中存放字型数据的低位字节。</p>
+<hr>
+<h2 id="ds-和-address" class="headerLink">
+    <a href="#ds-%e5%92%8c-address" class="header-mark"></a>2 DS 和 [address]</h2><p>8086CPU 中有一个 DS 寄存器，通常用来存放要访问数据的段地址。</p>
+<p>比如我们需要读取 10000H 单元的内容，并将数据读到 al 中。代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">; 8086CPU 不支持将数据直接送入段寄存器的操作（硬件设计问题）
+</span></span><span class="line"><span class="cl">; 需要使用一个寄存器进行中转
+</span></span><span class="line"><span class="cl">mov bx,1000H
+</span></span><span class="line"><span class="cl">mov ds,bx
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">; 完成数据从 1000:0 单元到 al 的传送
+</span></span><span class="line"><span class="cl">; 指令执行时，8086CPU 自动取 ds 中的数据为内存单元的段地址
+</span></span><span class="line"><span class="cl">mov al,[0]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="字的传送" class="headerLink">
+    <a href="#%e5%ad%97%e7%9a%84%e4%bc%a0%e9%80%81" class="header-mark"></a>3 字的传送</h2><p>只要在 mov 指令中给出 16 位的寄存器就可以进行 16 位数据的传送：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov bx,1000H
+</span></span><span class="line"><span class="cl">mov ds,bx
+</span></span><span class="line"><span class="cl">mov ax,[0]      ; 1000:0 处的字型数据送入 ax
+</span></span><span class="line"><span class="cl">mov [0],cx      ; cx 中的 16 位数据送到 1000:0 处
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="movaddsub-指令" class="headerLink">
+    <a href="#movaddsub-%e6%8c%87%e4%bb%a4" class="header-mark"></a>4 mov、add、sub 指令</h2><p>mov、add、sub 指令可以有以下几种形式（以 mov 指令举例）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">指令形式</th>
+<th style="text-align:center">指令案例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">mov 寄存器，数据</td>
+<td style="text-align:center"><code>mov ax,8</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 寄存器，寄存器</td>
+<td style="text-align:center"><code>mov ax,bx</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 寄存器，内存单元</td>
+<td style="text-align:center"><code>mov ax,[0]</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 内存单元，寄存器</td>
+<td style="text-align:center"><code>mov [0],ax</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 段寄存器，寄存器</td>
+<td style="text-align:center"><code>mov ds,ax</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 寄存器，段寄存器</td>
+<td style="text-align:center"><code>mov ax,ds</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 段寄存器，内存单元</td>
+<td style="text-align:center"><code>mov cs,[0]</code></td>
+</tr>
+<tr>
+<td style="text-align:center">mov 内存单元，段寄存器</td>
+<td style="text-align:center"><code>mov [0],cs</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="数据段" class="headerLink">
+    <a href="#%e6%95%b0%e6%8d%ae%e6%ae%b5" class="header-mark"></a>5 数据段</h2><p>我们可以将一组长度为 N( ≤ 64 KB )、地址连续、起始地址为 16 的倍数的内存单元当作专门存储数据的内存空间，从而定义了一个数据段。</p>
+<p>将一段内存当作数据段，也是我们在编程时的一种安排，与代码段类似。</p>
+<hr>
+<h2 id="cpu-提供的栈机制" class="headerLink">
+    <a href="#cpu-%e6%8f%90%e4%be%9b%e7%9a%84%e6%a0%88%e6%9c%ba%e5%88%b6" class="header-mark"></a>6 CPU 提供的栈机制</h2><p>栈是一种具有特殊的访问方式的存储空间。最后进入这个空间的数据，最先出去。</p>
+<p>8086CPU 提供相关的指令来以栈的方式访问内存空间。在基于 8086CPU 编程的时候，可以将一段内存当作栈来使用。</p>
+<p>8086CPU 提供入栈和出栈指令，最基本的两个是 PUSH(入栈) 和 POP(出栈)。8086CPU 的入栈和出栈操作以字为单位进行的。</p>
+<p>8086CPU 中，有两个寄存器，段寄存器 SS 和寄存器 SP，栈顶的段地址存放 在 SS 中，偏移地址存放在 SP 中。任意时刻，SS:SP 指向栈顶元素。push 指令和 pop 指令执行时，CPU 从 SS 和 SP 中得到栈顶的地址。</p>
+<h3 id="push-操作" class="headerLink">
+    <a href="#push-%e6%93%8d%e4%bd%9c" class="header-mark"></a>6.1 PUSH 操作</h3><p>push ax 的执行，由以下两步完成：</p>
+<ol>
+<li>SP = SP - 2，SS:SP指向当前栈顶前面的单元，以当前栈顶前面的单元为新的栈顶；</li>
+<li>将 ax 中的内容送入 SS:SP 指向的内存单元处，SS:SP 此时指向新栈顶。</li>
+</ol>
+<figure><a class="lightgallery" href="/images/assembly_language/03_01.jpg" title="PUSH 指令执行过程" data-thumbnail="/images/assembly_language/03_01.jpg" data-sub-html="<h2>PUSH 指令执行过程</h2><p>PUSH 指令执行过程</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/03_01.jpg"
+            srcset="/images/assembly_language/03_01.jpg, /images/assembly_language/03_01.jpg 1.5x, /images/assembly_language/03_01.jpg 2x"
+            sizes="auto"
+            alt="PUSH 指令执行过程">
+    </a><figcaption class="image-caption">PUSH 指令执行过程</figcaption>
+    </figure>
+<h3 id="pop-操作" class="headerLink">
+    <a href="#pop-%e6%93%8d%e4%bd%9c" class="header-mark"></a>6.2 POP 操作</h3><p>pop ax 的执行过程和 push ax 相反，由以下两步完成：</p>
+<ol>
+<li>将 SS:SP 指向的内存单元处的数据送入 ax 中；</li>
+<li>SP = SP + 2，SS:SP 指向当前栈顶下面的单元，以当前栈顶下面的单元为新的栈顶。</li>
+</ol>
+<figure><a class="lightgallery" href="/images/assembly_language/03_02.jpg" title="POP 指令执行过程" data-thumbnail="/images/assembly_language/03_02.jpg" data-sub-html="<h2>POP 指令执行过程</h2><p>POP 指令执行过程</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/03_02.jpg"
+            srcset="/images/assembly_language/03_02.jpg, /images/assembly_language/03_02.jpg 1.5x, /images/assembly_language/03_02.jpg 2x"
+            sizes="auto"
+            alt="POP 指令执行过程">
+    </a><figcaption class="image-caption">POP 指令执行过程</figcaption>
+    </figure>
+<h3 id="栈空时-sssp-的指向" class="headerLink">
+    <a href="#%e6%a0%88%e7%a9%ba%e6%97%b6-sssp-%e7%9a%84%e6%8c%87%e5%90%91" class="header-mark"></a>6.3 栈空时 SS:SP 的指向</h3><p>任意时刻，SS:SP 指向栈顶元素，当栈为空的时候，栈中没有元素，也就不存在栈顶元素，所以 SS:SP 只能指向栈的最底部单元下面的单元，该单元的偏移地为栈最底部的字单元的偏移地址 + 2。</p>
+<figure><a class="lightgallery" href="/images/assembly_language/03_03.jpg" title="栈空的状态" data-thumbnail="/images/assembly_language/03_03.jpg" data-sub-html="<h2>栈空的状态</h2><p>栈空的状态</p>">
+        <img
+            
+            loading="lazy"
+            src="/images/assembly_language/03_03.jpg"
+            srcset="/images/assembly_language/03_03.jpg, /images/assembly_language/03_03.jpg 1.5x, /images/assembly_language/03_03.jpg 2x"
+            sizes="auto"
+            alt="栈空的状态">
+    </a><figcaption class="image-caption">栈空的状态</figcaption>
+    </figure>
+<h3 id="栈顶超界问题" class="headerLink">
+    <a href="#%e6%a0%88%e9%a1%b6%e8%b6%85%e7%95%8c%e9%97%ae%e9%a2%98" class="header-mark"></a>6.4 栈顶超界问题</h3><p>当栈满的时候 再使用 push 指令入栈，或栈空的时候再使用 pop 指令出栈，都将发生栈顶超界问题。</p>
+<p>8086CPU 不保证我们对栈的操作不会超界，在编程的时候要自己操心栈顶超界的问题。</p>
+<hr>
+<h2 id="pushpop-指令" class="headerLink">
+    <a href="#pushpop-%e6%8c%87%e4%bb%a4" class="header-mark"></a>7 PUSH、POP 指令</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">指令形式</th>
+<th style="text-align:center">指令案例</th>
+<th style="text-align:center">指令说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">push 寄存器</td>
+<td style="text-align:center"><code>push ax</code></td>
+<td style="text-align:center">将一个奇存器中的数据入栈</td>
+</tr>
+<tr>
+<td style="text-align:center">pop 寄存器</td>
+<td style="text-align:center"><code>pop ax</code></td>
+<td style="text-align:center">出栈，用一个寄存器接收出栈的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">push 段寄存器</td>
+<td style="text-align:center"><code>push ds</code></td>
+<td style="text-align:center">将一个段寄存器中的数据入栈</td>
+</tr>
+<tr>
+<td style="text-align:center">pop 段寄存器</td>
+<td style="text-align:center"><code>pop cs</code></td>
+<td style="text-align:center">出栈，用一个段寄存器接收出栈的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">push 内存单元</td>
+<td style="text-align:center"><code>push [0]</code></td>
+<td style="text-align:center">将一个内存字单元处的字入栈(注意:栈操作都是以字为单位)</td>
+</tr>
+<tr>
+<td style="text-align:center">pop 内存单元</td>
+<td style="text-align:center"><code>pop [0]</code></td>
+<td style="text-align:center">出栈，用 一个内存字单元按收出栈的数据</td>
+</tr>
+</tbody>
+</table>
+<p>push、pop 实质上就是一种内存传送指令，可以在寄存器和内存之间或内存和内存之间传送数据，与 mov 指令不同的是，push 和 pop 指令访问的内存单元的地址不是在指令中给出的，而是由 SS:SP 指出的。</p>
+<p>CPU 执行 mov 指令只需一步操作，就是传送；而执行 push、pop 指令需要两步操作：</p>
+<ul>
+<li>执行push时，CPU 的两步操作是：先改变 SP，后向 SS:SP 处传送</li>
+<li>执行 pop 时，CPU 的两步操作是：先读取 SS:SP 处的数据，后改变SP</li>
+</ul>
+<p>提供：SS、SP 指示栈顶；改变 SP 后写内存的入栈指令；读内存后改变 SP 的出栈指令。这就是 8086CPU 提供的栈操作机制。</p>
+<hr>
+<h2 id="段的综述" class="headerLink">
+    <a href="#%e6%ae%b5%e7%9a%84%e7%bb%bc%e8%bf%b0" class="header-mark"></a>8 段的综述</h2><p>我们可以将一段内存定义为一个段，用一个段地址指示段，用偏移地址访问段内的单元。这完全是我们自己的安排：</p>
+<ol>
+<li>我们可以用一个段存放数据，将它定义为“数据段”；</li>
+<li>我们可以用一个段存放代码，将它定义为“代码段”；</li>
+<li>我们可以用一个段当作栈，将它定义为“栈段”。</li>
+</ol>
+<p>对于数据段，将它的段地址放在 DS 中，用 mov、add、sub 等访问内存单元的指令时，CPU 就将我们定义的数据段中的内容当作数据来访问。</p>
+<p>对于代码段，将它的段地址放在 CS 中，将段中第一条指令的偏移地址放在 IP 中，这样 CPU 就将执行我们定义的代码段中的指令。</p>
+<p>对于栈段，将它的段地址放在 SS 中，将栈顶单元的偏移地址放在 SP 中，这样 CPU 在需要进行栈操作的时候，比如执行 push、pop 指令等，就将我们定义的栈段当作栈空间来用。</p>
+<p><strong>一段内存，可以既是代码的存储空间，又是数据的存储空间，还可以是栈空间，也可以什么也不是。关键在于CPU中寄存器的设置，即 CS、IP，SS、SP，DS 的指向。</strong></p>
+<hr>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-08-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)" data-description="汇编语言 —— 寄存器(内存访问)"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)" data-description="汇编语言 —— 寄存器(内存访问)"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_03/" data-title="汇编语言 —— 寄存器(内存访问)"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/redis_source_code/redis_source_code_01/" class="prev" rel="prev" title="Redis 简单动态字符串 SDS"><i class="fas fa-angle-left fa-fw"></i>Redis 简单动态字符串 SDS</a>
+            <a href="/posts/algs4/algs4_09/" class="next" rel="next" title="算法第四版 —— 优先队列">算法第四版 —— 优先队列<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>

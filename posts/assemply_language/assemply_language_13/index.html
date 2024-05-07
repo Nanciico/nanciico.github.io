@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>汇编语言 —— INT指令 - Nanciico&#39;s Blog</title><meta name="Description" content="汇编语言 —— INT指令"><meta property="og:title" content="汇编语言 —— INT指令" />
+<meta property="og:description" content="汇编语言 —— INT指令" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-11-15T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="汇编语言 —— INT指令"/>
+<meta name="twitter:description" content="汇编语言 —— INT指令"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" /><link rel="prev" href="https://Nanciico.github.io/posts/assemply_language/assemply_language_12/" /><link rel="next" href="https://Nanciico.github.io/posts/assemply_language/assemply_language_14/" />
+<link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编语言 —— INT指令",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/Nanciico.github.io\/posts\/assemply_language\/assemply_language_13\/"
+        },"genre": "posts","keywords": "「汇编语言」","wordcount":  2776 ,
+        "url": "https:\/\/Nanciico.github.io\/posts\/assemply_language\/assemply_language_13\/","datePublished": "2023-11-15T00:00:00+00:00","dateModified": "2023-11-15T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Nanciico"
+            },"description": "汇编语言 —— INT指令"
+    }
+    </script></head>
+
+<body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="所有文章"> 所有文章 </a><a class="menu-item" href="/tags/" title="标签"> 标签 </a><a class="menu-item" href="/categories/" title="分类"> 分类 </a><a class="menu-item" href="/series" title="系列"> 系列 </a><a class="menu-item" href="/about" title="关于"> 关于 </a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i>  </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Nanciico&#39;s Blog"><span class="header-title-pre">🥳</span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="所有文章">所有文章</a><a class="menu-item" href="/tags/" title="标签">标签</a><a class="menu-item" href="/categories/" title="分类">分类</a><a class="menu-item" href="/series" title="系列">系列</a><a class="menu-item" href="/about" title="关于">关于</a><a class="menu-item" href="https://github.com/Nanciico" title="GitHub" rel="noopener noreferrer" target="_blank"><i class='fab fa-github fa-fw'></i></a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">目录</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#int-指令">INT 指令</a></li>
+    <li><a href="#编写供应用程序调用的中断例程">编写供应用程序调用的中断例程</a>
+      <ul>
+        <li><a href="#案例1编写安装中断-7ch-的中断例程">案例1：编写、安装中断 7ch 的中断例程</a></li>
+        <li><a href="#案例2编写安装中断-7ch-的中断例程">案例2：编写、安装中断 7ch 的中断例程</a></li>
+      </ul>
+    </li>
+    <li><a href="#对-intiret-和栈的深入理解">对 int、iret 和栈的深入理解</a></li>
+    <li><a href="#bios-和-dos-所提供的中断例程">BIOS 和 DOS 所提供的中断例程</a></li>
+    <li><a href="#bios-和-dos-中断例程的安装过程">BIOS 和 DOS 中断例程的安装过程</a></li>
+    <li><a href="#21h-号中断例程">21h 号中断例程</a></li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编语言 —— INT指令</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
+                </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/"><i class="far fa-folder fa-fw"></i>计算机体系结构</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「汇编语言」阅读笔记</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-11-15">2023-11-15</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-11-15">2023-11-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2776 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details series-nav open">
+                                <div class="details-summary series-title">
+                                    <span>系列 - 「汇编语言」阅读笔记</span>
+                                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                                </div>
+                                <div class="details-content series-content">
+                                    <nav>
+                                        <ul>
+                                                    <li><a href="/posts/assemply_language/assemply_language_00/">汇编语言 —— 前言</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_01/">汇编语言 —— 基础知识</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_02/">汇编语言 —— 寄存器</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_03/">汇编语言 —— 寄存器(内存访问)</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_04/">汇编语言 —— 第一个完整的程序</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_05/">汇编语言 —— [BX]和loop指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_06/">汇编语言 —— 包含多个段的程序</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_07/">汇编语言 —— 更灵活的定位内存地址的方法</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_08/">汇编语言 —— 数据处理的两个基本问题</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_09/">汇编语言 —— 转移指令的原理</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_10/">汇编语言 —— CALL和RET指令</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_11/">汇编语言 —— 标志寄存器</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_12/">汇编语言 —— 内中断</a></li><li><span class="active">汇编语言 —— INT指令</span></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_14/">汇编语言 —— 端口</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_15/">汇编语言 —— 外中断</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_16/">汇编语言 —— 直接定址表</a></li>
+                                                    <li><a href="/posts/assemply_language/assemply_language_17/">汇编语言 —— 使用BIOS进行键盘输入和磁盘读写</a></li></ul>
+                                    </nav>
+                                </div>
+                            </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#int-指令">INT 指令</a></li>
+    <li><a href="#编写供应用程序调用的中断例程">编写供应用程序调用的中断例程</a>
+      <ul>
+        <li><a href="#案例1编写安装中断-7ch-的中断例程">案例1：编写、安装中断 7ch 的中断例程</a></li>
+        <li><a href="#案例2编写安装中断-7ch-的中断例程">案例2：编写、安装中断 7ch 的中断例程</a></li>
+      </ul>
+    </li>
+    <li><a href="#对-intiret-和栈的深入理解">对 int、iret 和栈的深入理解</a></li>
+    <li><a href="#bios-和-dos-所提供的中断例程">BIOS 和 DOS 所提供的中断例程</a></li>
+    <li><a href="#bios-和-dos-中断例程的安装过程">BIOS 和 DOS 中断例程的安装过程</a></li>
+    <li><a href="#21h-号中断例程">21h 号中断例程</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>中断信息可以来自 CPU 的内部和外部，当 CPU 的内部有需要处理的事情发生的时候，将产生需要马上处理的中断信息，引发中断过程。</p>
+<p>本章，讲解由 int 指令引发的内中断。</p>
+<hr>
+<h2 id="int-指令" class="headerLink">
+    <a href="#int-%e6%8c%87%e4%bb%a4" class="header-mark"></a>1 INT 指令</h2><p>int 指令的格式为：int n，n 为中断类型码，<strong>它的功能是引发中断过程</strong>。</p>
+<p>CPU 执行 int n 指令，相当于引发一个 n 号中断的中断过程，执行过程如下：</p>
+<ol>
+<li>取中断类型码n；</li>
+<li>标志寄存器入栈，IF=0，TF=0；</li>
+<li>CS、IP 入栈；</li>
+<li>(IP)=(nx4)，(CS)=(nx4+2)。</li>
+</ol>
+<p>从此处转去执行 n 号中断的中断处理程序。</p>
+<p>一般情况下，系统将一些具有一定功能的子程序，以中断处理程序的方式提供给应用程序调用。我们在编程的时候，可以用 int 指令调用这些子程序。也可以自己编写一些中断处理程序供别人使用。</p>
+<p>中断处理程序又称中断例程。</p>
+<hr>
+<h2 id="编写供应用程序调用的中断例程" class="headerLink">
+    <a href="#%e7%bc%96%e5%86%99%e4%be%9b%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e8%b0%83%e7%94%a8%e7%9a%84%e4%b8%ad%e6%96%ad%e4%be%8b%e7%a8%8b" class="header-mark"></a>2 编写供应用程序调用的中断例程</h2><p>这里通过两个案例来讨论可以供应用程序调用的中断例程的编写方法。</p>
+<h3 id="案例1编写安装中断-7ch-的中断例程" class="headerLink">
+    <a href="#%e6%a1%88%e4%be%8b1%e7%bc%96%e5%86%99%e5%ae%89%e8%a3%85%e4%b8%ad%e6%96%ad-7ch-%e7%9a%84%e4%b8%ad%e6%96%ad%e4%be%8b%e7%a8%8b" class="header-mark"></a>2.1 案例1：编写、安装中断 7ch 的中断例程</h3><p>功能：求 word 型数据的平方。
+参数：(ax) = 要计算的数据。
+返回值：dx、ax 中存放结果的高 16 位和低 16 位。</p>
+<p>应用举例：求 2*3456^2 的值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, 3456                            ; (ax)=3456
+</span></span><span class="line"><span class="cl">            int 7ch                                 ; 计算 ax 中数据的平方
+</span></span><span class="line"><span class="cl">            add ax, ax
+</span></span><span class="line"><span class="cl">            adc dx, dx                              ; dx:ax 存放结果，将结果乘以2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们要做以下 3 部分工作：</p>
+<ol>
+<li>编写实现求平方功能的程序；</li>
+<li>安装程序，将其安装在 0:200 处；</li>
+<li>设置中断向量表，将程序的入口地址保存在 7ch 表项中，使其成为中断 7ch 的中断例程。</li>
+</ol>
+<p>安装程序如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, cs
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">            mov si, offset sqr                      ; 设置 ds:si 指向源地址
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov di, 200                             ; 设置 es:di 指向目的地址
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov cx, offset sqrend-offset sqr        ; 设置 cx 为传输长度
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            cld                                     ; 设置传输方向为正
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            rep movsb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov word ptr es:[7ch*4], 200h
+</span></span><span class="line"><span class="cl">            mov word ptr es:[7ch*4+2], 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      sqr:
+</span></span><span class="line"><span class="cl">            mul ax
+</span></span><span class="line"><span class="cl">            iret                                    ; 在中断例程最后使用 iret 指令
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   sqrend:
+</span></span><span class="line"><span class="cl">            nop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>CPU 执行 int 7ch 指令进入中断例程之前，标志寄存器、当前的 CS 和 IP 被压入栈中，在执行完中断例程后，应该用 iret 指令恢复 int 7ch 执行前的标志寄存器和 CS、IP 的值，从而接着执行应用程序。</p>
+<p>int 指令和 iret 指令的配合使用与 call 指令和 ret 指令的配合使用具有相似的思路。</p>
+<h3 id="案例2编写安装中断-7ch-的中断例程" class="headerLink">
+    <a href="#%e6%a1%88%e4%be%8b2%e7%bc%96%e5%86%99%e5%ae%89%e8%a3%85%e4%b8%ad%e6%96%ad-7ch-%e7%9a%84%e4%b8%ad%e6%96%ad%e4%be%8b%e7%a8%8b" class="header-mark"></a>2.2 案例2：编写、安装中断 7ch 的中断例程</h3><p>功能：将一个全是字母，以 0 结尾的字符串，转化为大写。
+参数：ds:si 指向字符串的首地址。
+应用举例：将 data 段中的字符串转化为大写。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">data segment
+</span></span><span class="line"><span class="cl">    db &#39;conversation&#39;,0
+</span></span><span class="line"><span class="cl">data ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, data
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">            mov si, 0
+</span></span><span class="line"><span class="cl">            int 7ch
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装程序如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, cs
+</span></span><span class="line"><span class="cl">            mov ds, ax
+</span></span><span class="line"><span class="cl">            mov si, offset capital
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov di, 200h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov cx, offset capitalend-offset capital
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            cld
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            rep movsb
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 0
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov word ptr es:[7ch*4], 200h
+</span></span><span class="line"><span class="cl">            mov word ptr es:[7ch*4+2], 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  capital:
+</span></span><span class="line"><span class="cl">            push cx
+</span></span><span class="line"><span class="cl">            push si
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   change:
+</span></span><span class="line"><span class="cl">            mov cl, [si]
+</span></span><span class="line"><span class="cl">            mov ch, 0
+</span></span><span class="line"><span class="cl">            jcxz ok
+</span></span><span class="line"><span class="cl">            and byte ptr [si], 11011111b
+</span></span><span class="line"><span class="cl">            inc si
+</span></span><span class="line"><span class="cl">            jmp short change
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       ok:
+</span></span><span class="line"><span class="cl">            pop si
+</span></span><span class="line"><span class="cl">            pop cx
+</span></span><span class="line"><span class="cl">            iret
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">capitalend:
+</span></span><span class="line"><span class="cl">            nop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在中断例程 capital 中用到了寄存器 si 和 cx，编写中断例程和编写子程序的时候具有同样的问题，就是要避免寄存器的冲突。应该注意例程中用到的寄存器的值的保存和恢复。</p>
+<hr>
+<h2 id="对-intiret-和栈的深入理解" class="headerLink">
+    <a href="#%e5%af%b9-intiret-%e5%92%8c%e6%a0%88%e7%9a%84%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3" class="header-mark"></a>3 对 int、iret 和栈的深入理解</h2><p>问题：用 7ch 中断例程完成 loop 指令的功能。</p>
+<p>loop s 的执行需要两个信息，循环次数和到 s 的位移，所以，7ch 中断例程要完成 loop 指令的功能，也需要这两个信息作为参数。我们用 cx 存放循环次数，用 bx 存放位移。</p>
+<p>应用举例：在屏幕中间显示 80 个 “!”。应用代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">assume cs:code
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code segment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    start:
+</span></span><span class="line"><span class="cl">            mov ax, 0b800h
+</span></span><span class="line"><span class="cl">            mov es, ax
+</span></span><span class="line"><span class="cl">            mov di, 160*12
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov bx, offset s-offset se          ; 设置从标号 se 到标号 s 的转移位移
+</span></span><span class="line"><span class="cl">            mov cx, 80
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        s:
+</span></span><span class="line"><span class="cl">            mov byte ptr es:[di], &#39;!&#39;
+</span></span><span class="line"><span class="cl">            add di, 2
+</span></span><span class="line"><span class="cl">            int 7ch                             ; 如果 (cx)!=0，转移到标号 s 处
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       se:
+</span></span><span class="line"><span class="cl">            nop
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            mov ax, 4c00h
+</span></span><span class="line"><span class="cl">            int 21h
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">code ends
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">end start
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>分析：为了模拟 loop 指令，7ch 中断例程应具备下面的功能：</p>
+<ol>
+<li>dec cx；</li>
+<li>如果 (cx)!=0，转到标号 s 处执行，否则向下执行。</li>
+</ol>
+<p>int 7ch 引发中断过程后，进入 7ch 中断例程，在中断过程中，当前的标志寄存器、CS 和 IP 都要压栈，此时压入的 CS 和 IP 中的内容，分别是调用程序的段地址(可以认为是标号 s 的段地址)和 int 7ch 后一条指令的偏移地址(即标号 se 的偏移地址)。在中断例程中，可以从栈里取得标号 s 的段地址和标号 se 的偏移地址，用标号 se 的偏移地址加上 bx 中存放的转移位移就可以得到标号 s 的偏移地址。利用 iret 指令，我们将栈中的 se 的偏移地址加上 bx 中的转移位移，则栈中的 se 的偏移地址就变为了 s 的偏移地址。我们再使用 iret 指令，用栈中的内容设置 CS、IP，从而实现转移到标号 s 处。</p>
+<p>7ch 中断例程如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">lp:
+</span></span><span class="line"><span class="cl">    push bp
+</span></span><span class="line"><span class="cl">    mov bp, sp
+</span></span><span class="line"><span class="cl">    dec cx
+</span></span><span class="line"><span class="cl">    jcxz lpret
+</span></span><span class="line"><span class="cl">    add [bp+2], bx                      ; [bp+2] 存储的是 IP 的值
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">lpret:
+</span></span><span class="line"><span class="cl">    pop bp
+</span></span><span class="line"><span class="cl">    iret
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>因为要访问栈，使用了 bp，在程序开始处将 bp 入栈保存，结束时出栈恢复。当要修改栈中 se 的偏移地址的时候，栈中的情况为：栈顶处是 bp 原来的数值，下面是 se 的偏移地址，再下面是 s 的段地址，再下面是标志寄存器的值。而此时，bp 中栈顶的偏移地址，所以 ((ss)*16+(bp)+2) 处为 se 的偏移地址，将它加上 bx 中的转移位移就变为 s 的偏移地址。最后用 iret 出栈返回，CS:IP 即从标号 s 处开始执行指令。</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>bp 为基址寄存器，一般在函数中用来保存进入函数时的 sp 的栈顶基址。</p>
+<p>每次子函数调用时，系统在开始时都会保存这个两个指针并在函数结束时恢复 sp 和 bp 的值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">sub:
+</span></span><span class="line"><span class="cl">    push bp                             ; 保存父函数 bp 指针
+</span></span><span class="line"><span class="cl">    mov bp, sp                          ; bp 指向 sp 的基地址
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ; 此时，如果该函数有参数，则
+</span></span><span class="line"><span class="cl">    ;    [bp+4] 是子函数的第一个参数，
+</span></span><span class="line"><span class="cl">    ;    [bp+6] 是子函数的第二个参数。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    mov sp, bp                          ; 将原 sp 指针传回 sp
+</span></span><span class="line"><span class="cl">    pop bp                              ; 恢复原 bp 的值
+</span></span><span class="line"><span class="cl">    ret                                 ; 退出子函数
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<hr>
+<h2 id="bios-和-dos-所提供的中断例程" class="headerLink">
+    <a href="#bios-%e5%92%8c-dos-%e6%89%80%e6%8f%90%e4%be%9b%e7%9a%84%e4%b8%ad%e6%96%ad%e4%be%8b%e7%a8%8b" class="header-mark"></a>4 BIOS 和 DOS 所提供的中断例程</h2><p>在系统板的 ROM 中存放着一套程序，称为 BIOS (基本输入输出系统)，BIOS 中主要包含以下几部分内容：</p>
+<ol>
+<li>硬件系统的检测和初始化程序；</li>
+<li>外部中断和内部中断的中断例程；</li>
+<li>用于对硬件设备进行 IO 操作的中断例程；</li>
+<li>其他和硬件系统相关的中断例程。</li>
+</ol>
+<p>操作系统 DOS 也提供了中断例程，从操作系统的角度来看，DOS 的中断例程就是操作系统向程序员提供的编程资源。</p>
+<p>程序员在编程的时候，可以用 int 指令直接调用 BIOS 和 DOS 提供的中断例程，来完成某些工作。</p>
+<hr>
+<h2 id="bios-和-dos-中断例程的安装过程" class="headerLink">
+    <a href="#bios-%e5%92%8c-dos-%e4%b8%ad%e6%96%ad%e4%be%8b%e7%a8%8b%e7%9a%84%e5%ae%89%e8%a3%85%e8%bf%87%e7%a8%8b" class="header-mark"></a>5 BIOS 和 DOS 中断例程的安装过程</h2><p>BIOS 和 DOS 提供的中断例程的安装过程如下：</p>
+<ol>
+<li>开机后，CPU 一加电，初始化 (CS)=OFFFFH，(IP)=0，自动从 FFFF:0 单元开始执行程序。FFFF:0 处有一条转跳指令，CPU 执行该指令后，转去执行 BIOS 中的硬件系统检测和初始化程序；</li>
+<li>初始化程序将建立 BIOS 所支持的中断向量，即将 BIOS 提供的中断例程的入口地址登记在中断向量表中。对于 BIOS 所提供的中断例程，只需将入口地址登记在中断向量表中即可，因为它们是固化到 ROM 中的程序，一直在内存中存在；</li>
+<li>硬件系统检测和初始化完成后，调用 int 19h 进行操作系统的引导。从此将计算机交由操作系统控制；</li>
+<li>DOS 启动后，除完成其他工作外，还将它所提供的中断例程装入内存，并建立相应的中断向量。</li>
+</ol>
+<hr>
+<h2 id="21h-号中断例程" class="headerLink">
+    <a href="#21h-%e5%8f%b7%e4%b8%ad%e6%96%ad%e4%be%8b%e7%a8%8b" class="header-mark"></a>6 21h 号中断例程</h2><p>int 21h 中断例程是 DOS 提供的中断例程，其中包含了 DOS 提供给程序员在编程时调用的子程序。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">mov ah, 4ch                     ; 程序返回
+</span></span><span class="line"><span class="cl">mov al, 0                       ; 返回值
+</span></span><span class="line"><span class="cl">int 21h
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>(ah)=4ch 表示调用第 21h 号中断例程的 4ch 号子程序，功能为程序返回，可以提供返回值作为参数。</p>
+<hr>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-11-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令" data-hashtags="「汇编语言」"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-hashtag="「汇编语言」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令" data-description="汇编语言 —— INT指令"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令" data-description="汇编语言 —— INT指令"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/posts/assemply_language/assemply_language_13/" data-title="汇编语言 —— INT指令"><span class="fab fa-evernote fa-fw"></span></button></div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/">「汇编语言」</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/assemply_language/assemply_language_12/" class="prev" rel="prev" title="汇编语言 —— 内中断"><i class="fas fa-angle-left fa-fw"></i>汇编语言 —— 内中断</a>
+            <a href="/posts/assemply_language/assemply_language_14/" class="next" rel="next" title="汇编语言 —— 端口">汇编语言 —— 端口<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2022 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://github.com/Nanciico" target="_blank" rel="noopener noreferrer">Nanciico</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div class="assets"><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":20},"comment":{},"data":{"desktop-header-typeit":"Nanciico's Blog~","mobile-header-typeit":"Nanciico's Blog~"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"distance":100,"findAllMatches":false,"fuseIndexURL":"/index.json","highlightTag":"em","ignoreFieldNorm":false,"ignoreLocation":false,"isCaseSensitive":false,"location":0,"maxResultLength":10,"minMatchCharLength":2,"noResultsFound":"没有找到结果","snippetLength":50,"threshold":0.3,"type":"fuse","useExtendedSearch":false},"sharerjs":true,"table":{"sort":true},"twemoji":true,"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.js" defer></script><script type="text/javascript" src="/js/twemoji.min.js" defer></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script></div>
+</body>
+
+</html>

@@ -5,67 +5,67 @@
         <description>缓存 - 标签 - Nanciico&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
             <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Tue, 17 Oct 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E7%BC%93%E5%AD%98/" rel="self" type="application/rss+xml" /><item>
-    <title>Redis 对象(redisObject)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/</link>
+    <title>Redis 对象 (redisObject)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_08/</link>
     <pubDate>Tue, 17 Oct 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_08_%E5%AF%B9%E8%B1%A1redisobject/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_08/</guid>
     <description><![CDATA[阅读 Redis 对象 redisObject 相关代码，了解 Redis 中对象的数据结构。]]></description>
 </item><item>
-    <title>Redis 整数集合(intset)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</link>
+    <title>Redis 整数集合 (intset)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_07/</link>
     <pubDate>Thu, 12 Oct 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_07_%E6%95%B4%E6%95%B0%E9%9B%86%E5%90%88intset/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_07/</guid>
     <description><![CDATA[阅读 Redis 整数集合 intset 相关代码，了解 Redis 中整数集合的实现。]]></description>
 </item><item>
-    <title>Redis 快速列表(quicklist)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/</link>
+    <title>Redis 快速列表 (quicklist)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_06/</link>
     <pubDate>Fri, 08 Sep 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_06_%E5%BF%AB%E9%80%9F%E5%88%97%E8%A1%A8quicklist/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_06/</guid>
     <description><![CDATA[阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。]]></description>
 </item><item>
-    <title>Redis 跳表(zskiplist)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_05_%E8%B7%B3%E8%A1%A8zskiplist/</link>
+    <title>Redis 跳表 (zskiplist)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_05/</link>
     <pubDate>Fri, 25 Aug 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_05_%E8%B7%B3%E8%A1%A8zskiplist/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_05/</guid>
     <description><![CDATA[阅读 Redis 跳表 zskiplist 相关代码，了解 Redis 中跳表的实现。]]></description>
 </item><item>
-    <title>Redis 紧凑列表(listpack)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_04_%E7%B4%A7%E5%87%91%E5%88%97%E8%A1%A8listpack/</link>
+    <title>Redis 紧凑列表 (listpack)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_04/</link>
     <pubDate>Thu, 24 Aug 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_04_%E7%B4%A7%E5%87%91%E5%88%97%E8%A1%A8listpack/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_04/</guid>
     <description><![CDATA[阅读 Redis 紧凑列表 listpack 相关代码，了解 Redis 中紧凑列表的实现。]]></description>
 </item><item>
-    <title>Redis 字典(dict)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_03_%E5%AD%97%E5%85%B8dict/</link>
+    <title>Redis 字典 (dict)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_03/</link>
     <pubDate>Mon, 21 Aug 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_03_%E5%AD%97%E5%85%B8dict/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_03/</guid>
     <description><![CDATA[阅读 Redis 字典 dict 相关代码，了解 Redis 中字典的实现。]]></description>
 </item><item>
-    <title>Redis 链表(adlist)</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_02_%E9%93%BE%E8%A1%A8adlist/</link>
+    <title>Redis 链表 (adlist)</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_02/</link>
     <pubDate>Tue, 15 Aug 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_02_%E9%93%BE%E8%A1%A8adlist/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_02/</guid>
     <description><![CDATA[阅读 Redis 链表 adlist 相关代码，了解 Redis 中链表的实现。]]></description>
 </item><item>
-    <title>Redis 简单动态字符串SDS</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds/</link>
+    <title>Redis 简单动态字符串 SDS</title>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_01/</link>
     <pubDate>Thu, 27 Jul 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_01_%E7%AE%80%E5%8D%95%E5%8A%A8%E6%80%81%E5%AD%97%E7%AC%A6%E4%B8%B2sds/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_01/</guid>
     <description><![CDATA[阅读 Redis SDS 相关代码，理解 Redis 中字符串是如何存储的。]]></description>
 </item><item>
     <title>Redis 代码阅读开篇</title>
-    <link>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_00_%E5%89%8D%E8%A8%80/</link>
+    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_00/</link>
     <pubDate>Wed, 26 Jul 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/redis%E6%BA%90%E7%A0%81_00_%E5%89%8D%E8%A8%80/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_00/</guid>
     <description><![CDATA[阅读 Redis 代码，学习代码设计。]]></description>
 </item></channel>
 </rss>
