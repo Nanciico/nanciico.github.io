@@ -54,8 +54,7 @@ EventHandler 导致内存泄漏问题，是 .NET 中一个非常常见的问题�
 
 [Why and How to avoid Event Handler memory leaks?](https://stackoverflow.com/questions/4526829/why-and-how-to-avoid-event-handler-memory-leaks)
 
-[Are you afraid of event handlers because of C# memory leak? Fear not!
-](https://www.spicelogic.com/Blog/net-event-handler-memory-leak-16)
+[Are you afraid of event handlers because of C# memory leak? Fear not!](https://www.spicelogic.com/Blog/net-event-handler-memory-leak-16)
 
 ---
 
