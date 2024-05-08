@@ -4,9 +4,16 @@
         <link>https://Nanciico.github.io/</link>
         <description>这是我的全新 Hugo 网站</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
-            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Tue, 07 May 2024 00:00:00 &#43;0000</lastBuildDate>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Wed, 08 May 2024 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://Nanciico.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>设计模式 —— 单例模式</title>
+    <link>https://Nanciico.github.io/posts/design_patterns/design_patterns_05/</link>
+    <pubDate>Wed, 08 May 2024 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/design_patterns/design_patterns_05/</guid>
+    <description><![CDATA[设计模式 —— 单例模式]]></description>
+</item><item>
     <title>设计模式 —— 原型模式</title>
     <link>https://Nanciico.github.io/posts/design_patterns/design_patterns_04/</link>
     <pubDate>Tue, 07 May 2024 00:00:00 &#43;0000</pubDate><author>
@@ -69,12 +76,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/assemply_language/assemply_language_17/</guid>
     <description><![CDATA[汇编语言 —— 使用BIOS进行键盘输入和磁盘读写]]></description>
-</item><item>
-    <title>汇编语言 —— 直接定址表</title>
-    <link>https://Nanciico.github.io/posts/assemply_language/assemply_language_16/</link>
-    <pubDate>Wed, 22 Nov 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/assemply_language/assemply_language_16/</guid>
-    <description><![CDATA[汇编语言 —— 直接定址表]]></description>
 </item></channel>
 </rss>
