@@ -7,39 +7,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noodp" />
-    <title>设计模式 —— 工厂方法模式 - Nanciico&#39;s Blog</title><meta name="Description" content="设计模式 —— 工厂方法模式"><meta property="og:title" content="设计模式 —— 工厂方法模式" />
-<meta property="og:description" content="设计模式 —— 工厂方法模式" />
+    <title>设计模式 —— 桥接模式 - Nanciico&#39;s Blog</title><meta name="Description" content="设计模式 —— 桥接模式"><meta property="og:title" content="设计模式 —— 桥接模式" />
+<meta property="og:description" content="设计模式 —— 桥接模式" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-12-29T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-12-29T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
+<meta property="og:url" content="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-05-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-05-09T00:00:00+00:00" /><meta property="og:site_name" content="Nanciico&#39;s Blog" />
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="设计模式 —— 工厂方法模式"/>
-<meta name="twitter:description" content="设计模式 —— 工厂方法模式"/>
+<meta name="twitter:title" content="设计模式 —— 桥接模式"/>
+<meta name="twitter:description" content="设计模式 —— 桥接模式"/>
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" /><link rel="prev" href="https://Nanciico.github.io/posts/design_patterns/design_patterns_00/" /><link rel="next" href="https://Nanciico.github.io/posts/design_patterns/design_patterns_02/" />
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" /><link rel="prev" href="https://Nanciico.github.io/posts/design_patterns/design_patterns_06/" />
 <link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/color.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "设计模式 —— 工厂方法模式",
+        "headline": "设计模式 —— 桥接模式",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/Nanciico.github.io\/posts\/design_patterns\/design_patterns_01\/"
-        },"genre": "posts","keywords": "「设计模式」, 创建型设计模式","wordcount":  979 ,
-        "url": "https:\/\/Nanciico.github.io\/posts\/design_patterns\/design_patterns_01\/","datePublished": "2023-12-29T00:00:00+00:00","dateModified": "2023-12-29T00:00:00+00:00","publisher": {
+            "@id": "https:\/\/Nanciico.github.io\/posts\/design_patterns\/design_patterns_07\/"
+        },"genre": "posts","keywords": "「设计模式」, 结构型设计模式","wordcount":  985 ,
+        "url": "https:\/\/Nanciico.github.io\/posts\/design_patterns\/design_patterns_07\/","datePublished": "2024-05-09T00:00:00+00:00","dateModified": "2024-05-09T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico"
-            },"description": "设计模式 —— 工厂方法模式"
+            },"description": "设计模式 —— 桥接模式"
     }
     </script></head>
 
@@ -117,9 +117,9 @@
         <h2 class="toc-title">目录</h2>
         <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#工厂方法模式结构">工厂方法模式结构</a></li>
-    <li><a href="#工厂方法模式的应用场景">工厂方法模式的应用场景</a></li>
-    <li><a href="#工厂方法模式的优缺点">工厂方法模式的优缺点</a>
+    <li><a href="#桥接模式结构">桥接模式结构</a></li>
+    <li><a href="#桥接模式的应用场景">桥接模式的应用场景</a></li>
+    <li><a href="#桥接模式的优缺点">桥接模式的优缺点</a>
       <ul>
         <li><a href="#优点">优点</a></li>
         <li><a href="#缺点">缺点</a></li>
@@ -128,11 +128,11 @@
     <li><a href="#代码示例">代码示例</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">设计模式 —— 工厂方法模式</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">设计模式 —— 桥接模式</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><i class="far fa-folder fa-fw"></i>设计模式</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="far fa-list-alt fa-fw"></i>「设计模式」学习笔记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-12-29">2023-12-29</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-12-29">2023-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 979 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-05-09">2024-05-09</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2024-05-09">2024-05-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 985 字&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - 「设计模式」学习笔记</span>
@@ -141,13 +141,13 @@
                                 <div class="details-content series-content">
                                     <nav>
                                         <ul>
-                                                    <li><a href="/posts/design_patterns/design_patterns_00/">设计模式 —— 什么是设计模式</a></li><li><span class="active">设计模式 —— 工厂方法模式</span></li>
+                                                    <li><a href="/posts/design_patterns/design_patterns_00/">设计模式 —— 什么是设计模式</a></li>
+                                                    <li><a href="/posts/design_patterns/design_patterns_01/">设计模式 —— 工厂方法模式</a></li>
                                                     <li><a href="/posts/design_patterns/design_patterns_02/">设计模式 —— 抽象工厂模式</a></li>
                                                     <li><a href="/posts/design_patterns/design_patterns_03/">设计模式 —— 生成器模式</a></li>
                                                     <li><a href="/posts/design_patterns/design_patterns_04/">设计模式 —— 原型模式</a></li>
                                                     <li><a href="/posts/design_patterns/design_patterns_05/">设计模式 —— 单例模式</a></li>
-                                                    <li><a href="/posts/design_patterns/design_patterns_06/">设计模式 —— 适配器模式</a></li>
-                                                    <li><a href="/posts/design_patterns/design_patterns_07/">设计模式 —— 桥接模式</a></li></ul>
+                                                    <li><a href="/posts/design_patterns/design_patterns_06/">设计模式 —— 适配器模式</a></li><li><span class="active">设计模式 —— 桥接模式</span></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc" id="toc-static"  kept="">
@@ -157,9 +157,9 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#工厂方法模式结构">工厂方法模式结构</a></li>
-    <li><a href="#工厂方法模式的应用场景">工厂方法模式的应用场景</a></li>
-    <li><a href="#工厂方法模式的优缺点">工厂方法模式的优缺点</a>
+    <li><a href="#桥接模式结构">桥接模式结构</a></li>
+    <li><a href="#桥接模式的应用场景">桥接模式的应用场景</a></li>
+    <li><a href="#桥接模式的优缺点">桥接模式的优缺点</a>
       <ul>
         <li><a href="#优点">优点</a></li>
         <li><a href="#缺点">缺点</a></li>
@@ -168,58 +168,61 @@
     <li><a href="#代码示例">代码示例</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>工厂方法模式是一种创建型设计模式，其在<strong>父类</strong>中提供一个创建对象的方法，允许子类决定实例化对象的类型。</p>
+            </div><div class="content" id="content"><p>桥接模式是一种结构型设计模式，可将一个大类或一系列紧密相关的类拆分为<strong>抽象</strong>和<strong>实现</strong>两个独立的层次结构，从而能在开发时分别使用。</p>
 <hr>
-<h2 id="工厂方法模式结构" class="headerLink">
-    <a href="#%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%e7%bb%93%e6%9e%84" class="header-mark"></a>1 工厂方法模式结构</h2><figure><a class="lightgallery" href="/images/design_patterns/01_01.jpg" title="工厂方法模式结构图" data-thumbnail="/images/design_patterns/01_01.jpg" data-sub-html="<h2>工厂方法模式结构图</h2><p>工厂方法模式结构图</p>">
+<h2 id="桥接模式结构" class="headerLink">
+    <a href="#%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%e7%bb%93%e6%9e%84" class="header-mark"></a>1 桥接模式结构</h2><p>适配器实现了其中一个对象的接口，并对另一个对象进行封装。</p>
+<figure><a class="lightgallery" href="/images/design_patterns/07_01.jpg" title="桥接模式结构图" data-thumbnail="/images/design_patterns/07_01.jpg" data-sub-html="<h2>桥接模式结构图</h2><p>桥接模式结构图</p>">
         <img
             
             loading="lazy"
-            src="/images/design_patterns/01_01.jpg"
-            srcset="/images/design_patterns/01_01.jpg, /images/design_patterns/01_01.jpg 1.5x, /images/design_patterns/01_01.jpg 2x"
+            src="/images/design_patterns/07_01.jpg"
+            srcset="/images/design_patterns/07_01.jpg, /images/design_patterns/07_01.jpg 1.5x, /images/design_patterns/07_01.jpg 2x"
             sizes="auto"
-            alt="工厂方法模式结构图">
-    </a><figcaption class="image-caption">工厂方法模式结构图</figcaption>
+            alt="桥接模式结构图">
+    </a><figcaption class="image-caption">桥接模式结构图</figcaption>
     </figure>
 <ol>
-<li>产品（Product）：对接口进行声明。</li>
-<li>具体产品（Concrete Products）：产品接口的不同实现。</li>
-<li>创建者（Creator）：声明返回产品对象的工厂方法。</li>
-<li>具体创建者（Concrete Creators）：重写基础工厂方法，使其返回不同类型的产品。并不一定每次调用工厂方法都会创建新的实例。工厂方法也可以返回缓存、对象池或其他来源的已有对象。</li>
+<li>抽象部分（Abstraction）：提供高层控制逻辑，依赖于完成底层实际工作的实现对象。</li>
+<li>实现部分（Implementation）：为所有具体实现声明通用接口。抽象部分仅能通过在这里声明的方法与实现对象交互。</li>
+<li>具体实现（Concrete Implementations）：具体实现中包括特定于平台的代码。</li>
+<li>精确抽象（Refined Abstraction）：提供控制逻辑的变体。与其父类一样，它们通过通用实现接口与不同的实现进行交互。</li>
+<li>客户端（Client）：客户端需要将抽象对象与一个实现对象连接起来。但仅关心如何与抽象部分合作。</li>
 </ol>
 <hr>
-<h2 id="工厂方法模式的应用场景" class="headerLink">
-    <a href="#%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%e7%9a%84%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="header-mark"></a>2 工厂方法模式的应用场景</h2><ol>
+<h2 id="桥接模式的应用场景" class="headerLink">
+    <a href="#%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%e7%9a%84%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af" class="header-mark"></a>2 桥接模式的应用场景</h2><ol>
 <li>
-<p>在编写代码的过程中，如果无法预知对象确切类别及其依赖关系时，可使用工厂方法。工厂方法将创建产品的代码与实际使用产品的代码分离，从而能在不影响其他代码的情况下扩展产品创建部分代码。</p>
+<p>如果你想要拆分或重组一个具有多重功能的庞杂类（例如能与多个数据库服务器进行交互的类），可以使用桥接模式。</p>
 </li>
 <li>
-<p>希望用户能扩展你软件库或框架的内部组件，可使用工厂方法。</p>
+<p>如果你希望在几个独立维度上扩展一个类， 可使用该模式。</p>
 </li>
 <li>
-<p>希望复用现有对象来节省系统资源，而不是每次都重新创建对象，可使用工厂方法。</p>
+<p>如果你需要在运行时切换不同实现方法， 可使用桥接模式。</p>
 </li>
 </ol>
 <hr>
-<h2 id="工厂方法模式的优缺点" class="headerLink">
-    <a href="#%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%e7%9a%84%e4%bc%98%e7%bc%ba%e7%82%b9" class="header-mark"></a>3 工厂方法模式的优缺点</h2><h3 id="优点" class="headerLink">
+<h2 id="桥接模式的优缺点" class="headerLink">
+    <a href="#%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%e7%9a%84%e4%bc%98%e7%bc%ba%e7%82%b9" class="header-mark"></a>3 桥接模式的优缺点</h2><h3 id="优点" class="headerLink">
     <a href="#%e4%bc%98%e7%82%b9" class="header-mark"></a>3.1 优点</h3><ol>
 <li>
-<p>可以避免创建者和具体产品之间的紧密耦合。</p>
+<p>客户端代码仅与高层抽象部分进行互动，不会接触到平台的详细信息。因此可以创建与平台无关的类和程序。</p>
 </li>
 <li>
-<p>单一职责原则。你可以将产品创建代码放在程序的单一位置，从而使得代码更容易维护。</p>
+<p>开闭原则。你可以新增抽象部分和实现部分，且它们之间不会相互影响。</p>
 </li>
 <li>
-<p>开闭原则。无需更改现有客户端代码，你就可以在程序中引入新的产品类型。</p>
+<p>单一职责原则。抽象部分专注于处理高层逻辑，实现部分处理平台细节。</p>
 </li>
 </ol>
 <h3 id="缺点" class="headerLink">
-    <a href="#%e7%bc%ba%e7%82%b9" class="header-mark"></a>3.2 缺点</h3><p>应用工厂方法模式需要引入许多新的子类，代码可能会因此变得更复杂。</p>
+    <a href="#%e7%bc%ba%e7%82%b9" class="header-mark"></a>3.2 缺点</h3><ul>
+<li>对高内聚的类使用该模式可能会让代码更加复杂。</li>
+</ul>
 <hr>
 <h2 id="代码示例" class="headerLink">
-    <a href="#%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b" class="header-mark"></a>4 代码示例</h2><p>工厂方法模式识别方法：工厂方法可通过构建方法来识别，它会创建具体类的对象，但以抽象类型或接口的形式返回这些对象。</p>
-<div class="highlight"><div class="chroma">
+    <a href="#%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b" class="header-mark"></a>4 代码示例</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -310,100 +313,94 @@
 </span><span class="lnt">87
 </span><span class="lnt">88
 </span><span class="lnt">89
-</span><span class="lnt">90
-</span><span class="lnt">91
-</span><span class="lnt">92
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">FactoryMethod.Conceptual</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Bridge.Conceptual</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">Client</span><span class="p">.</span><span class="n">Main</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nn">FactoryMethod.Conceptual</span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nn">Bridge.Conceptual</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// The Creator class declares the factory method that is supposed to return</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// an object of a Product class.</span>
-</span></span><span class="line"><span class="cl">    <span class="k">abstract</span> <span class="k">class</span> <span class="nc">Creator</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// The Abstraction defines the interface for the &#34;control&#34; part of the two</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// class hierarchies. It maintains a reference to an object of the</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Implementation hierarchy and delegates all of the real work to this</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// object.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">Abstraction</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">abstract</span> <span class="n">IProduct</span> <span class="n">FactoryMethod</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">protected</span> <span class="n">IImplementation</span> <span class="n">_implementation</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="c1">// Creator&#39;s primary responsibility is not creating products.</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Usually, it contains some core business logic that relies on Product objects,</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// returned by the factory method. Subclasses can indirectly change that business logic</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// by overriding the factory method and returning a different type of</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// product from it.</span>
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="kt">string</span> <span class="n">SomeOperation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="n">Abstraction</span><span class="p">(</span><span class="n">IImplementation</span> <span class="n">implementation</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">product</span> <span class="p">=</span> <span class="n">FactoryMethod</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_implementation</span> <span class="p">=</span> <span class="n">implementation</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="s">&#34;Creator: The same creator&#39;s code has just worked with &#34;</span>
-</span></span><span class="line"><span class="cl">                <span class="p">+</span> <span class="n">product</span><span class="p">.</span><span class="n">Operation</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">virtual</span> <span class="kt">string</span> <span class="n">Operation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s">&#34;Abstract: Base operation with:\n&#34;</span> <span class="p">+</span>
+</span></span><span class="line"><span class="cl">                <span class="n">_implementation</span><span class="p">.</span><span class="n">OperationImplementation</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ConcreteCreator1</span> <span class="p">:</span> <span class="n">Creator</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// You can extend the Abstraction without changing the Implementation</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// classes.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ExtendedAbstraction</span> <span class="p">:</span> <span class="n">Abstraction</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Note that the signature of the method still uses the abstract product</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// type, even though the concrete product is actually returned from the</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// method. This way the Creator can stay independent of concrete product</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// classes.</span>
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">override</span> <span class="n">IProduct</span> <span class="n">FactoryMethod</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="n">ExtendedAbstraction</span><span class="p">(</span><span class="n">IImplementation</span> <span class="n">implementation</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">implementation</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">new</span> <span class="n">ConcreteProduct1</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">Operation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s">&#34;ExtendedAbstraction: Extended operation with:\n&#34;</span> <span class="p">+</span>
+</span></span><span class="line"><span class="cl">                <span class="n">_implementation</span><span class="p">.</span><span class="n">OperationImplementation</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ConcreteCreator2</span> <span class="p">:</span> <span class="n">Creator</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// The Implementation defines the interface for all implementation classes.</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// It doesn&#39;t have to match the Abstraction&#39;s interface.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">interface</span> <span class="nc">IImplementation</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">override</span> <span class="n">IProduct</span> <span class="n">FactoryMethod</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">string</span> <span class="n">OperationImplementation</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Each Concrete Implementation corresponds to a specific platform and</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// implements the Implementation interface using that platform&#39;s API.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ConcreteImplementationA</span> <span class="p">:</span> <span class="n">IImplementation</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="kt">string</span> <span class="n">OperationImplementation</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">new</span> <span class="n">ConcreteProduct2</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s">&#34;ConcreteImplementationA: The result in platform A.\n&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// The Product interface declares the operations that all concrete products</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// must implement.</span>
-</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">interface</span> <span class="nc">IProduct</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ConcreteImplementationB</span> <span class="p">:</span> <span class="n">IImplementation</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">string</span> <span class="n">Operation</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ConcreteProduct1</span> <span class="p">:</span> <span class="n">IProduct</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="kt">string</span> <span class="n">Operation</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="kt">string</span> <span class="n">OperationImplementation</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s">&#34;{Result of ConcreteProduct1}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s">&#34;ConcreteImplementationB: The result in platform B.\n&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">ConcreteProduct2</span> <span class="p">:</span> <span class="n">IProduct</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="kt">string</span> <span class="n">Operation</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s">&#34;{Result of ConcreteProduct2}&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">class</span> <span class="nc">Client</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;App: Launched with the ConcreteCreator1.&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ClientCode</span><span class="p">(</span><span class="k">new</span> <span class="n">ConcreteCreator1</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">abstraction</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Abstraction</span><span class="p">(</span><span class="k">new</span> <span class="n">ConcreteImplementationA</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ClientCode</span><span class="p">(</span><span class="n">abstraction</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;App: Launched with the ConcreteCreator2.&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">ClientCode</span><span class="p">(</span><span class="k">new</span> <span class="n">ConcreteCreator2</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">abstraction</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Abstraction</span><span class="p">(</span><span class="k">new</span> <span class="n">ConcreteImplementationB</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ClientCode</span><span class="p">(</span><span class="n">abstraction</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">ClientCode</span><span class="p">(</span><span class="n">Creator</span> <span class="n">creator</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Except for the initialization phase, where an Abstraction object gets</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// linked with a specific Implementation object, the client code should</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// only depend on the Abstraction class. This way the client code can</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// support any abstraction-implementation combination.</span>
+</span></span><span class="line"><span class="cl">        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">ClientCode</span><span class="p">(</span><span class="n">Abstraction</span> <span class="n">abstraction</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;Client: I&#39;m not aware of the creator&#39;s class,&#34;</span> <span class="p">+</span>
-</span></span><span class="line"><span class="cl">                <span class="s">&#34;but it still works.\n&#34;</span> <span class="p">+</span> <span class="n">creator</span><span class="p">.</span><span class="n">SomeOperation</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">abstraction</span><span class="p">.</span><span class="n">Operation</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -416,25 +413,24 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2023-12-29</span>
+                <span>更新于 2024-05-09</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式" data-hashtags="「设计模式」,创建型设计模式"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-hashtag="「设计模式」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式" data-description="设计模式 —— 工厂方法模式"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式" data-description="设计模式 —— 工厂方法模式"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_01/" data-title="设计模式 —— 工厂方法模式"><span class="fab fa-evernote fa-fw"></span></button></div>
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式" data-hashtags="「设计模式」,结构型设计模式"><span class="fab fa-twitter fa-fw"></span></button><button title="分享到 Facebook" data-sharer="facebook" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-hashtag="「设计模式」"><span class="fab fa-facebook-square fa-fw"></span></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式" data-web><span class="fab fa-whatsapp fa-fw"></span></button><button title="分享到 Line" data-sharer="line" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式"><span data-svg-src="/lib/simple-icons/icons/line.min.svg"></span></button><button title="分享到 微博" data-sharer="weibo" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式"><span class="fab fa-weibo fa-fw"></span></button><button title="分享到 Myspace" data-sharer="myspace" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式" data-description="设计模式 —— 桥接模式"><span data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></span></button><button title="分享到 Blogger" data-sharer="blogger" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式" data-description="设计模式 —— 桥接模式"><span class="fab fa-blogger fa-fw"></span></button><button title="分享到 Evernote" data-sharer="evernote" data-url="https://Nanciico.github.io/posts/design_patterns/design_patterns_07/" data-title="设计模式 —— 桥接模式"><span class="fab fa-evernote fa-fw"></span></button></div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">「设计模式」</a>,&nbsp;<a href="/tags/%E5%88%9B%E5%BB%BA%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">创建型设计模式</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">「设计模式」</a>,&nbsp;<a href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">结构型设计模式</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/posts/design_patterns/design_patterns_00/" class="prev" rel="prev" title="设计模式 —— 什么是设计模式"><i class="fas fa-angle-left fa-fw"></i>设计模式 —— 什么是设计模式</a>
-            <a href="/posts/design_patterns/design_patterns_02/" class="next" rel="next" title="设计模式 —— 抽象工厂模式">设计模式 —— 抽象工厂模式<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/posts/design_patterns/design_patterns_06/" class="prev" rel="prev" title="设计模式 —— 适配器模式"><i class="fas fa-angle-left fa-fw"></i>设计模式 —— 适配器模式</a></div>
 </div>
 </article></div>
         </main><footer class="footer">
