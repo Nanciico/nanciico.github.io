@@ -41,7 +41,7 @@
 
 加锁操作脚本如下所示：
 
-``` lua
+``` Lua
 local function TryLock(key, field, leaseTime)
     if ((redis.call('EXISTS', key) == 0) or (redis.call('HEXISTS', key, field) == 1))
     then
@@ -56,7 +56,7 @@ return TryLock(KEYS[1], ARGV[1], ARGV[2])
 
 解锁操作脚本如下所示：
 
-``` lua
+``` Lua
 local function Unlock(key, field)
     if (redis.call('HEXISTS', key, field) == 0)
     then

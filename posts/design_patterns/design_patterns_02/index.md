@@ -51,7 +51,7 @@
 
 ## 代码示例
 
-``` csharp
+``` C#
 using AbstractFactory.Conceptual;
 
 Client.Main();

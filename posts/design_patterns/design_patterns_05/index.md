@@ -52,7 +52,7 @@
 
 ### 基础单例
 
-``` csharp
+``` C#
 using Singleton.Conceptual;
 
 Client.Main();
@@ -114,7 +114,7 @@ namespace Singleton.Conceptual
 
 ### 线程安全单例
 
-``` csharp
+``` C#
 using Singleton.Conceptual;
 
 Client.Main();

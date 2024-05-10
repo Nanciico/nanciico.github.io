@@ -9,7 +9,7 @@
 
 对于 Lock 接口，应该轮询尝试加锁，直到加锁成功，否则 Sleep 一段时间，以降低 Redis 请求量。由此我们可以得到初步的加锁代码如下：
 
-``` csharp
+``` C#
 public override void Lock(long leaseTime)
 {
     Checker.CheckLeaseTime(leaseTime);

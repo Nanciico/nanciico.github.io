@@ -42,7 +42,7 @@
 
 组合可以通过将同一抽象或接口类型的实例放入树状结构的行为方法来轻松识别。
 
-``` csharp
+``` C#
 using Composite.Conceptual;
 
 Client.Main();

@@ -42,7 +42,7 @@
 
 [Monitor.Wait](https://learn.microsoft.com/en-us/dotnet/api/system.threading.monitor.wait?view=net-8.0) ：释放当前占有的锁对象并阻塞当前线程，直到当前线程重新获取锁；如果指定了超时时间，则会在超时时间过去后，将当前线程放入锁对象就绪队列中。
 
-``` csharp
+``` C#
 internal class RenewEntryPriorityBlockingQueue<T>
     where T : RenewEntry
 {

@@ -104,7 +104,7 @@ happens-before 保证会对指令重排序进行限制。
 
 ## 一个 volitile 变量例子
 
-``` csharp
+``` C#
 public class Singleton {
 
     private volatile static Singleton singleton;

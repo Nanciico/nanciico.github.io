@@ -46,7 +46,7 @@
 
 工厂方法模式识别方法：工厂方法可通过构建方法来识别，它会创建具体类的对象，但以抽象类型或接口的形式返回这些对象。
 
-``` csharp
+``` C#
 using FactoryMethod.Conceptual;
 
 Client.Main();

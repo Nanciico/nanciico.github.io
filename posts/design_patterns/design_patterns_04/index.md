@@ -53,7 +53,7 @@
 
 C# 的 ICloneable 接口就是立即可用的原型模式。
 
-``` csharp
+``` C#
 using Prototype.Conceptual;
 
 Client.Main();

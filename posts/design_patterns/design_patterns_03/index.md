@@ -43,7 +43,7 @@
 
 ## 代码示例
 
-``` csharp
+``` C#
 using Builder.Conceptual;
 
 Client.Main();

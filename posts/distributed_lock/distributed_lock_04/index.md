@@ -24,7 +24,7 @@ Unlock 发送请求，如果发生 Socket 异常导致逻辑上解锁但实际�
 
 不要用判断取代校验，这会导致忽略某些异常。
 
-``` csharp
+``` C#
 // 校验，将异常抛出
 internal void Unlock(string name)
 {

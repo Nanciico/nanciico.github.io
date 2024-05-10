@@ -47,7 +47,7 @@
 
 ## 代码示例
 
-``` csharp
+``` C#
 using Bridge.Conceptual;
 
 Client.Main();
