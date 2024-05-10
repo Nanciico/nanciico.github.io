@@ -1,78 +1,78 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>计算机体系结构 - 分类 - Nanciico&#39;s Blog</title>
-        <link>http://localhost:1313/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
+        <link>https://Nanciico.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
         <description>计算机体系结构 - 分类 - Nanciico&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>Nanciico@gmail.com (Nanciico)</managingEditor>
-            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://localhost:1313/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>Nanciico@gmail.com (Nanciico)</webMaster><lastBuildDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/" rel="self" type="application/rss+xml" /><item>
     <title>深入理解计算机系统 —— 计算机系统漫游</title>
-    <link>http://localhost:1313/posts/computer_architecture/csapp/csapp_01/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</link>
     <pubDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/csapp/csapp_01/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</guid>
     <description><![CDATA[深入理解计算机系统 —— 计算机系统漫游]]></description>
 </item><item>
     <title>深入理解计算机系统 —— 前言</title>
-    <link>http://localhost:1313/posts/computer_architecture/csapp/csapp_00/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</link>
     <pubDate>Fri, 24 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/csapp/csapp_00/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</guid>
     <description><![CDATA[深入理解计算机系统 —— 前言]]></description>
 </item><item>
     <title>汇编语言 —— 使用BIOS进行键盘输入和磁盘读写</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_17/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_17/</link>
     <pubDate>Thu, 23 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_17/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_17/</guid>
     <description><![CDATA[汇编语言 —— 使用BIOS进行键盘输入和磁盘读写]]></description>
 </item><item>
     <title>汇编语言 —— 直接定址表</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_16/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_16/</link>
     <pubDate>Wed, 22 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_16/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_16/</guid>
     <description><![CDATA[汇编语言 —— 直接定址表]]></description>
 </item><item>
     <title>汇编语言 —— 外中断</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_15/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_15/</link>
     <pubDate>Fri, 17 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_15/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_15/</guid>
     <description><![CDATA[汇编语言 —— 外中断]]></description>
 </item><item>
     <title>汇编语言 —— 端口</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_14/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_14/</link>
     <pubDate>Thu, 16 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_14/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_14/</guid>
     <description><![CDATA[汇编语言 —— 端口]]></description>
 </item><item>
     <title>汇编语言 —— INT指令</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_13/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_13/</link>
     <pubDate>Wed, 15 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_13/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_13/</guid>
     <description><![CDATA[汇编语言 —— INT指令]]></description>
 </item><item>
     <title>汇编语言 —— 内中断</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_12/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_12/</link>
     <pubDate>Mon, 13 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_12/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_12/</guid>
     <description><![CDATA[汇编语言 —— 内中断]]></description>
 </item><item>
     <title>汇编语言 —— 标志寄存器</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_11/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_11/</link>
     <pubDate>Tue, 07 Nov 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_11/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_11/</guid>
     <description><![CDATA[汇编语言 —— 标志寄存器]]></description>
 </item><item>
     <title>汇编语言 —— CALL和RET指令</title>
-    <link>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_10/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_10/</link>
     <pubDate>Sat, 23 Sep 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/assemply_language/assemply_language_10/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_10/</guid>
     <description><![CDATA[汇编语言 —— CALL和RET指令]]></description>
 </item></channel>
 </rss>
