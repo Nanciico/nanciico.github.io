@@ -6,41 +6,45 @@
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noodp" /><title>Redis 内存碎片整理调研 - Nanciico&#39;s Blog</title><meta name="Description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><meta property="og:url" content="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/">
+    <meta name="robots" content="noodp" /><title>Redis 事件驱动框架 - Nanciico&#39;s Blog</title><meta name="Description" content="阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。"><meta property="og:url" content="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/">
   <meta property="og:site_name" content="Nanciico&#39;s Blog">
-  <meta property="og:title" content="Redis 内存碎片整理调研">
-  <meta property="og:description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。">
+  <meta property="og:title" content="Redis 事件驱动框架">
+  <meta property="og:description" content="阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。">
   <meta property="og:locale" content="zh-CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2023-04-19T00:00:00+00:00">
-    <meta property="article:modified_time" content="2023-04-19T00:00:00+00:00">
+    <meta property="article:published_time" content="2024-07-27T00:00:00+00:00">
+    <meta property="article:modified_time" content="2024-07-27T00:00:00+00:00">
     <meta property="article:tag" content="Redis">
-      <meta property="og:see_also" content="http://localhost:1313/posts/redis_upgrade/redis_upgrade_00/">
-      <meta property="og:see_also" content="http://localhost:1313/posts/redis_upgrade/redis_upgrade_01/">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Redis 内存碎片整理调研">
-<meta name="twitter:description" content="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。">
+      <meta property="og:see_also" content="http://localhost:1313/posts/redis_source_code/redis_source_code_00/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/redis_source_code/redis_source_code_01/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/redis_source_code/redis_source_code_02/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/redis_source_code/redis_source_code_03/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/redis_source_code/redis_source_code_04/">
+      <meta property="og:see_also" content="http://localhost:1313/posts/redis_source_code/redis_source_code_05/">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Redis 事件驱动框架">
+<meta name="twitter:description" content="阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。">
 <meta name="application-name" content="DoIt">
 <meta name="apple-mobile-web-app-title" content="DoIt">
 
 <meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="/images/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
-<link rel="canonical" href="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" /><link rel="prev" href="http://localhost:1313/posts/algs4/algs4_05/" /><link rel="next" href="http://localhost:1313/posts/algs4/algs4_06/" />
+<link rel="canonical" href="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" /><link rel="prev" href="http://localhost:1313/posts/algs4/algs4_11/" />
 <link rel="stylesheet" href="/css/main.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">{"@context": "https://schema.org","@type": "BlogPosting",
-        "headline": "Redis 内存碎片整理调研",
+        "headline": "Redis 事件驱动框架",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/"
-        },"genre": "posts","keywords":["Redis"],"wordcount":  2352 ,
-        "url": "http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/","datePublished": "2023-04-19T00:00:00+00:00","dateModified": "2023-04-19T00:00:00+00:00","publisher": {
+            "@id": "http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/"
+        },"genre": "posts","keywords":["Redis"],"wordcount":  1193 ,
+        "url": "http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/","datePublished": "2024-07-27T00:00:00+00:00","dateModified": "2024-07-27T00:00:00+00:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
                 "name": "Nanciico",
                 "url": "https://github.com/Nanciico"
-            },"description": "分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"
+            },"description": "阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。"
     }</script></head>
 
 <body header-desktop="auto" header-mobile="auto"><script type="text/javascript">
@@ -162,37 +166,23 @@
         <h2 class="toc-title">目录</h2>
         <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
   <ul>
-    <li><a href="#内存碎片产生原因">内存碎片产生原因</a>
-      <ul>
-        <li><a href="#内存分配原因">内存分配原因</a></li>
-        <li><a href="#频繁修改-redis-中数据">频繁修改 Redis 中数据</a></li>
-      </ul>
-    </li>
-    <li><a href="#内存碎片率">内存碎片率</a></li>
-    <li><a href="#内存碎片整理功能默认配置">内存碎片整理功能默认配置</a></li>
-    <li><a href="#内存碎片整理的实现">内存碎片整理的实现</a>
-      <ul>
-        <li><a href="#控制占用-cpu-时间比率限制的实现">控制占用 CPU 时间比率限制的实现</a></li>
-        <li><a href="#内存碎片整理核心实现">内存碎片整理核心实现</a></li>
-        <li><a href="#内存碎片整理大-key-是否阻塞">内存碎片整理大 Key 是否阻塞</a></li>
-      </ul>
-    </li>
-    <li><a href="#手动内存整理-memory-purge">手动内存整理 Memory Purge</a></li>
-    <li><a href="#结论">结论</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
+    <li><a href="#redis-事件循环的主要功能">Redis 事件循环的主要功能</a></li>
+    <li><a href="#事件循环的初始化">事件循环的初始化</a></li>
+    <li><a href="#事件处理器是如何注册的">事件处理器是如何注册的？</a></li>
+    <li><a href="#如何触发事件处理器">如何触发事件处理器？</a></li>
   </ul>
 </nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class="single-title animate__animated animate__flipInX">Redis 内存碎片整理调研</h1><div class="post-meta">
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single print:!tw-w-full print:!tw-max-w-none print:!tw-m-0 print:!tw-p-0"><h1 class="single-title animate__animated animate__flipInX">Redis 事件驱动框架</h1><div class="post-meta">
             <div class="post-meta-line">
                 <span class="post-author"><img src="http://localhost:1313/images/avatar.jpeg" alt="Nanciico avatar" class="tw-inline-block tw-max-h-4 tw-rounded-full tw-translate-y-[-2px] tw-mr-1"><a href="https://github.com/Nanciico" title="Author" target="_blank" rel="noopener noreferrer author" class="author">Nanciico</a>
                 </span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>中间件技术</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/redis%E5%8D%87%E7%BA%A7/"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm-6 400H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v340a6 6 0 0 1-6 6zm-42-92v24c0 6.627-5.373 12-12 12H204c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h200c6.627 0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h200c6.627 0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h200c6.627 0 12 5.373 12 12zm-252 12c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36z"/></svg>Redis升级</a></span></div>
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>中间件技术</a></span>&nbsp;<span class="post-category">和</span>&nbsp;<span class="post-series">系列 <a href="/series/redis%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zm-6 400H54a6 6 0 0 1-6-6V86a6 6 0 0 1 6-6h404a6 6 0 0 1 6 6v340a6 6 0 0 1-6 6zm-42-92v24c0 6.627-5.373 12-12 12H204c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h200c6.627 0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h200c6.627 0 12 5.373 12 12zm0-96v24c0 6.627-5.373 12-12 12H204c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h200c6.627 0 12 5.373 12 12zm-252 12c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36zm0 96c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36 36 16.118 36 36z"/></svg>Redis源码 阅读笔记</a></span></div>
             <div class="post-meta-line"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"/></svg>&nbsp;<time datetime="2023-04-19">2023-04-19</time>&nbsp;<svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime="2023-04-19">2023-04-19</time>&nbsp;<svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 2352 字&nbsp;<svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 5 分钟&nbsp;</div>
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"/></svg>&nbsp;<time datetime="2024-07-27">2024-07-27</time>&nbsp;<svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"/></svg>&nbsp;<time datetime="2024-07-27">2024-07-27</time>&nbsp;<svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;约 1193 字&nbsp;<svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z"/></svg>&nbsp;预计阅读 3 分钟&nbsp;</div>
         </div><div class="details series-nav open">
                                 <div class="details-summary series-title">
                                     <span>系列 - </span>
@@ -202,8 +192,15 @@
                                 <div class="details-content series-content">
                                     <nav>
                                         <ul>
-                                                    <li><a href="/posts/redis_upgrade/redis_upgrade_00/">Redis 升级 —— 前言</a></li>
-                                                    <li><a href="/posts/redis_upgrade/redis_upgrade_01/">Redis 异步删除解决大 Key 过期阻塞问题可行性分析</a></li><li><span class="active">Redis 内存碎片整理调研</span></li></ul>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_00/">Redis 代码阅读开篇</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_01/">Redis 简单动态字符串 SDS</a></li><li><span class="active">Redis 事件驱动框架</span></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_02/">Redis 链表 (adlist)</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_03/">Redis 字典 (dict)</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_04/">Redis 紧凑列表 (listpack)</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_05/">Redis 跳表 (zskiplist)</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_06/">Redis 快速列表 (quicklist)</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_07/">Redis 整数集合 (intset)</a></li>
+                                                    <li><a href="/posts/redis_source_code/redis_source_code_08/">Redis 对象 (redisObject)</a></li></ul>
                                     </nav>
                                 </div>
                             </div><div class="details toc print:!tw-block" id="toc-static"  kept="">
@@ -214,35 +211,21 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#内存碎片产生原因">内存碎片产生原因</a>
-      <ul>
-        <li><a href="#内存分配原因">内存分配原因</a></li>
-        <li><a href="#频繁修改-redis-中数据">频繁修改 Redis 中数据</a></li>
-      </ul>
-    </li>
-    <li><a href="#内存碎片率">内存碎片率</a></li>
-    <li><a href="#内存碎片整理功能默认配置">内存碎片整理功能默认配置</a></li>
-    <li><a href="#内存碎片整理的实现">内存碎片整理的实现</a>
-      <ul>
-        <li><a href="#控制占用-cpu-时间比率限制的实现">控制占用 CPU 时间比率限制的实现</a></li>
-        <li><a href="#内存碎片整理核心实现">内存碎片整理核心实现</a></li>
-        <li><a href="#内存碎片整理大-key-是否阻塞">内存碎片整理大 Key 是否阻塞</a></li>
-      </ul>
-    </li>
-    <li><a href="#手动内存整理-memory-purge">手动内存整理 Memory Purge</a></li>
-    <li><a href="#结论">结论</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
+    <li><a href="#redis-事件循环的主要功能">Redis 事件循环的主要功能</a></li>
+    <li><a href="#事件循环的初始化">事件循环的初始化</a></li>
+    <li><a href="#事件处理器是如何注册的">事件处理器是如何注册的？</a></li>
+    <li><a href="#如何触发事件处理器">如何触发事件处理器？</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><hr>
-<h2 id="内存碎片产生原因" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e4%ba%a7%e7%94%9f%e5%8e%9f%e5%9b%a0" class="header-mark" aria-label="Header mark for '内存碎片产生原因'"></a>1 内存碎片产生原因</h2><p>内存碎片产生有两种原因</p>
-<h3 id="内存分配原因" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e5%8e%9f%e5%9b%a0" class="header-mark" aria-label="Header mark for '内存分配原因'"></a>1.1 内存分配原因</h3><blockquote>
-<p>To store user keys, Redis allocates at most as much memory as the maxmemory setting enables (however there are small extra allocations possible).</p>
-</blockquote>
-<p>Redis 在分配内存时有可能会分配少量额外空间。</p>
-<p>Redis 封装的 zmalloc 方法会调用 ztrymalloc_usable 方法额外分配 PREFIX_SIZE 大小的空间。</p>
+<h2 id="redis-事件循环的主要功能" class="headerLink">
+    <a href="#redis-%e4%ba%8b%e4%bb%b6%e5%be%aa%e7%8e%af%e7%9a%84%e4%b8%bb%e8%a6%81%e5%8a%9f%e8%83%bd" class="header-mark" aria-label="Header mark for 'Redis 事件循环的主要功能'"></a>1 Redis 事件循环的主要功能</h2><ol>
+<li>接受新的客户端连接</li>
+<li>响应客户端连接命令</li>
+</ol>
+<hr>
+<h2 id="事件循环的初始化" class="headerLink">
+    <a href="#%e4%ba%8b%e4%bb%b6%e5%be%aa%e7%8e%af%e7%9a%84%e5%88%9d%e5%a7%8b%e5%8c%96" class="header-mark" aria-label="Header mark for '事件循环的初始化'"></a>2 事件循环的初始化</h2><p>Redis 启动时会创建事件循环数据结构。</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
@@ -335,41 +318,24 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="cm">/* Try allocating memory, and return NULL if failed.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * &#39;*usable&#39; is set to the usable size if non NULL. */</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="o">*</span><span class="nf">ztrymalloc_usable</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">usable</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="cm">/* Possible overflow, return NULL, so that the caller can panic or handle a failed allocation. */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">SIZE_MAX</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="nf">MALLOC_MIN_SIZE</span><span class="p">(</span><span class="n">size</span><span class="p">)</span><span class="o">+</span><span class="n">PREFIX_SIZE</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ptr</span><span class="p">)</span> <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="cp">#ifdef HAVE_MALLOC_SIZE
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">size</span> <span class="o">=</span> <span class="nf">zmalloc_size</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">update_zmalloc_stat_alloc</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">usable</span><span class="p">)</span> <span class="o">*</span><span class="n">usable</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ptr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="cp">#else
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="o">*</span><span class="p">((</span><span class="kt">size_t</span><span class="o">*</span><span class="p">)</span><span class="n">ptr</span><span class="p">)</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">update_zmalloc_stat_alloc</span><span class="p">(</span><span class="n">size</span><span class="o">+</span><span class="n">PREFIX_SIZE</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">usable</span><span class="p">)</span> <span class="o">*</span><span class="n">usable</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">ptr</span><span class="o">+</span><span class="n">PREFIX_SIZE</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="cp">#endif
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span></span></span></code></pre>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/server.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">initServer</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    
+</span></span><span class="line"><span class="cl">    <span class="n">server</span><span class="p">.</span><span class="n">el</span> <span class="o">=</span> <span class="nf">aeCreateEventLoop</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">maxclients</span><span class="o">+</span><span class="n">CONFIG_FDSET_INCR</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">el</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">serverLog</span><span class="p">(</span><span class="n">LL_WARNING</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="s">&#34;Failed creating the event loop. Error message: &#39;%s&#39;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre>
 </div>
-<p>其次在默认内存分配器 Jemalloc 下，会按照固定大小分配内存，比如需要申请 6 bytes，但实际分配 8 bytes。</p>
-<h3 id="频繁修改-redis-中数据" class="headerLink">
-    <a href="#%e9%a2%91%e7%b9%81%e4%bf%ae%e6%94%b9-redis-%e4%b8%ad%e6%95%b0%e6%8d%ae" class="header-mark" aria-label="Header mark for '频繁修改 Redis 中数据'"></a>1.2 频繁修改 Redis 中数据</h3><blockquote>
-<p>Redis will not always free up (return) memory to the OS when keys are removed. This is not something special about Redis, but it is how most malloc() implementations work. For example if you fill an instance with 5GB worth of data, and then remove the equivalent of 2GB of data, the Resident Set Size (also known as the RSS, which is the number of memory pages consumed by the process) will probably still be around 5GB, even if Redis will claim that the user memory is around 3GB. This happens because the underlying allocator can&rsquo;t easily release the memory. For example often most of the removed keys were allocated in the same pages as the other keys that still exist.</p>
-</blockquote>
-<p>在删除数据时，Redis 不会直接将该部分内存归还操作系统，原因是有可能有其他数据落在相同页上，这部分删除的内存也会产生内存碎片。</p>
-<hr>
-<h2 id="内存碎片率" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e7%8e%87" class="header-mark" aria-label="Header mark for '内存碎片率'"></a>2 内存碎片率</h2><p>mem_fragmentation_ratio = used_memory_rss / used_memory</p>
-<p>可以理解为 Redis 向操作系统申请的内存与 Redis 实际使用内存的比。</p>
-<p>理想情况下内存碎片率维持在 1.03 最好。正常情况下在 1-1.5 之间。</p>
-<hr>
-<h2 id="内存碎片整理功能默认配置" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e6%95%b4%e7%90%86%e5%8a%9f%e8%83%bd%e9%bb%98%e8%ae%a4%e9%85%8d%e7%bd%ae" class="header-mark" aria-label="Header mark for '内存碎片整理功能默认配置'"></a>3 内存碎片整理功能默认配置</h2><div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+<p><code>aeCreateEventLoop</code> 初始化并返回 <code>aeEventLoop</code> 数据结构。</p>
+<p><code>aeEventLoop</code> 数据结构中两个最重要的域：<code>aeFileEvent *events</code> 和 <code>aeFiredEvent *fired</code>。</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
     
@@ -393,7 +359,7 @@
     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button>
 
     <div class="code-block-title-bar tw-w-full">
-      <p class="tw-select-none !tw-my-1">conf</p>
+      <p class="tw-select-none !tw-my-1">C</p>
     </div>
     <div class="tw-flex">
       <button 
@@ -461,25 +427,31 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">activedefrag = 0                        # 内存碎片整理总开关，默认不开启。
-</span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">active-defrag-cycle-min = 1             # 内存碎片整理的 CPU 时间占总 CPU 时间不低于 1%。
-</span></span><span class="line"><span class="cl">active-defrag-cycle-max = 25            # 内存碎片整理的 CPU 时间占总 CPU 时间不高于 25%。
-</span></span><span class="line"><span class="cl">active-defrag-threshold-lower = 10      # 内存碎片率小于 10%，不进行内存碎片整理。
-</span></span><span class="line"><span class="cl">active-defrag-threshold-upper = 100     # 在 100% 碎片率时达到最大的碎片整理力度。
-</span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">active-defrag-max-scan-fields = 1000    # key 中包含的 field 大于 1000 会被单独处理。
-</span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">active-defrag-ignore-bytes = 100mb      # 碎片总空间少于 100mb 不进行内存整理。</span></span></code></pre>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/ae.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* State of an event based program */</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">aeEventLoop</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">maxfd</span><span class="p">;</span>   <span class="cm">/* highest file descriptor currently registered */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">setsize</span><span class="p">;</span> <span class="cm">/* max number of file descriptors tracked */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">long</span> <span class="kt">long</span> <span class="n">timeEventNextId</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeFileEvent</span> <span class="o">*</span><span class="n">events</span><span class="p">;</span> <span class="cm">/* Registered events */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeFiredEvent</span> <span class="o">*</span><span class="n">fired</span><span class="p">;</span> <span class="cm">/* Fired events */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeTimeEvent</span> <span class="o">*</span><span class="n">timeEventHead</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">stop</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">apidata</span><span class="p">;</span> <span class="cm">/* This is used for polling API specific data */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeBeforeSleepProc</span> <span class="o">*</span><span class="n">beforesleep</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeBeforeSleepProc</span> <span class="o">*</span><span class="n">aftersleep</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">flags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">aeEventLoop</span><span class="p">;</span></span></span></code></pre>
 </div>
 <hr>
-<h2 id="内存碎片整理的实现" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e6%95%b4%e7%90%86%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark" aria-label="Header mark for '内存碎片整理的实现'"></a>4 内存碎片整理的实现</h2><p>内存碎片整理功能通过 activeDefragCycle 函数实现，该函数通过 serverCron 函数调用，在开启该功能后会被定时调用。一次完整的内存碎片整理过程需要多次调用 activeDefragCycle 函数，即会横跨多次定时任务。</p>
-<h3 id="控制占用-cpu-时间比率限制的实现" class="headerLink">
-    <a href="#%e6%8e%a7%e5%88%b6%e5%8d%a0%e7%94%a8-cpu-%e6%97%b6%e9%97%b4%e6%af%94%e7%8e%87%e9%99%90%e5%88%b6%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark" aria-label="Header mark for '控制占用 CPU 时间比率限制的实现'"></a>4.1 控制占用 CPU 时间比率限制的实现</h3><p>通过 active-defrag-cycle-min、active-defrag-cycle-max、active-defrag-threshold-lower、active-defrag-threshold-upper 四个配置能够控制内存碎片整理功能占用 CPU 时间的百分比。</p>
-<p>该百分比最终会被计算为每次执行 activeDefragCycle 函数的最大时间限制 timeLimit，从而控制每次执行内存碎片整理功能的时间。</p>
-<div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
+<h2 id="事件处理器是如何注册的" class="headerLink">
+    <a href="#%e4%ba%8b%e4%bb%b6%e5%a4%84%e7%90%86%e5%99%a8%e6%98%af%e5%a6%82%e4%bd%95%e6%b3%a8%e5%86%8c%e7%9a%84" class="header-mark" aria-label="Header mark for '事件处理器是如何注册的？'"></a>3 事件处理器是如何注册的？</h2><p>事件循环有两个主要事件需要处理：</p>
+<ol>
+<li>新的连接建立并可用</li>
+<li>现有连接进入可读状态</li>
+</ol>
+<p>事件循环初始化后，会在事件循环中注册一个 <code>aeFileProc *accept_handler</code>，该事件处理器会在新的连接建立时执行。</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
     
@@ -571,54 +543,24 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="cp">#define INTERPOLATE(x, x1, x2, y1, y2) ( (y1) + ((x)-(x1)) * ((y2)-(y1)) / ((x2)-(x1)) )
-</span></span></span><span class="line"><span class="cl"><span class="cp">#define LIMIT(y, min, max) ((y)&lt;(min)? min: ((y)&gt;(max)? max: (y)))
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
-</span></span><span class="line"><span class="cl"><span class="cm">/* decide if defrag is needed, and at what CPU effort to invest in it */</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">computeDefragCycles</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="n">frag_bytes</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 获得内存碎片率和内存碎片的总字节数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">float</span> <span class="n">frag_pct</span> <span class="o">=</span> <span class="nf">getAllocatorFragmentation</span><span class="p">(</span><span class="o">&amp;</span><span class="n">frag_bytes</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="cm">/* If we&#39;re not already running, and below the threshold, exit. */</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 如果当前未进行内存碎片整理，且内存碎片率和内存碎片总字节数不满足阈值要求，退出
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">server</span><span class="p">.</span><span class="n">active_defrag_running</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">frag_pct</span> <span class="o">&lt;</span> <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_threshold_lower</span> <span class="o">||</span> <span class="n">frag_bytes</span> <span class="o">&lt;</span> <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_ignore_bytes</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/server.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* Create an event handler for accepting new connections in TCP or TLS domain sockets.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * This works atomically for all socket fds */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">createSocketAcceptHandler</span><span class="p">(</span><span class="n">connListener</span> <span class="o">*</span><span class="n">sfd</span><span class="p">,</span> <span class="n">aeFileProc</span> <span class="o">*</span><span class="n">accept_handler</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">sfd</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nf">aeCreateFileEvent</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">el</span><span class="p">,</span> <span class="n">sfd</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">AE_READABLE</span><span class="p">,</span> <span class="n">accept_handler</span><span class="p">,</span><span class="n">sfd</span><span class="p">)</span> <span class="o">==</span> <span class="n">AE_ERR</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="cm">/* Rollback */</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">--</span><span class="p">)</span> <span class="nf">aeDeleteFileEvent</span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">el</span><span class="p">,</span> <span class="n">sfd</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">AE_READABLE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">C_ERR</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">    <span class="cm">/* Calculate the adaptive aggressiveness of the defrag */</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 自适应计算内存碎片清理的 cpu 占用百分比
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">cpu_pct</span> <span class="o">=</span> <span class="nf">INTERPOLATE</span><span class="p">(</span><span class="n">frag_pct</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_threshold_lower</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_threshold_upper</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_cycle_min</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_cycle_max</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 将 cpu 占用百分比限制在 [active_defrag_cycle_min, active_defrag_cycle_max]
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">cpu_pct</span> <span class="o">=</span> <span class="nf">LIMIT</span><span class="p">(</span><span class="n">cpu_pct</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_cycle_min</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_cycle_max</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">     <span class="cm">/* We allow increasing the aggressiveness during a scan, but don&#39;t
-</span></span></span><span class="line"><span class="cl"><span class="cm">      * reduce it. */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">cpu_pct</span> <span class="o">&gt;</span> <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_running</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// 记录比率
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_running</span> <span class="o">=</span> <span class="n">cpu_pct</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="nf">serverLog</span><span class="p">(</span><span class="n">LL_VERBOSE</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="s">&#34;Starting active defrag, frag=%.0f%%, frag_bytes=%zu, cpu=%d%%&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">            <span class="n">frag_pct</span><span class="p">,</span> <span class="n">frag_bytes</span><span class="p">,</span> <span class="n">cpu_pct</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">C_OK</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre>
 </div>
-<p>计算公式： cycle-min + (frag_pct - threshold_lower) * (cycle_max - cycle_min) / (threshold_upper - threshold_lower)。</p>
-<p>若当前内存碎片率为 1.5，则计算出来的 cpu_pct = 14。</p>
-<p>则 <code>timelimit = 1000000 * server.active_defrag_running / server.hz / 100 = 1000000 * 14 / 10 / 100 = 14,000 μs = 14 ms</code>。</p>
-<p>该值计算出来后，会在每 16 次 scan，或每 512 次指针移动，或每 64 个 key 完成内存整理完毕后，判断运行时间是否超过运行时间限制，若超过则退出本次内存整理。</p>
-<p>即在内存碎片率为 1.5 时，每次定时任务会花费 14ms 左右时间整理内存碎片。</p>
-<h3 id="内存碎片整理核心实现" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e6%95%b4%e7%90%86%e6%a0%b8%e5%bf%83%e5%ae%9e%e7%8e%b0" class="header-mark" aria-label="Header mark for '内存碎片整理核心实现'"></a>4.2 内存碎片整理核心实现</h3><p>内存整理功能通过 scan 键空间实现。每次 scan 时会调用 defragScanCallback 回调函数，执行 scan 出来的 key 的内存碎片清理工作。</p>
-<p><code>cursor = dictScan(db-&gt;dict, cursor, defragScanCallback, defragDictBucketCallback, db);</code></p>
-<p>defragScanCallback 调用 defragKey 函数，先尝试整理 key 对象，再判断 value 对象的编码从而调用相关函数整理 value 对象。</p>
-<p>最终都会调用 activeDefragAlloc 函数进行内存整理。内存整理的过程为：分配新内存、内存复制、释放旧内存。</p>
-<div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
+<p>在连接已经建立后，会为连接设置一个读事件处理器。</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
     
@@ -710,35 +652,17 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="cm">/* Defrag helper for generic allocations.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> *
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * returns NULL in case the allocation wasn&#39;t moved.
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * when it returns a non-null value, the old pointer was already released
-</span></span></span><span class="line"><span class="cl"><span class="cm"> * and should NOT be accessed. */</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span><span class="o">*</span> <span class="nf">activeDefragAlloc</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="n">size</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">newptr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nf">je_get_defrag_hint</span><span class="p">(</span><span class="n">ptr</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_misses</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="cm">/* move this allocation to a new allocation.
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * make sure not to use the thread cache. so that we don&#39;t get back the same
-</span></span></span><span class="line"><span class="cl"><span class="cm">     * pointers we try to free */</span>
-</span></span><span class="line"><span class="cl">    <span class="n">size</span> <span class="o">=</span> <span class="nf">zmalloc_size</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 分配新内存
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">newptr</span> <span class="o">=</span> <span class="nf">zmalloc_no_tcache</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 内存复制
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">memcpy</span><span class="p">(</span><span class="n">newptr</span><span class="p">,</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 释放旧内存
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">zfree_no_tcache</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">newptr</span><span class="p">;</span>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/connection.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* Register a read handler, to be called when the connection is readable.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * If NULL, the existing handler is removed.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">int</span> <span class="nf">connSetReadHandler</span><span class="p">(</span><span class="n">connection</span> <span class="o">*</span><span class="n">conn</span><span class="p">,</span> <span class="n">ConnectionCallbackFunc</span> <span class="n">func</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">conn</span><span class="o">-&gt;</span><span class="n">type</span><span class="o">-&gt;</span><span class="nf">set_read_handler</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">func</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre>
 </div>
-<p>这样就完成了单个内存区域的内存整理。</p>
-<h3 id="内存碎片整理大-key-是否阻塞" class="headerLink">
-    <a href="#%e5%86%85%e5%ad%98%e7%a2%8e%e7%89%87%e6%95%b4%e7%90%86%e5%a4%a7-key-%e6%98%af%e5%90%a6%e9%98%bb%e5%a1%9e" class="header-mark" aria-label="Header mark for '内存碎片整理大 Key 是否阻塞'"></a>4.3 内存碎片整理大 Key 是否阻塞</h3><p>假设有一大 key 其拥有的元素为 fields 个。</p>
-<p>在处理到该 key 时，会比较 fields 与 active-defrag-max-scan-fields 的大小，若 fields &gt; active-defrag-max-scan-fields，则将其标记为大 key 放在一个列表里，并跳过该 key 的内存整理。</p>
+<hr>
+<h2 id="如何触发事件处理器" class="headerLink">
+    <a href="#%e5%a6%82%e4%bd%95%e8%a7%a6%e5%8f%91%e4%ba%8b%e4%bb%b6%e5%a4%84%e7%90%86%e5%99%a8" class="header-mark" aria-label="Header mark for '如何触发事件处理器？'"></a>4 如何触发事件处理器？</h2><p>Redis 使用操作系统的多路复用 IO 来等待事件。</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
@@ -831,12 +755,24 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">dictSize</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">server</span><span class="p">.</span><span class="n">active_defrag_max_scan_fields</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">defragLater</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">kde</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="k">else</span>
-</span></span><span class="line"><span class="cl">    <span class="n">defragged</span> <span class="o">+=</span> <span class="nf">activeDefragSdsDict</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">DEFRAG_SDS_DICT_VAL_IS_SDS</span><span class="p">);</span></span></span></code></pre>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/ae.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* Include the best multiplexing layer supported by this system.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The following should be ordered by performances, descending. */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef HAVE_EVPORT
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;ae_evport.c&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="cp">#ifdef HAVE_EPOLL
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="cp">#include</span> <span class="cpf">&#34;ae_epoll.c&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp">#ifdef HAVE_KQUEUE
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp">#include</span> <span class="cpf">&#34;ae_kqueue.c&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp">#include</span> <span class="cpf">&#34;ae_select.c&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp">#endif</span></span></span></code></pre>
 </div>
-<p>在 scan 下一个桶之前，会检查列表里是否有大 key 未完成内存整理，若有则会单独为大 key 进行内存整理。</p>
+<p>事件循环启动，会一直进行循环并执行已经就绪的事件。</p>
 <div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
@@ -929,14 +865,18 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="cm">/* before scanning the next bucket, see if we have big keys left from the previous bucket to scan */</span>
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">defragLaterStep</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">endtime</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">quit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="cm">/* time is up, we didn&#39;t finish all the work */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">break</span><span class="p">;</span> <span class="cm">/* this will exit the function and we&#39;ll continue on the next cycle */</span>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src.ae.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">aeMain</span><span class="p">(</span><span class="n">aeEventLoop</span> <span class="o">*</span><span class="n">eventLoop</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">stop</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">stop</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">aeProcessEvents</span><span class="p">(</span><span class="n">eventLoop</span><span class="p">,</span> <span class="n">AE_ALL_EVENTS</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">                                   <span class="n">AE_CALL_BEFORE_SLEEP</span><span class="o">|</span>
+</span></span><span class="line"><span class="cl">                                   <span class="n">AE_CALL_AFTER_SLEEP</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre>
 </div>
-<p>在整理大 key 的内存时，也会分多次整理。会在每 16 次迭代，或每 512 个指针移动，或每 64 个 field 内存整理完毕后，判断运行时间是否超过运行时间限制，若超过则退出本次内存整理。</p>
-<div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
+<p>当事件已就绪，会被放置在 <code>aeFiredEvent *fired</code> 域。</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
   <div class="
     code-block-title 
     
@@ -1028,46 +968,307 @@
       group-[.is-closed]:!tw-max-h-0 
       group-[.is-wrap]:tw-text-wrap
       tw-overflow-y-hidden
-      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="k">do</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">quit</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">defragLaterItem</span><span class="p">(</span><span class="n">de</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">defrag_later_cursor</span><span class="p">,</span> <span class="n">endtime</span><span class="p">,</span><span class="n">db</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">))</span>
-</span></span><span class="line"><span class="cl">        <span class="n">quit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="cm">/* time is up, we didn&#39;t finish all the work */</span>
-</span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl">    <span class="cm">/* Once in 16 scan iterations, 512 pointer reallocations, or 64 fields
-</span></span></span><span class="line"><span class="cl"><span class="cm">        * (if we have a lot of pointers in one hash bucket, or rehashing),
-</span></span></span><span class="line"><span class="cl"><span class="cm">        * check if we reached the time limit. */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">quit</span> <span class="o">||</span> <span class="p">(</span><span class="o">++</span><span class="n">iterations</span> <span class="o">&gt;</span> <span class="mi">16</span> <span class="o">||</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_hits</span> <span class="o">-</span> <span class="n">prev_defragged</span> <span class="o">&gt;</span> <span class="mi">512</span> <span class="o">||</span>
-</span></span><span class="line"><span class="cl">                    <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_scanned</span> <span class="o">-</span> <span class="n">prev_scanned</span> <span class="o">&gt;</span> <span class="mi">64</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">quit</span> <span class="o">||</span> <span class="nf">ustime</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">endtime</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">if</span><span class="p">(</span><span class="n">key_defragged</span> <span class="o">!=</span> <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_hits</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_key_hits</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">else</span>
-</span></span><span class="line"><span class="cl">                <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_key_misses</span><span class="o">++</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">prev_defragged</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_hits</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">prev_scanned</span> <span class="o">=</span> <span class="n">server</span><span class="p">.</span><span class="n">stat_active_defrag_scanned</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">while</span><span class="p">(</span><span class="n">defrag_later_cursor</span><span class="p">);</span></span></span></code></pre>
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/ae.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* State of an event based program */</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">aeEventLoop</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeFileEvent</span> <span class="o">*</span><span class="n">events</span><span class="p">;</span> <span class="cm">/* Registered events */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeFiredEvent</span> <span class="o">*</span><span class="n">fired</span><span class="p">;</span> <span class="cm">/* Fired events */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span> <span class="n">aeEventLoop</span><span class="p">;</span></span></span></code></pre>
 </div>
-<p>即一个大 key 的内存整理会分多次处理，不会长时间阻塞主线程。</p>
-<hr>
-<h2 id="手动内存整理-memory-purge" class="headerLink">
-    <a href="#%e6%89%8b%e5%8a%a8%e5%86%85%e5%ad%98%e6%95%b4%e7%90%86-memory-purge" class="header-mark" aria-label="Header mark for '手动内存整理 Memory Purge'"></a>5 手动内存整理 Memory Purge</h2><p>该命令只在使用 jemalloc 内存分配器下生效。</p>
-<p>该命令清理内存脏页，和上述内存碎片整理功能管理的不是相同区域。</p>
-<hr>
-<h2 id="结论" class="headerLink">
-    <a href="#%e7%bb%93%e8%ae%ba" class="header-mark" aria-label="Header mark for '结论'"></a>6 结论</h2><p>Redis 内存碎片整理功能是通过 scan 命令渐进式地整理每次迭代到的 key，每次调用的时间复杂度为 O(1), 完整执行完一次内存碎片整理功能的时间复杂度为 O(n)。</p>
-<p>内存碎片整理大 key 会将大 key 分多次处理，不会长时间阻塞主线程。</p>
-<p>内存碎片整理功能的核心作用是降低内存碎片率，提高内存利用率以节省内存成本。</p>
-<p>但内存整理功能在主线程中执行，会阻塞主线程而降低 Redis 的性能。</p>
-<hr>
-<h2 id="参考资料" class="headerLink">
-    <a href="#%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99" class="header-mark" aria-label="Header mark for '参考资料'"></a>7 参考资料</h2><p><a href="https://redis.io/docs/management/optimization/memory-optimization/" target="_blank" rel="noopener noreferrer">Memory optimization | Redis</a></p>
-<p><a href="https://github.com/redis/redis/blob/unstable/src/defrag.c" target="_blank" rel="noopener noreferrer">redis/defrag.c at unstable · redis/redis · GitHub</a></p>
-<p><a href="https://redis.io/commands/memory-purge/" target="_blank" rel="noopener noreferrer">MEMORY PURGE | Redis</a></p>
+<p><code>aeProcessEvents</code> 从 <code>aeFiredEvent *fired</code> 域中读取事件。</p>
+<div class="code-block highlight is-closed show-line-numbers  tw-group tw-my-2">
+  <div class="
+    code-block-title 
+    
+    tw-flex 
+    tw-flex-row 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        tw-select-none 
+        tw-mx-2 
+        tw-block
+        group-[.is-open]:tw-rotate-90
+        tw-transition-[transform] 
+        tw-duration-500 
+        tw-ease-in-out
+        print:!tw-hidden"
+      disabled
+      aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button>
+
+    <div class="code-block-title-bar tw-w-full">
+      <p class="tw-select-none !tw-my-1">C</p>
+    </div>
+    <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-8" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/ae.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cm">/* Process every pending time event, then every pending file event
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * (that may be registered by time event callbacks just processed).
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Without special flags the function sleeps until some file event
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * fires, or when the next time event occurs (if any).
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * If flags is 0, the function does nothing and returns.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if flags has AE_ALL_EVENTS set, all the kind of events are processed.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if flags has AE_FILE_EVENTS set, file events are processed.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if flags has AE_TIME_EVENTS set, time events are processed.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if flags has AE_DONT_WAIT set, the function returns ASAP once all
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * the events that can be handled without a wait are processed.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if flags has AE_CALL_AFTER_SLEEP set, the aftersleep callback is called.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * if flags has AE_CALL_BEFORE_SLEEP set, the beforesleep callback is called.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * The function returns the number of events processed. */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">aeProcessEvents</span><span class="p">(</span><span class="n">aeEventLoop</span> <span class="o">*</span><span class="n">eventLoop</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Call the multiplexing API, will return only on timeout or when
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * some event fires. */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">numevents</span> <span class="o">=</span> <span class="nf">aeApiPoll</span><span class="p">(</span><span class="n">eventLoop</span><span class="p">,</span> <span class="n">tvp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">numevents</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">fired</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">fd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">aeFileEvent</span> <span class="o">*</span><span class="n">fe</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">fired</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">mask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fired</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="cm">/* Number of events fired for current fd. */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Normally we execute the readable event first, and the writable
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * event later. This is useful as sometimes we may be able
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * to serve the reply of a query immediately after processing the
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * query.
+</span></span></span><span class="line"><span class="cl"><span class="cm">         *
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * However if AE_BARRIER is set in the mask, our application is
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * asking us to do the reverse: never fire the writable event
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * after the readable. In such a case, we invert the calls.
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * This is useful when, for instance, we want to do things
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * in the beforeSleep() hook, like fsyncing a file to disk,
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * before replying to a client. */</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">invert</span> <span class="o">=</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">AE_BARRIER</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Note the &#34;fe-&gt;mask &amp; mask &amp; ...&#34; code: maybe an already
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * processed event removed an element that fired and we still
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * didn&#39;t processed, so we check if the event is still valid.
+</span></span></span><span class="line"><span class="cl"><span class="cm">         *
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * Fire the readable event if the call sequence is not
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * inverted. */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">invert</span> <span class="o">&amp;&amp;</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">AE_READABLE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fe</span><span class="o">-&gt;</span><span class="nf">rfileProc</span><span class="p">(</span><span class="n">eventLoop</span><span class="p">,</span><span class="n">fd</span><span class="p">,</span><span class="n">fe</span><span class="o">-&gt;</span><span class="n">clientData</span><span class="p">,</span><span class="n">mask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fired</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fe</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span> <span class="cm">/* Refresh in case of resize. */</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* Fire the writable event. */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">fe</span><span class="o">-&gt;</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">AE_WRITABLE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">fired</span> <span class="o">||</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">wfileProc</span> <span class="o">!=</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">rfileProc</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fe</span><span class="o">-&gt;</span><span class="nf">wfileProc</span><span class="p">(</span><span class="n">eventLoop</span><span class="p">,</span><span class="n">fd</span><span class="p">,</span><span class="n">fe</span><span class="o">-&gt;</span><span class="n">clientData</span><span class="p">,</span><span class="n">mask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fired</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* If we have to invert the call, fire the readable event now
+</span></span></span><span class="line"><span class="cl"><span class="cm">         * after the writable one. */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">invert</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">fe</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span> <span class="cm">/* Refresh in case of resize. */</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">((</span><span class="n">fe</span><span class="o">-&gt;</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">mask</span> <span class="o">&amp;</span> <span class="n">AE_READABLE</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">(</span><span class="o">!</span><span class="n">fired</span> <span class="o">||</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">wfileProc</span> <span class="o">!=</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">rfileProc</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fe</span><span class="o">-&gt;</span><span class="nf">rfileProc</span><span class="p">(</span><span class="n">eventLoop</span><span class="p">,</span><span class="n">fd</span><span class="p">,</span><span class="n">fe</span><span class="o">-&gt;</span><span class="n">clientData</span><span class="p">,</span><span class="n">mask</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fired</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre>
+</div>
+<p><code>fe-&gt;rfileProc</code> 会调用在 <code>aeCreateFileEvent</code> 注册的事件处理器。</p>
+<div class="code-block highlight is-open show-line-numbers  tw-group tw-my-2">
+  <div class="
+    code-block-title 
+    
+    tw-flex 
+    tw-flex-row 
+    tw-justify-between 
+    tw-w-full tw-bg-bgColor-secondary
+    ">      
+    <button 
+      class="
+        tw-select-none 
+        tw-mx-2 
+        tw-block
+        group-[.is-open]:tw-rotate-90
+        tw-transition-[transform] 
+        tw-duration-500 
+        tw-ease-in-out
+        print:!tw-hidden"
+      disabled
+      aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/></svg></button>
+
+    <div class="code-block-title-bar tw-w-full">
+      <p class="tw-select-none !tw-my-1">C</p>
+    </div>
+    <div class="tw-flex">
+      <button 
+        class="
+          line-number-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.show-line-numbers]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle line numbers"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M61.77 401l17.5-20.15a19.92 19.92 0 0 0 5.07-14.19v-3.31C84.34 356 80.5 352 73 352H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8h22.83a157.41 157.41 0 0 0-11 12.31l-5.61 7c-4 5.07-5.25 10.13-2.8 14.88l1.05 1.93c3 5.76 6.29 7.88 12.25 7.88h4.73c10.33 0 15.94 2.44 15.94 9.09 0 4.72-4.2 8.22-14.36 8.22a41.54 41.54 0 0 1-15.47-3.12c-6.49-3.88-11.74-3.5-15.6 3.12l-5.59 9.31c-3.72 6.13-3.19 11.72 2.63 15.94 7.71 4.69 20.38 9.44 37 9.44 34.16 0 48.5-22.75 48.5-44.12-.03-14.38-9.12-29.76-28.73-34.88zM496 224H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zm0-160H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16zm0 320H176a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h320a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM16 160h64a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H64V40a8 8 0 0 0-8-8H32a8 8 0 0 0-7.14 4.42l-8 16A8 8 0 0 0 24 64h8v64H16a8 8 0 0 0-8 8v16a8 8 0 0 0 8 8zm-3.91 160H80a8 8 0 0 0 8-8v-16a8 8 0 0 0-8-8H41.32c3.29-10.29 48.34-18.68 48.34-56.44 0-29.06-25-39.56-44.47-39.56-21.36 0-33.8 10-40.46 18.75-4.37 5.59-3 10.84 2.8 15.37l8.58 6.88c5.61 4.56 11 2.47 16.12-2.44a13.44 13.44 0 0 1 9.46-3.84c3.33 0 9.28 1.56 9.28 8.75C51 248.19 0 257.31 0 304.59v4C0 316 5.08 320 12.09 320z"/></svg></button>
+
+      <button 
+        class="
+          wrap-code-button
+          tw-select-none 
+          tw-mx-2 
+          tw-hidden 
+          group-[.is-open]:tw-block 
+          group-[.is-wrap]:tw-text-fgColor-link 
+          print:!tw-hidden" 
+        title="Toggle code wrap"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg></button>
+      
+      <button 
+        class="
+          copy-code-button
+          tw-select-none
+          tw-mx-2 
+          tw-hidden
+          group-[.is-open]:tw-block
+          hover:tw-text-fgColor-link 
+          print:!tw-hidden"
+        title="Copy code">
+          <span class="copy-icon tw-block"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M433.941 65.941l-51.882-51.882A48 48 0 0 0 348.118 0H176c-26.51 0-48 21.49-48 48v48H48c-26.51 0-48 21.49-48 48v320c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48v-48h80c26.51 0 48-21.49 48-48V99.882a48 48 0 0 0-14.059-33.941zM266 464H54a6 6 0 0 1-6-6V150a6 6 0 0 1 6-6h74v224c0 26.51 21.49 48 48 48h96v42a6 6 0 0 1-6 6zm128-96H182a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6h106v88c0 13.255 10.745 24 24 24h88v202a6 6 0 0 1-6 6zm6-256h-64V48h9.632c1.591 0 3.117.632 4.243 1.757l48.368 48.368a6 6 0 0 1 1.757 4.243V112z"/></svg></span>
+          <span class="check-icon tw-hidden"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg></span>
+      </button>
+        
+      <button 
+        class="
+          tw-select-none 
+          tw-mx-2 
+          tw-block 
+          group-[.is-open]:tw-hidden 
+          print:!tw-hidden" 
+        disabled
+        aria-hidden="true"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"/></svg></button>
+    </div>
+  </div>
+  <pre style="counter-reset: codeblock;" class="tw-block tw-m-0 tw-p-0"><code 
+    id="codeblock-id-9" 
+    class="
+      chroma 
+      !tw-block 
+      tw-p-0
+      tw-m-0
+      tw-transition-[max-height] 
+      tw-duration-500 
+      tw-ease-in-out 
+      group-[.is-closed]:!tw-max-h-0 
+      group-[.is-wrap]:tw-text-wrap
+      tw-overflow-y-hidden
+      tw-overflow-x-auto"><span class="line"><span class="cl"><span class="c1">// src/ae.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">aeCreateFileEvent</span><span class="p">(</span><span class="n">aeEventLoop</span> <span class="o">*</span><span class="n">eventLoop</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mask</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">aeFileProc</span> <span class="o">*</span><span class="n">proc</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">clientData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="n">aeFileEvent</span> <span class="o">*</span><span class="n">fe</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">eventLoop</span><span class="o">-&gt;</span><span class="n">events</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">AE_READABLE</span><span class="p">)</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">rfileProc</span> <span class="o">=</span> <span class="n">proc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">AE_WRITABLE</span><span class="p">)</span> <span class="n">fe</span><span class="o">-&gt;</span><span class="n">wfileProc</span> <span class="o">=</span> <span class="n">proc</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre>
+</div>
+<p>事件循环会一直循环执行：</p>
+<ol>
+<li>等待事件就绪</li>
+<li>执行 <code>fired</code> 事件的处理器</li>
+<li>重复&hellip;</li>
+</ol>
 <hr>
 </div>
 
@@ -1075,18 +1276,18 @@
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2023-04-19</span>
+                <span>更新于 2024-07-27</span>
             </div>
             <div class="post-info-license"></div>
         </div>
         <div class="post-info-line print:!tw-hidden">
             <div class="post-info-md"></div>
-            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研" data-hashtags="Redis"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></button><button title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-hashtag="Redis"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研" data-web><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></button><button title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></button><button title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M407 177.6c7.6-24-13.4-46.8-37.4-41.7-22 4.8-28.8-28.1-7.1-32.8 50.1-10.9 92.3 37.1 76.5 84.8-6.8 21.2-38.8 10.8-32-10.3zM214.8 446.7C108.5 446.7 0 395.3 0 310.4c0-44.3 28-95.4 76.3-143.7C176 67 279.5 65.8 249.9 161c-4 13.1 12.3 5.7 12.3 6 79.5-33.6 140.5-16.8 114 51.4-3.7 9.4 1.1 10.9 8.3 13.1 135.7 42.3 34.8 215.2-169.7 215.2zm143.7-146.3c-5.4-55.7-78.5-94-163.4-85.7-84.8 8.6-148.8 60.3-143.4 116s78.5 94 163.4 85.7c84.8-8.6 148.8-60.3 143.4-116zM347.9 35.1c-25.9 5.6-16.8 43.7 8.3 38.3 72.3-15.2 134.8 52.8 111.7 124-7.4 24.2 29.1 37 37.4 12 31.9-99.8-55.1-195.9-157.4-174.3zm-78.5 311c-17.1 38.8-66.8 60-109.1 46.3-40.8-13.1-58-53.4-40.3-89.7 17.7-35.4 63.1-55.4 103.4-45.1 42 10.8 63.1 50.2 46 88.5zm-86.3-30c-12.9-5.4-30 .3-38 12.9-8.3 12.9-4.3 28 8.6 34 13.1 6 30.8.3 39.1-12.9 8-13.1 3.7-28.3-9.7-34zm32.6-13.4c-5.1-1.7-11.4.6-14.3 5.4-2.9 5.1-1.4 10.6 3.7 12.9 5.1 2 11.7-.3 14.6-5.4 2.8-5.2 1.1-10.9-4-12.9z"/></svg></button><button title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研" data-description="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811 0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816 0 00-3.818 3.81 3.817 3.817 0 003.818 3.811zm-8.602.705a3.43 3.43 0 003.435-3.424A3.43 3.43 0 0011.2 6.13a3.44 3.44 0 00-3.436 3.436A3.436 3.436 0 0011.2 13zm-7.8.635c1.71 0 3.093-1.38 3.093-3.081 0-1.704-1.395-3.084-3.105-3.084A3.086 3.086 0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96 0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31 0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18 0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344 0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422 0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21 0 .383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></button><button title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研" data-description="分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M162.4 196c4.8-4.9 6.2-5.1 36.4-5.1 27.2 0 28.1.1 32.1 2.1 5.8 2.9 8.3 7 8.3 13.6 0 5.9-2.4 10-7.6 13.4-2.8 1.8-4.5 1.9-31.1 2.1-16.4.1-29.5-.2-31.5-.8-10.3-2.9-14.1-17.7-6.6-25.3zm61.4 94.5c-53.9 0-55.8.2-60.2 4.1-3.5 3.1-5.7 9.4-5.1 13.9.7 4.7 4.8 10.1 9.2 12 2.2 1 14.1 1.7 56.3 1.2l47.9-.6 9.2-1.5c9-5.1 10.5-17.4 3.1-24.4-5.3-4.7-5-4.7-60.4-4.7zm223.4 130.1c-3.5 28.4-23 50.4-51.1 57.5-7.2 1.8-9.7 1.9-172.9 1.8-157.8 0-165.9-.1-172-1.8-8.4-2.2-15.6-5.5-22.3-10-5.6-3.8-13.9-11.8-17-16.4-3.8-5.6-8.2-15.3-10-22C.1 423 0 420.3 0 256.3 0 93.2 0 89.7 1.8 82.6 8.1 57.9 27.7 39 53 33.4c7.3-1.6 332.1-1.9 340-.3 21.2 4.3 37.9 17.1 47.6 36.4 7.7 15.3 7-1.5 7.3 180.6.2 115.8 0 164.5-.7 170.5zm-85.4-185.2c-1.1-5-4.2-9.6-7.7-11.5-1.1-.6-8-1.3-15.5-1.7-12.4-.6-13.8-.8-17.8-3.1-6.2-3.6-7.9-7.6-8-18.3 0-20.4-8.5-39.4-25.3-56.5-12-12.2-25.3-20.5-40.6-25.1-3.6-1.1-11.8-1.5-39.2-1.8-42.9-.5-52.5.4-67.1 6.2-27 10.7-46.3 33.4-53.4 62.4-1.3 5.4-1.6 14.2-1.9 64.3-.4 62.8 0 72.1 4 84.5 9.7 30.7 37.1 53.4 64.6 58.4 9.2 1.7 122.2 2.1 133.7.5 20.1-2.7 35.9-10.8 50.7-25.9 10.7-10.9 17.4-22.8 21.8-38.5 3.2-10.9 2.9-88.4 1.7-93.9z"/></svg></button><button title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/" data-title="Redis 内存碎片整理调研"><svg class="icon"
+            <div class="post-info-share"><button title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架" data-hashtags="Redis"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></button><button title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-hashtag="Redis"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg></button><button title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架" data-web><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></button><button title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></button><button title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M407 177.6c7.6-24-13.4-46.8-37.4-41.7-22 4.8-28.8-28.1-7.1-32.8 50.1-10.9 92.3 37.1 76.5 84.8-6.8 21.2-38.8 10.8-32-10.3zM214.8 446.7C108.5 446.7 0 395.3 0 310.4c0-44.3 28-95.4 76.3-143.7C176 67 279.5 65.8 249.9 161c-4 13.1 12.3 5.7 12.3 6 79.5-33.6 140.5-16.8 114 51.4-3.7 9.4 1.1 10.9 8.3 13.1 135.7 42.3 34.8 215.2-169.7 215.2zm143.7-146.3c-5.4-55.7-78.5-94-163.4-85.7-84.8 8.6-148.8 60.3-143.4 116s78.5 94 163.4 85.7c84.8-8.6 148.8-60.3 143.4-116zM347.9 35.1c-25.9 5.6-16.8 43.7 8.3 38.3 72.3-15.2 134.8 52.8 111.7 124-7.4 24.2 29.1 37 37.4 12 31.9-99.8-55.1-195.9-157.4-174.3zm-78.5 311c-17.1 38.8-66.8 60-109.1 46.3-40.8-13.1-58-53.4-40.3-89.7 17.7-35.4 63.1-55.4 103.4-45.1 42 10.8 63.1 50.2 46 88.5zm-86.3-30c-12.9-5.4-30 .3-38 12.9-8.3 12.9-4.3 28 8.6 34 13.1 6 30.8.3 39.1-12.9 8-13.1 3.7-28.3-9.7-34zm32.6-13.4c-5.1-1.7-11.4.6-14.3 5.4-2.9 5.1-1.4 10.6 3.7 12.9 5.1 2 11.7-.3 14.6-5.4 2.8-5.2 1.1-10.9-4-12.9z"/></svg></button><button title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架" data-description="阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811 0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816 0 00-3.818 3.81 3.817 3.817 0 003.818 3.811zm-8.602.705a3.43 3.43 0 003.435-3.424A3.43 3.43 0 0011.2 6.13a3.44 3.44 0 00-3.436 3.436A3.436 3.436 0 0011.2 13zm-7.8.635c1.71 0 3.093-1.38 3.093-3.081 0-1.704-1.395-3.084-3.105-3.084A3.086 3.086 0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96 0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31 0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18 0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344 0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422 0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21 0 .383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></button><button title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架" data-description="阅读 Redis 事件驱动框架代码，理解 Redis 是如何处理客户端请求的。"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M162.4 196c4.8-4.9 6.2-5.1 36.4-5.1 27.2 0 28.1.1 32.1 2.1 5.8 2.9 8.3 7 8.3 13.6 0 5.9-2.4 10-7.6 13.4-2.8 1.8-4.5 1.9-31.1 2.1-16.4.1-29.5-.2-31.5-.8-10.3-2.9-14.1-17.7-6.6-25.3zm61.4 94.5c-53.9 0-55.8.2-60.2 4.1-3.5 3.1-5.7 9.4-5.1 13.9.7 4.7 4.8 10.1 9.2 12 2.2 1 14.1 1.7 56.3 1.2l47.9-.6 9.2-1.5c9-5.1 10.5-17.4 3.1-24.4-5.3-4.7-5-4.7-60.4-4.7zm223.4 130.1c-3.5 28.4-23 50.4-51.1 57.5-7.2 1.8-9.7 1.9-172.9 1.8-157.8 0-165.9-.1-172-1.8-8.4-2.2-15.6-5.5-22.3-10-5.6-3.8-13.9-11.8-17-16.4-3.8-5.6-8.2-15.3-10-22C.1 423 0 420.3 0 256.3 0 93.2 0 89.7 1.8 82.6 8.1 57.9 27.7 39 53 33.4c7.3-1.6 332.1-1.9 340-.3 21.2 4.3 37.9 17.1 47.6 36.4 7.7 15.3 7-1.5 7.3 180.6.2 115.8 0 164.5-.7 170.5zm-85.4-185.2c-1.1-5-4.2-9.6-7.7-11.5-1.1-.6-8-1.3-15.5-1.7-12.4-.6-13.8-.8-17.8-3.1-6.2-3.6-7.9-7.6-8-18.3 0-20.4-8.5-39.4-25.3-56.5-12-12.2-25.3-20.5-40.6-25.1-3.6-1.1-11.8-1.5-39.2-1.8-42.9-.5-52.5.4-67.1 6.2-27 10.7-46.3 33.4-53.4 62.4-1.3 5.4-1.6 14.2-1.9 64.3-.4 62.8 0 72.1 4 84.5 9.7 30.7 37.1 53.4 64.6 58.4 9.2 1.7 122.2 2.1 133.7.5 20.1-2.7 35.9-10.8 50.7-25.9 10.7-10.9 17.4-22.8 21.8-38.5 3.2-10.9 2.9-88.4 1.7-93.9z"/></svg></button><button title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/" data-title="Redis 事件驱动框架"><svg class="icon"
     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M120.82 132.21c1.6 22.31-17.55 21.59-21.61 21.59-68.93 0-73.64-1-83.58 3.34-.56.22-.74 0-.37-.37L123.79 46.45c.38-.37.6-.22.38.37-4.35 9.99-3.35 15.09-3.35 85.39zm79 308c-14.68-37.08 13-76.93 52.52-76.62 17.49 0 22.6 23.21 7.95 31.42-6.19 3.3-24.95 1.74-25.14 19.2-.05 17.09 19.67 25 31.2 24.89A45.64 45.64 0 0 0 312 393.45v-.08c0-11.63-7.79-47.22-47.54-55.34-7.72-1.54-65-6.35-68.35-50.52-3.74 16.93-17.4 63.49-43.11 69.09-8.74 1.94-69.68 7.64-112.92-36.77 0 0-18.57-15.23-28.23-57.95-3.38-15.75-9.28-39.7-11.14-62 0-18 11.14-30.45 25.07-32.2 81 0 90 2.32 101-7.8 9.82-9.24 7.8-15.5 7.8-102.78 1-8.3 7.79-30.81 53.41-24.14 6 .86 31.91 4.18 37.48 30.64l64.26 11.15c20.43 3.71 70.94 7 80.6 57.94 22.66 121.09 8.91 238.46 7.8 238.46C362.15 485.53 267.06 480 267.06 480c-18.95-.23-54.25-9.4-67.27-39.83zm80.94-204.84c-1 1.92-2.2 6 .85 7 14.09 4.93 39.75 6.84 45.88 5.53 3.11-.25 3.05-4.43 2.48-6.65-3.53-21.85-40.83-26.5-49.24-5.92z"/></svg></button></div>
         </div>
     </div>
@@ -1099,10 +1300,8 @@
         </section>
     </div>
 
-    <div class="post-nav print:tw-hidden"><a href="/posts/algs4/algs4_05/" class="prev" rel="prev" title="算法第四版 —— Union-Find 算法"><svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>算法第四版 —— Union-Find 算法</a>
-            <a href="/posts/algs4/algs4_06/" class="next" rel="next" title="算法第四版 —— 初级排序算法">算法第四版 —— 初级排序算法<svg class="icon"
-    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg></a></div>
+    <div class="post-nav print:tw-hidden"><a href="/posts/algs4/algs4_11/" class="prev" rel="prev" title="算法第四版 —— 符号表"><svg class="icon"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>算法第四版 —— 符号表</a></div>
 </div>
 </article></div>
         </main><footer class="footer">
