@@ -9,13 +9,13 @@
 
 ### 问题定位
 
-通过打点调试，定位到不消费消息的原因是：XXXMetadataCache 单例类，调用类的静态方法，触发单例初始化，注册消息 Handler 方法。从而导致消息虽然消费了，但是没有处理消息。
+通过打点调试，定位到不消费消息的原因： XXXMetadataCache 单例类，调用类的静态方法，未触发单例初始化，不会注册 Handler 方法。从而导致消息虽然消费了，但是没有处理消息。
 
 {{< image src="/images/support_distributed_cache/02_01.jpg" caption="打点调试——预期日志" title="打点调试——预期日志" >}}
 
 {{< image src="/images/support_distributed_cache/02_02.jpg" caption="打点调试——实际日志" title="打点调试——实际日志" >}}
 
-通过 ILSpy，查看单例类反编译代码，发现该类上存在 `beforefieldinit` 标志。
+通过 ILSpy 工具，查看单例类反编译代码，发现该类上存在 `beforefieldinit` 标志。
 
 {{< image src="/images/support_distributed_cache/02_03.jpg" caption="单例类代码" title="单例类代码" >}}
 
@@ -61,11 +61,13 @@
 1. 通过给缓存设置的过期时间加上一个随机的时间，从而避免让缓存数据短时间大批量过期；
 2. 清理缓存数据的时间点随机化，让不同客户端清理缓存的时间点均匀。
 
+---
+
 ## Redis Lua 整数精度问题
 
 Redis 缓存版本号，只允许写入高版本，这个需要使用 Lua 实现。
 
-发现无法向 Redis 写入 `long.MaxValue`，因为 Redis 中 Lua 版本为 5.1，不支持整数，一律使用双精度浮点数表示整数，根据 IEEE754，能精确表达的整数范围为：[-2^53, 2^53]。
+发现无法向 Redis 写入 `long.MaxValue`，因为 Redis 中 Lua 版本为 5.1 ，不支持整数，一律使用双精度浮点数表示整数，根据 IEEE754，能精确表达的整数范围为：[-2^53, 2^53]。
 
 由于 2^53 比较大，评估版本号够用，所以此处不做修改。
 
