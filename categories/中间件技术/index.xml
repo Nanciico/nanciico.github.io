@@ -3,7 +3,14 @@
         <title>中间件技术 - 分类 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/</link>
         <description>中间件技术 - 分类 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 27 Jul 2024 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml" /><item>
+    <title>Kafka 服务启动、网络与线程模型</title>
+    <link>https://Nanciico.github.io/posts/kafka_source_code/kafka_source_code_00/</link>
+    <pubDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_source_code/kafka_source_code_00/</guid>
+    <description><![CDATA[阅读 Kafka 3.6.2 版本代码，理解 Kafka 服务启动流程、网络模型和线程模型。]]></description>
+</item><item>
     <title>Redis 事件驱动框架</title>
     <link>https://Nanciico.github.io/posts/redis_source_code/redis%E6%BA%90%E7%A0%81_99_%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8%E6%A1%86%E6%9E%B6/</link>
     <pubDate>Sat, 27 Jul 2024 00:00:00 &#43;0000</pubDate><author>
@@ -66,12 +73,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_01/</guid>
     <description><![CDATA[阅读 Redis SDS 相关代码，理解 Redis 中字符串是如何存储的。]]></description>
-</item><item>
-    <title>Redis 代码阅读开篇</title>
-    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_00/</link>
-    <pubDate>Wed, 26 Jul 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_00/</guid>
-    <description><![CDATA[阅读 Redis 代码，学习代码设计。]]></description>
 </item></channel>
 </rss>
