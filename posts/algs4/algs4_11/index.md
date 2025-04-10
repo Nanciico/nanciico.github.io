@@ -1,7 +1,11 @@
 # 算法第四版 —— 符号表
 
 
-## 符号表 API
+符号表：描述一种抽象机制，通过这种机制，我们保存信息（value），之后可以通过指定一个键（key）来搜索和检索这些信息。
+
+---
+
+## 符号表的基础 API
 
 ``` Text
 符号表
@@ -18,4 +22,25 @@ Iterable<Key>       keys()                          符号表中所有的 key
 ```
 
 ---
+
+## 有序的符号表
+
+### 有序符号表 API
+
+``` Text
+有序符号表扩展 API
+public class ST<Key extends Comparable<Key>, Value>
+
+          Key       min()                           smallest key
+          Key       max()                           largest key
+          Key       floor(Key key)                  largest key less than or equal to key
+          Key       ceiling(Key key)                smallest key greater than or equal to key
+          int       rank(Key key)                   number of keys less than key
+          Key       select(int k)                   key of rank k
+         void       deleteMin()                     delete smallest key
+         void       deleteMax()                     delete largest key
+          int       size(Key lo, Key hi)            number of keys in [lo..hi]
+Iterable<Key>       keys(Key lo, Key hi)            keys in [lo..hi], in sorted order
+```
+
 
