@@ -3,7 +3,14 @@
         <title>数据结构与算法 - 分类 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</link>
         <description>数据结构与算法 - 分类 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 04 Dec 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
+    <title>算法第四版 —— 二叉查找树</title>
+    <link>https://Nanciico.github.io/posts/algs4/algs4_12/</link>
+    <pubDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_12/</guid>
+    <description><![CDATA[二叉查找树]]></description>
+</item><item>
     <title>算法第四版 —— 符号表</title>
     <link>https://Nanciico.github.io/posts/algs4/algs4_11/</link>
     <pubDate>Mon, 04 Dec 2023 00:00:00 &#43;0000</pubDate><author>
@@ -66,12 +73,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/algs4/algs4_03/</guid>
     <description><![CDATA[算法第四版 —— 背包、队列和栈]]></description>
-</item><item>
-    <title>算法第四版 —— 欧几里得算法求最大公因数</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_02/</link>
-    <pubDate>Mon, 27 Feb 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_02/</guid>
-    <description><![CDATA[算法第四版 —— 欧几里得算法求最大公因数]]></description>
 </item></channel>
 </rss>
