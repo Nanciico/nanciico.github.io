@@ -3,12 +3,47 @@
         <title>中间件技术 - 分类 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/</link>
         <description>中间件技术 - 分类 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%8A%80%E6%9C%AF/" rel="self" type="application/rss+xml" /><item>
+    <title>The Apache Kafka Control Plane</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</link>
+    <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>The Apache Kafka Control Plane</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</link>
+    <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>Data Plane: Replication Protocol</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_02/</link>
+    <pubDate>Sat, 26 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_02/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>Inside the Apache Kafka Broker</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_01/</link>
+    <pubDate>Fri, 25 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_01/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>The Fundamentals of Apache Kafka Architecture</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_00/</link>
+    <pubDate>Thu, 24 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_00/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
     <title>Kafka 服务启动、网络与线程模型</title>
-    <link>https://Nanciico.github.io/posts/kafka_source_code/kafka_source_code_00/</link>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_99/</link>
     <pubDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_source_code/kafka_source_code_00/</guid>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_99/</guid>
     <description><![CDATA[阅读 Kafka 3.6.2 版本代码，理解 Kafka 服务启动流程、网络模型和线程模型。]]></description>
 </item><item>
     <title>Redis 事件驱动框架</title>
@@ -38,40 +73,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_06/</guid>
     <description><![CDATA[阅读 Redis 快速列表 quicklist 相关代码，了解 Redis 中快速列表的实现。]]></description>
-</item><item>
-    <title>Redis 跳表 (zskiplist)</title>
-    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_05/</link>
-    <pubDate>Fri, 25 Aug 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_05/</guid>
-    <description><![CDATA[阅读 Redis 跳表 zskiplist 相关代码，了解 Redis 中跳表的实现。]]></description>
-</item><item>
-    <title>Redis 紧凑列表 (listpack)</title>
-    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_04/</link>
-    <pubDate>Thu, 24 Aug 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_04/</guid>
-    <description><![CDATA[阅读 Redis 紧凑列表 listpack 相关代码，了解 Redis 中紧凑列表的实现。]]></description>
-</item><item>
-    <title>Redis 字典 (dict)</title>
-    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_03/</link>
-    <pubDate>Mon, 21 Aug 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_03/</guid>
-    <description><![CDATA[阅读 Redis 字典 dict 相关代码，了解 Redis 中字典的实现。]]></description>
-</item><item>
-    <title>Redis 链表 (adlist)</title>
-    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_02/</link>
-    <pubDate>Tue, 15 Aug 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_02/</guid>
-    <description><![CDATA[阅读 Redis 链表 adlist 相关代码，了解 Redis 中链表的实现。]]></description>
-</item><item>
-    <title>Redis 简单动态字符串 SDS</title>
-    <link>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_01/</link>
-    <pubDate>Thu, 27 Jul 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/redis_source_code/redis_source_code_01/</guid>
-    <description><![CDATA[阅读 Redis SDS 相关代码，理解 Redis 中字符串是如何存储的。]]></description>
 </item></channel>
 </rss>

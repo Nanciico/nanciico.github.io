@@ -3,19 +3,19 @@
         <title>系列 - 系列 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/series/</link>
         <description>系列 - 系列 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/" rel="self" type="application/rss+xml" /><item>
+    <title>Kafka源码 阅读笔记</title>
+    <link>https://Nanciico.github.io/series/kafka%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+    <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>作者</name>
+    </author><guid>https://Nanciico.github.io/series/kafka%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
     <title>算法第四版 阅读笔记</title>
     <link>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
     <pubDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>作者</name>
     </author><guid>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-    <description><![CDATA[]]></description>
-</item><item>
-    <title>Kafka源码 阅读笔记</title>
-    <link>https://Nanciico.github.io/series/kafka%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
-    <pubDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</pubDate><author>
-        <name>作者</name>
-    </author><guid>https://Nanciico.github.io/series/kafka%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
     <description><![CDATA[]]></description>
 </item><item>
     <title>添加分布式缓存设计</title>

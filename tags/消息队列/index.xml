@@ -3,12 +3,47 @@
         <title>消息队列 - 标签 - Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/</link>
         <description>消息队列 - 标签 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="self" type="application/rss+xml" /><item>
+    <title>The Apache Kafka Control Plane</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</link>
+    <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>The Apache Kafka Control Plane</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</link>
+    <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>Data Plane: Replication Protocol</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_02/</link>
+    <pubDate>Sat, 26 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_02/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>Inside the Apache Kafka Broker</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_01/</link>
+    <pubDate>Fri, 25 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_01/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
+    <title>The Fundamentals of Apache Kafka Architecture</title>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_00/</link>
+    <pubDate>Thu, 24 Apr 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_00/</guid>
+    <description><![CDATA[Kafka Internals 笔记]]></description>
+</item><item>
     <title>Kafka 服务启动、网络与线程模型</title>
-    <link>https://Nanciico.github.io/posts/kafka_source_code/kafka_source_code_00/</link>
+    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_99/</link>
     <pubDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_source_code/kafka_source_code_00/</guid>
+    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_99/</guid>
     <description><![CDATA[阅读 Kafka 3.6.2 版本代码，理解 Kafka 服务启动流程、网络模型和线程模型。]]></description>
 </item></channel>
 </rss>
