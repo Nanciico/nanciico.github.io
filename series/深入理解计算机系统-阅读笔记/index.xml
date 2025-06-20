@@ -1,21 +1,26 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>深入理解计算机系统 阅读笔记 - 系列 - Nanciico&#39;s Blog</title>
-        <link>https://Nanciico.github.io/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
-        <description>深入理解计算机系统 阅读笔记 - 系列 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="self" type="application/rss+xml" /><item>
-    <title>深入理解计算机系统 —— 前言</title>
-    <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</link>
-    <pubDate>Fri, 24 Nov 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</guid>
-    <description><![CDATA[深入理解计算机系统 —— 前言]]></description>
-</item><item>
-    <title>深入理解计算机系统 —— 计算机系统漫游</title>
-    <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</link>
-    <pubDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</guid>
-    <description><![CDATA[深入理解计算机系统 —— 计算机系统漫游]]></description>
-</item></channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>深入理解计算机系统 阅读笔记 on Nanciico&#39;s Blog</title>
+    <link>http://localhost:1313/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 深入理解计算机系统 阅读笔记 on Nanciico&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 25 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>深入理解计算机系统 —— 前言</title>
+      <link>http://localhost:1313/posts/computer_architecture/csapp/csapp_00/</link>
+      <pubDate>Fri, 24 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/computer_architecture/csapp/csapp_00/</guid>
+      <description>深入理解计算机系统 —— 前言</description>
+    </item>
+    <item>
+      <title>深入理解计算机系统 —— 计算机系统漫游</title>
+      <link>http://localhost:1313/posts/computer_architecture/csapp/csapp_01/</link>
+      <pubDate>Sat, 25 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/computer_architecture/csapp/csapp_01/</guid>
+      <description>深入理解计算机系统 —— 计算机系统漫游</description>
+    </item>
+  </channel>
 </rss>

@@ -1,49 +1,54 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>分布式锁 - 标签 - Nanciico&#39;s Blog</title>
-        <link>https://Nanciico.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
-        <description>分布式锁 - 标签 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 31 Oct 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="self" type="application/rss+xml" /><item>
-    <title>Redis 分布式锁设计 —— 内存泄漏问题排查</title>
-    <link>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_05/</link>
-    <pubDate>Tue, 31 Oct 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_05/</guid>
-    <description><![CDATA[记录使用 WinDBG 排查内存泄漏问题的过程。]]></description>
-</item><item>
-    <title>Redis 分布式锁设计 —— 两个编码规范</title>
-    <link>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_04/</link>
-    <pubDate>Mon, 26 Jun 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_04/</guid>
-    <description><![CDATA[记录在分布式锁开发中的两个编码规范。]]></description>
-</item><item>
-    <title>Redis 分布式锁设计 —— 异步续约机制</title>
-    <link>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_03/</link>
-    <pubDate>Sun, 25 Jun 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_03/</guid>
-    <description><![CDATA[记录基于 Redis 的分布式锁异步续约机制设计。]]></description>
-</item><item>
-    <title>Redis 分布式锁设计 —— 加锁主流程</title>
-    <link>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_02/</link>
-    <pubDate>Sat, 24 Jun 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_02/</guid>
-    <description><![CDATA[记录基于 Redis 的分布式锁加锁住流程设计。]]></description>
-</item><item>
-    <title>Redis 分布式锁设计 —— 基本特性的设计与实现</title>
-    <link>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_01/</link>
-    <pubDate>Fri, 23 Jun 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_01/</guid>
-    <description><![CDATA[记录基于 Redis 的分布式锁的基本特性。]]></description>
-</item><item>
-    <title>Redis 分布式锁设计 —— 分布式锁介绍</title>
-    <link>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_00/</link>
-    <pubDate>Thu, 22 Jun 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/distributed_lock/distributed_lock_00/</guid>
-    <description><![CDATA[记录基于Redis的分布式锁设计流程。]]></description>
-</item></channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>分布式锁 on Nanciico&#39;s Blog</title>
+    <link>http://localhost:1313/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+    <description>Recent content in 分布式锁 on Nanciico&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 31 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Redis 分布式锁设计 —— 内存泄漏问题排查</title>
+      <link>http://localhost:1313/posts/distributed_lock/distributed_lock_05/</link>
+      <pubDate>Tue, 31 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/distributed_lock/distributed_lock_05/</guid>
+      <description>记录使用 WinDBG 排查内存泄漏问题的过程。</description>
+    </item>
+    <item>
+      <title>Redis 分布式锁设计 —— 两个编码规范</title>
+      <link>http://localhost:1313/posts/distributed_lock/distributed_lock_04/</link>
+      <pubDate>Mon, 26 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/distributed_lock/distributed_lock_04/</guid>
+      <description>记录在分布式锁开发中的两个编码规范。</description>
+    </item>
+    <item>
+      <title>Redis 分布式锁设计 —— 异步续约机制</title>
+      <link>http://localhost:1313/posts/distributed_lock/distributed_lock_03/</link>
+      <pubDate>Sun, 25 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/distributed_lock/distributed_lock_03/</guid>
+      <description>记录基于 Redis 的分布式锁异步续约机制设计。</description>
+    </item>
+    <item>
+      <title>Redis 分布式锁设计 —— 加锁主流程</title>
+      <link>http://localhost:1313/posts/distributed_lock/distributed_lock_02/</link>
+      <pubDate>Sat, 24 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/distributed_lock/distributed_lock_02/</guid>
+      <description>记录基于 Redis 的分布式锁加锁住流程设计。</description>
+    </item>
+    <item>
+      <title>Redis 分布式锁设计 —— 基本特性的设计与实现</title>
+      <link>http://localhost:1313/posts/distributed_lock/distributed_lock_01/</link>
+      <pubDate>Fri, 23 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/distributed_lock/distributed_lock_01/</guid>
+      <description>记录基于 Redis 的分布式锁的基本特性。</description>
+    </item>
+    <item>
+      <title>Redis 分布式锁设计 —— 分布式锁介绍</title>
+      <link>http://localhost:1313/posts/distributed_lock/distributed_lock_00/</link>
+      <pubDate>Thu, 22 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/distributed_lock/distributed_lock_00/</guid>
+      <description>记录基于Redis的分布式锁设计流程。</description>
+    </item>
+  </channel>
 </rss>

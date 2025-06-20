@@ -1,79 +1,79 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Nanciico&#39;s Blog</title>
-        <link>https://Nanciico.github.io/</link>
+        <link>http://localhost:1313/</link>
         <description>这是我的全新 Hugo 网站</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</lastBuildDate>
-            <atom:link href="https://Nanciico.github.io/index.xml" rel="self" type="application/rss+xml" />
+            <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
         <item>
     <title>The Apache Kafka Control Plane</title>
-    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</link>
+    <link>http://localhost:1313/posts/kafka_internals/kafka_internals_04/</link>
     <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</guid>
+    </author><guid>http://localhost:1313/posts/kafka_internals/kafka_internals_04/</guid>
     <description><![CDATA[Kafka Internals 笔记]]></description>
 </item><item>
     <title>The Apache Kafka Control Plane</title>
-    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</link>
+    <link>http://localhost:1313/posts/kafka_internals/kafka_internals_04/</link>
     <pubDate>Sun, 27 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_04/</guid>
+    </author><guid>http://localhost:1313/posts/kafka_internals/kafka_internals_04/</guid>
     <description><![CDATA[Kafka Internals 笔记]]></description>
 </item><item>
     <title>Data Plane: Replication Protocol</title>
-    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_02/</link>
+    <link>http://localhost:1313/posts/kafka_internals/kafka_internals_02/</link>
     <pubDate>Sat, 26 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_02/</guid>
+    </author><guid>http://localhost:1313/posts/kafka_internals/kafka_internals_02/</guid>
     <description><![CDATA[Kafka Internals 笔记]]></description>
 </item><item>
     <title>Inside the Apache Kafka Broker</title>
-    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_01/</link>
+    <link>http://localhost:1313/posts/kafka_internals/kafka_internals_01/</link>
     <pubDate>Fri, 25 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_01/</guid>
+    </author><guid>http://localhost:1313/posts/kafka_internals/kafka_internals_01/</guid>
     <description><![CDATA[Kafka Internals 笔记]]></description>
 </item><item>
     <title>The Fundamentals of Apache Kafka Architecture</title>
-    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_00/</link>
+    <link>http://localhost:1313/posts/kafka_internals/kafka_internals_00/</link>
     <pubDate>Thu, 24 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_00/</guid>
+    </author><guid>http://localhost:1313/posts/kafka_internals/kafka_internals_00/</guid>
     <description><![CDATA[Kafka Internals 笔记]]></description>
 </item><item>
     <title>算法第四版 —— 二叉查找树</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_12/</link>
+    <link>http://localhost:1313/posts/algs4/algs4_12/</link>
     <pubDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_12/</guid>
+    </author><guid>http://localhost:1313/posts/algs4/algs4_12/</guid>
     <description><![CDATA[二叉查找树]]></description>
 </item><item>
     <title>Redis 客户端在 NET8 容器环境下 CPU 高问题排查</title>
-    <link>https://Nanciico.github.io/posts/others/technology/high_cpu_problem/</link>
+    <link>http://localhost:1313/posts/others/technology/high_cpu_problem/</link>
     <pubDate>Thu, 10 Apr 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/others/technology/high_cpu_problem/</guid>
+    </author><guid>http://localhost:1313/posts/others/technology/high_cpu_problem/</guid>
     <description><![CDATA[排查 Redis 客户端在 NET8 容器环境下 CPU 高的问题，通过分析 profile 文件，查看 NetCore 代码找出原因。]]></description>
 </item><item>
     <title>Kafka 服务启动、网络与线程模型</title>
-    <link>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_99/</link>
+    <link>http://localhost:1313/posts/kafka_internals/kafka_internals_99/</link>
     <pubDate>Mon, 09 Dec 2024 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/kafka_internals/kafka_internals_99/</guid>
+    </author><guid>http://localhost:1313/posts/kafka_internals/kafka_internals_99/</guid>
     <description><![CDATA[阅读 Kafka 3.6.2 版本代码，理解 Kafka 服务启动流程、网络模型和线程模型。]]></description>
 </item><item>
     <title>添加分布式缓存 —— 系统实现</title>
-    <link>https://Nanciico.github.io/posts/support_distributed_cache_02/</link>
+    <link>http://localhost:1313/posts/support_distributed_cache_02/</link>
     <pubDate>Sun, 29 Sep 2024 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/support_distributed_cache_02/</guid>
+    </author><guid>http://localhost:1313/posts/support_distributed_cache_02/</guid>
     <description><![CDATA[添加分布式缓存设计]]></description>
 </item><item>
     <title>添加分布式缓存 —— 缓存设计</title>
-    <link>https://Nanciico.github.io/posts/support_distributed_cache_01/</link>
+    <link>http://localhost:1313/posts/support_distributed_cache_01/</link>
     <pubDate>Sat, 28 Sep 2024 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/support_distributed_cache_01/</guid>
+    </author><guid>http://localhost:1313/posts/support_distributed_cache_01/</guid>
     <description><![CDATA[添加分布式缓存设计]]></description>
 </item></channel>
 </rss>

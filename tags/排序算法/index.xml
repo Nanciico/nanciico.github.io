@@ -1,42 +1,47 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>排序算法 - 标签 - Nanciico&#39;s Blog</title>
-        <link>https://Nanciico.github.io/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link>
-        <description>排序算法 - 标签 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 09 Aug 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
-    <title>算法第四版 —— 排序算法应用</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_10/</link>
-    <pubDate>Wed, 09 Aug 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_10/</guid>
-    <description><![CDATA[排序算法的应用]]></description>
-</item><item>
-    <title>算法第四版 —— 优先队列</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_09/</link>
-    <pubDate>Fri, 04 Aug 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_09/</guid>
-    <description><![CDATA[优先队列]]></description>
-</item><item>
-    <title>算法第四版 —— 快速排序</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_08/</link>
-    <pubDate>Sat, 08 Jul 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_08/</guid>
-    <description><![CDATA[快速排序]]></description>
-</item><item>
-    <title>算法第四版 —— 归并排序</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_07/</link>
-    <pubDate>Sun, 21 May 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_07/</guid>
-    <description><![CDATA[归并排序]]></description>
-</item><item>
-    <title>算法第四版 —— 初级排序算法</title>
-    <link>https://Nanciico.github.io/posts/algs4/algs4_06/</link>
-    <pubDate>Thu, 20 Apr 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/algs4/algs4_06/</guid>
-    <description><![CDATA[选择排序、插入排序和希尔排序]]></description>
-</item></channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>排序算法 on Nanciico&#39;s Blog</title>
+    <link>http://localhost:1313/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 排序算法 on Nanciico&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 09 Aug 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>算法第四版 —— 排序算法应用</title>
+      <link>http://localhost:1313/posts/algs4/algs4_10/</link>
+      <pubDate>Wed, 09 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/algs4/algs4_10/</guid>
+      <description>排序算法的应用</description>
+    </item>
+    <item>
+      <title>算法第四版 —— 优先队列</title>
+      <link>http://localhost:1313/posts/algs4/algs4_09/</link>
+      <pubDate>Fri, 04 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/algs4/algs4_09/</guid>
+      <description>优先队列</description>
+    </item>
+    <item>
+      <title>算法第四版 —— 快速排序</title>
+      <link>http://localhost:1313/posts/algs4/algs4_08/</link>
+      <pubDate>Sat, 08 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/algs4/algs4_08/</guid>
+      <description>快速排序</description>
+    </item>
+    <item>
+      <title>算法第四版 —— 归并排序</title>
+      <link>http://localhost:1313/posts/algs4/algs4_07/</link>
+      <pubDate>Sun, 21 May 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/algs4/algs4_07/</guid>
+      <description>归并排序</description>
+    </item>
+    <item>
+      <title>算法第四版 —— 初级排序算法</title>
+      <link>http://localhost:1313/posts/algs4/algs4_06/</link>
+      <pubDate>Thu, 20 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/algs4/algs4_06/</guid>
+      <description>选择排序、插入排序和希尔排序</description>
+    </item>
+  </channel>
 </rss>
