@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Redis升级 on Nanciico&#39;s Blog</title>
-    <link>https://Nanciico.github.io/series/redis%E5%8D%87%E7%BA%A7/</link>
-    <description>Recent content in Redis升级 on Nanciico&#39;s Blog</description>
+    <title>Redis版本升级 on Nanciico&#39;s Blog</title>
+    <link>https://Nanciico.github.io/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/</link>
+    <description>Recent content in Redis版本升级 on Nanciico&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <lastBuildDate>Wed, 19 Apr 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://Nanciico.github.io/series/redis%E5%8D%87%E7%BA%A7/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://Nanciico.github.io/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Redis 升级 —— 前言</title>
       <link>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_00/</link>

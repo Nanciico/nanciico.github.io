@@ -9,17 +9,17 @@
     <lastBuildDate>Tue, 19 Aug 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://Nanciico.github.io/series/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>计算机网络自顶向下方法 阅读笔记</title>
-      <link>https://Nanciico.github.io/series/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <title>计算机网络自顶向下方法阅读笔记</title>
+      <link>https://Nanciico.github.io/series/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Tue, 19 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>https://Nanciico.github.io/series/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://Nanciico.github.io/series/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
-      <title>算法第四版 阅读笔记</title>
-      <link>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <title>算法第四版阅读笔记</title>
+      <link>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Wed, 16 Apr 2025 00:00:00 +0000</pubDate>
-      <guid>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://Nanciico.github.io/series/%E7%AE%97%E6%B3%95%E7%AC%AC%E5%9B%9B%E7%89%88%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
@@ -30,24 +30,24 @@
       <description></description>
     </item>
     <item>
-      <title>Redis源码 阅读笔记</title>
-      <link>https://Nanciico.github.io/series/redis%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <title>Redis源码阅读笔记</title>
+      <link>https://Nanciico.github.io/series/redis%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Sat, 27 Jul 2024 00:00:00 +0000</pubDate>
-      <guid>https://Nanciico.github.io/series/redis%E6%BA%90%E7%A0%81-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://Nanciico.github.io/series/redis%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
-      <title>深入理解计算机系统 阅读笔记</title>
-      <link>https://Nanciico.github.io/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <title>深入理解计算机系统阅读笔记</title>
+      <link>https://Nanciico.github.io/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Sat, 25 Nov 2023 00:00:00 +0000</pubDate>
-      <guid>https://Nanciico.github.io/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://Nanciico.github.io/series/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
-      <title>汇编语言 阅读笔记</title>
-      <link>https://Nanciico.github.io/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <title>汇编语言阅读笔记</title>
+      <link>https://Nanciico.github.io/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Thu, 23 Nov 2023 00:00:00 +0000</pubDate>
-      <guid>https://Nanciico.github.io/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <guid>https://Nanciico.github.io/series/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
       <description></description>
     </item>
     <item>
@@ -58,10 +58,10 @@
       <description></description>
     </item>
     <item>
-      <title>Redis升级</title>
-      <link>https://Nanciico.github.io/series/redis%E5%8D%87%E7%BA%A7/</link>
+      <title>Redis版本升级</title>
+      <link>https://Nanciico.github.io/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/</link>
       <pubDate>Wed, 19 Apr 2023 00:00:00 +0000</pubDate>
-      <guid>https://Nanciico.github.io/series/redis%E5%8D%87%E7%BA%A7/</guid>
+      <guid>https://Nanciico.github.io/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/</guid>
       <description></description>
     </item>
   </channel>
