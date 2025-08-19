@@ -6,8 +6,29 @@
     <description>Recent content in 计算机体系结构 on Nanciico&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 25 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Aug 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://Nanciico.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机网络自顶向下方法 —— 应用层</title>
+      <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</link>
+      <pubDate>Tue, 19 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</guid>
+      <description>计算机网络自顶向下方法 —— 应用层</description>
+    </item>
+    <item>
+      <title>计算机网络自顶向下方法 —— 计算机网络和因特网</title>
+      <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</link>
+      <pubDate>Mon, 18 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</guid>
+      <description>计算机网络自顶向下方法 —— 计算机网络和因特网</description>
+    </item>
+    <item>
+      <title>计算机网络自顶向下方法 —— 前言</title>
+      <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</link>
+      <pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</guid>
+      <description>计算机网络自顶向下方法 —— 前言</description>
+    </item>
     <item>
       <title>深入理解计算机系统 —— 计算机系统漫游</title>
       <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</link>

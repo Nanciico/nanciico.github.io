@@ -3,9 +3,30 @@
         <title>Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/</link>
         <description>这是我的全新 Hugo 网站</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 19 Aug 2025 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://Nanciico.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>计算机网络自顶向下方法 —— 应用层</title>
+    <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</link>
+    <pubDate>Tue, 19 Aug 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</guid>
+    <description><![CDATA[计算机网络自顶向下方法 —— 应用层]]></description>
+</item><item>
+    <title>计算机网络自顶向下方法 —— 计算机网络和因特网</title>
+    <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</link>
+    <pubDate>Mon, 18 Aug 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</guid>
+    <description><![CDATA[计算机网络自顶向下方法 —— 计算机网络和因特网]]></description>
+</item><item>
+    <title>计算机网络自顶向下方法 —— 前言</title>
+    <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</link>
+    <pubDate>Sun, 17 Aug 2025 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</guid>
+    <description><![CDATA[计算机网络自顶向下方法 —— 前言]]></description>
+</item><item>
     <title>算法第四版 —— 二叉查找树</title>
     <link>https://Nanciico.github.io/posts/algs4/algs4_12/</link>
     <pubDate>Wed, 16 Apr 2025 00:00:00 &#43;0000</pubDate><author>
@@ -54,26 +75,5 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/algs4/algs4_11/</guid>
     <description><![CDATA[符号表]]></description>
-</item><item>
-    <title>深入理解计算机系统 —— 计算机系统漫游</title>
-    <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</link>
-    <pubDate>Sat, 25 Nov 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</guid>
-    <description><![CDATA[深入理解计算机系统 —— 计算机系统漫游]]></description>
-</item><item>
-    <title>深入理解计算机系统 —— 前言</title>
-    <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</link>
-    <pubDate>Fri, 24 Nov 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</guid>
-    <description><![CDATA[深入理解计算机系统 —— 前言]]></description>
-</item><item>
-    <title>汇编语言 —— 使用BIOS进行键盘输入和磁盘读写</title>
-    <link>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_17/</link>
-    <pubDate>Thu, 23 Nov 2023 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/computer_architecture/assemply_language/assemply_language_17/</guid>
-    <description><![CDATA[汇编语言 —— 使用BIOS进行键盘输入和磁盘读写]]></description>
 </item></channel>
 </rss>

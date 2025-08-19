@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>计算机网络自顶向下方法 阅读笔记 on Nanciico&#39;s Blog</title>
+    <link>https://Nanciico.github.io/series/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 计算机网络自顶向下方法 阅读笔记 on Nanciico&#39;s Blog</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 19 Aug 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://Nanciico.github.io/series/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95-%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机网络自顶向下方法 —— 前言</title>
+      <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</link>
+      <pubDate>Sun, 17 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</guid>
+      <description>计算机网络自顶向下方法 —— 前言</description>
+    </item>
+    <item>
+      <title>计算机网络自顶向下方法 —— 计算机网络和因特网</title>
+      <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</link>
+      <pubDate>Mon, 18 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</guid>
+      <description>计算机网络自顶向下方法 —— 计算机网络和因特网</description>
+    </item>
+    <item>
+      <title>计算机网络自顶向下方法 —— 应用层</title>
+      <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</link>
+      <pubDate>Tue, 19 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</guid>
+      <description>计算机网络自顶向下方法 —— 应用层</description>
+    </item>
+  </channel>
+</rss>
