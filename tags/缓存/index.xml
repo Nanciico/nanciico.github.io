@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>缓存 on Nanciico&#39;s Blog</title>
-    <link>http://localhost:1313/tags/%E7%BC%93%E5%AD%98/</link>
+    <link>https://Nanciico.github.io/tags/%E7%BC%93%E5%AD%98/</link>
     <description>Recent content in 缓存 on Nanciico&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/%E7%BC%93%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://Nanciico.github.io/tags/%E7%BC%93%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>添加分布式缓存 —— 系统实现</title>
-      <link>http://localhost:1313/posts/support_distributed_cache_02/</link>
+      <link>https://Nanciico.github.io/posts/support_distributed_cache_02/</link>
       <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/support_distributed_cache_02/</guid>
+      <guid>https://Nanciico.github.io/posts/support_distributed_cache_02/</guid>
       <description>添加分布式缓存设计</description>
     </item>
     <item>
       <title>添加分布式缓存 —— 缓存设计</title>
-      <link>http://localhost:1313/posts/support_distributed_cache_01/</link>
+      <link>https://Nanciico.github.io/posts/support_distributed_cache_01/</link>
       <pubDate>Sat, 28 Sep 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/support_distributed_cache_01/</guid>
+      <guid>https://Nanciico.github.io/posts/support_distributed_cache_01/</guid>
       <description>添加分布式缓存设计</description>
     </item>
     <item>
       <title>添加分布式缓存 —— 原缓存流程</title>
-      <link>http://localhost:1313/posts/support_distributed_cache_00/</link>
+      <link>https://Nanciico.github.io/posts/support_distributed_cache_00/</link>
       <pubDate>Fri, 27 Sep 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/support_distributed_cache_00/</guid>
+      <guid>https://Nanciico.github.io/posts/support_distributed_cache_00/</guid>
       <description>添加分布式缓存设计</description>
     </item>
   </channel>

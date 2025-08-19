@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>深入理解计算机系统 on Nanciico&#39;s Blog</title>
-    <link>http://localhost:1313/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/</link>
+    <link>https://Nanciico.github.io/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/</link>
     <description>Recent content in 深入理解计算机系统 on Nanciico&#39;s Blog</description>
     <generator>Hugo</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 25 Nov 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://Nanciico.github.io/tags/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>深入理解计算机系统 —— 计算机系统漫游</title>
-      <link>http://localhost:1313/posts/computer_architecture/csapp/csapp_01/</link>
+      <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</link>
       <pubDate>Sat, 25 Nov 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/computer_architecture/csapp/csapp_01/</guid>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_01/</guid>
       <description>深入理解计算机系统 —— 计算机系统漫游</description>
     </item>
     <item>
       <title>深入理解计算机系统 —— 前言</title>
-      <link>http://localhost:1313/posts/computer_architecture/csapp/csapp_00/</link>
+      <link>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</link>
       <pubDate>Fri, 24 Nov 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/computer_architecture/csapp/csapp_00/</guid>
+      <guid>https://Nanciico.github.io/posts/computer_architecture/csapp/csapp_00/</guid>
       <description>深入理解计算机系统 —— 前言</description>
     </item>
   </channel>
