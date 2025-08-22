@@ -1,28 +1,28 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>计算机网络自顶向下方法 - 标签 - Nanciico&#39;s Blog</title>
-        <link>http://localhost:1313/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95/</link>
+        <link>https://Nanciico.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95/</link>
         <description>计算机网络自顶向下方法 - 标签 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 19 Aug 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://localhost:1313/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Tue, 19 Aug 2025 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E6%96%B9%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
     <title>计算机网络自顶向下方法 —— 应用层</title>
-    <link>http://localhost:1313/posts/computer_architecture/computer_networking/computer_networking_02/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</link>
     <pubDate>Tue, 19 Aug 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/computer_networking/computer_networking_02/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_02/</guid>
     <description><![CDATA[计算机网络自顶向下方法 —— 应用层]]></description>
 </item><item>
     <title>计算机网络自顶向下方法 —— 计算机网络和因特网</title>
-    <link>http://localhost:1313/posts/computer_architecture/computer_networking/computer_networking_01/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</link>
     <pubDate>Mon, 18 Aug 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/computer_networking/computer_networking_01/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_01/</guid>
     <description><![CDATA[计算机网络自顶向下方法 —— 计算机网络和因特网]]></description>
 </item><item>
     <title>计算机网络自顶向下方法 —— 前言</title>
-    <link>http://localhost:1313/posts/computer_architecture/computer_networking/computer_networking_00/</link>
+    <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</link>
     <pubDate>Sun, 17 Aug 2025 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/computer_architecture/computer_networking/computer_networking_00/</guid>
+    </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_00/</guid>
     <description><![CDATA[计算机网络自顶向下方法 —— 前言]]></description>
 </item></channel>
 </rss>

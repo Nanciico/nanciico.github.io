@@ -1,28 +1,28 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Redis版本升级 - 系列 - Nanciico&#39;s Blog</title>
-        <link>http://localhost:1313/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/</link>
+        <link>https://Nanciico.github.io/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/</link>
         <description>Redis版本升级 - 系列 - Nanciico&#39;s Blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 19 Apr 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="http://localhost:1313/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 19 Apr 2023 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/redis%E7%89%88%E6%9C%AC%E5%8D%87%E7%BA%A7/" rel="self" type="application/rss+xml" /><item>
     <title>Redis 升级 —— 前言</title>
-    <link>http://localhost:1313/posts/redis_upgrade/redis_upgrade_00/</link>
+    <link>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_00/</link>
     <pubDate>Fri, 03 Mar 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/redis_upgrade/redis_upgrade_00/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_00/</guid>
     <description><![CDATA[记录Redis升级流程。]]></description>
 </item><item>
     <title>Redis 异步删除解决大 Key 过期阻塞问题可行性分析</title>
-    <link>http://localhost:1313/posts/redis_upgrade/redis_upgrade_01/</link>
+    <link>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_01/</link>
     <pubDate>Sat, 04 Mar 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/redis_upgrade/redis_upgrade_01/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_01/</guid>
     <description><![CDATA[通过分析 Redis 异步删除源码，判断异步删除能否解决大 Key 过期阻塞主线程的问题。]]></description>
 </item><item>
     <title>Redis 内存碎片整理调研</title>
-    <link>http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/</link>
+    <link>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_02/</link>
     <pubDate>Wed, 19 Apr 2023 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
-    </author><guid>http://localhost:1313/posts/redis_upgrade/redis_upgrade_02/</guid>
+    </author><guid>https://Nanciico.github.io/posts/redis_upgrade/redis_upgrade_02/</guid>
     <description><![CDATA[分析 Redis 内存碎片整理功能，给出控制内存碎片可行方案。]]></description>
 </item></channel>
 </rss>
