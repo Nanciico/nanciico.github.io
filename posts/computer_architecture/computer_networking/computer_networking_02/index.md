@@ -100,6 +100,8 @@ cookie 可以用于标识一个用户。用户首次访问一个站点时，可�
 
 {{< image src="/images/computer_networking/02_08.jpg" caption="客户通过 Web 缓存器请求对象" title="客户通过 Web 缓存器请求对象" >}}
 
+{{< image src="/images/computer_networking/02_09.jpg" caption="为机构网络添加一台缓存器" title="为机构网络添加一台缓存器" >}}
+
 通过使用内容分发网络（Content Distribution Network, CDN） , Web 缓存器正在因特网中发挥着越来越重要的作用。CDN公司在因特网上安装了许多地理上分散的缓存器，因而使大量流量实现了本地化。
 
 HTTP协议有一种机制，允许缓存器证实它的对象是最新的。这种机制就是**条件 GET** （conditional GET）方法。
@@ -118,11 +120,11 @@ HTTP协议有一种机制，允许缓存器证实它的对象是最新的。这�
 
 因特网电子邮件系统有 3 个主要组成部分：**用户代理**（user agent）、**邮件服务器**（mail server）和**简单邮件传输协议**（Simple Mail Transfer Protocol, SMTP）。
 
-{{< image src="/images/computer_networking/02_09.jpg" caption="因特网电子邮件系统的总体描述" title="因特网电子邮件系统的总体描述" >}}
+{{< image src="/images/computer_networking/02_10.jpg" caption="因特网电子邮件系统的总体描述" title="因特网电子邮件系统的总体描述" >}}
 
 SMTP 是因特网电子邮件中主要的应用层协议。它使用 TCP 可靠数据传输服务，从发送方的邮件服务器向接收方的邮件服务器发送邮件。
 
-{{< image src="/images/computer_networking/02_10.jpg" caption="电子邮件协议及其通信实体" title="电子邮件协议及其通信实体" >}}
+{{< image src="/images/computer_networking/02_11.jpg" caption="电子邮件协议及其通信实体" title="电子邮件协议及其通信实体" >}}
 
 Bob 的用户代理不能使用 SMTP 得到报文，因为取报文是一个拉操作，而 SMTP 协议是一个推协议。目前有一些流行的邮件访问协议，包括**第三版的邮局协议**（Post
 Office Protocol—Version 3 , POP3）、**因特网邮件访问协议**（Internet Mail Access Protocol,
@@ -132,15 +134,15 @@ IMAP）以及 HTTP。
 
 识别主机有两种方式，通过主机名或者 IP 地址。**域名系统**（Domain Name System, DNS）的主要任务是进行主机名到 IP 地址转换的目录服务。
 
-DNS是：①一个由分层的 DNS 服务器（DNS server）实现的分布式数据库；②一个使得主机能够查询分布式数据库的应用层协议。
+DNS 是：①一个由分层的 DNS 服务器（DNS server）实现的分布式数据库；②一个使得主机能够查询分布式数据库的应用层协议。
 
-DNS 服务器通常是运行 BIND（ Berkeley Internet Name Domain）软件的 UNIX 机器。DNS 协议运行在 UDP 之上，使用 53 号端口。
+DNS 服务器通常是运行 BIND（Berkeley Internet Name Domain）软件的 UNIX 机器。DNS 协议运行在 UDP 之上，使用 53 号端口。
 
-DNS通常是由其他应用层协议所使用的，包括 HTTP、SMTP 和 FTP,将用户提供的主机名解析为 IP 地址。
+DNS 通常是由其他应用层协议所使用的，包括 HTTP、SMTP 和 FTP,将用户提供的主机名解析为 IP 地址。
 
 大致有 3 种类型的DNS服务器：根 DNS 服务器、顶级域(Top-Level Domain, TLD) DNS 服务器和权威 DNS 服务器。这些服务器下图所示的层次结构组织起来。
 
-{{< image src="/images/computer_networking/02_11.jpg" caption="部分DNS服务器的层次结构" title="部分DNS服务器的层次结构" >}}
+{{< image src="/images/computer_networking/02_12.jpg" caption="部分DNS服务器的层次结构" title="部分DNS服务器的层次结构" >}}
 
 - **根 DNS 服务器**。有400多个根名字服务器遍及全世界。根名字服务器提供 TLD 服务器的 IP 地址。
 - **顶级域(DNS)服务器**。对于每个顶级域(如 com、org、net、edu 和 gov)和所有国家的顶级域(如 uk、fr、ca 和 jp),都有 TLD 服务器(或服务器集群)。TLD 服务器提供了权威 DNS 服务器的 IP 地址。
@@ -148,7 +150,7 @@ DNS通常是由其他应用层协议所使用的，包括 HTTP、SMTP 和 FTP,�
 
 另一类重要的 DNS 服务器，称为**本地 DNS 服务器**（local DNS server）。当主机发出 DNS 请求时，该请求被发往本地 DNS 服务器，它起着代理的作用，并将该请求转发到 DNS 服务器层次结构中。
 
-{{< image src="/images/computer_networking/02_12.jpg" caption="各种 DNS 服务器的交互" title="各种 DNS 服务器的交互" >}}
+{{< image src="/images/computer_networking/02_13.jpg" caption="各种 DNS 服务器的交互" title="各种 DNS 服务器的交互" >}}
 
 ### P2P 文件分发
 
@@ -158,8 +160,139 @@ BitTorrent 是一种用于文件分发的流行 P2P 协议。
 
 每个洪流具有一个基础设施节点，称为**追踪器**（tracker）。当一个对等方加入某洪流时，它向追踪器注册自己，并周期性地通知追踪器它仍在该洪流中。以这种方式，追踪器跟踪参与在洪流中的对等方。
 
-{{< image src="/images/computer_networking/02_13.jpg" caption="用 BitTorrent 分发文件" title="用 BitTorrent 分发文件" >}}
+{{< image src="/images/computer_networking/02_14.jpg" caption="用 BitTorrent 分发文件" title="用 BitTorrent 分发文件" >}}
 
 ### 视频流和内容分发网
 
+#### HTTP 流和 DASH
+
+在 HTTP 流中，视频只是存储在 HTTP 服务器中作为一个普通的文件，每个文件有一个特定的 URL。
+
+HTTP 流具有严重缺陷，即所有客户接收到相同编码的视频，这导致了一种新型基于 HTTP 的流的研发，它常常被称为**经 HTTP 的动态适应性流**(Dynamic Adaptive
+Streaming over HTTP, DASH) 。在 DASH 中，视频编码为几个不同的版本，其中每个版本具有不同的比特率，对应于不同的质量水平。DASH 允许客户自由地在不同的质量等级之间切换。
+
+#### 内容分发网
+
+为了应对向分布于全世界的用户分发巨量视频数据的挑战，几乎所有主要的视频流公司都利用内容分发网（Content Distribution Network, CDN）。
+
+CDN 管理分布在多个地理位置上的服务器，在它的服务器中存储视频（和其他类型的 Web 内容，包括文档、图片和音频）的副本，并且所有试图将每个用户请求定向到一个将提供最好的用户体验的 CDN 位置。
+
+{{< image src="/images/computer_networking/02_15.jpg" caption="DNS 将用户的请求重定向到一台 CDN 服务器" title="DNS 将用户的请求重定向到一台 CDN 服务器" >}}
+
+---
+
+## 套接字编程：生成网络应用
+
+在研发阶段，开发者必须最先做的一个决定是，应用程序是运行在 TCP 上还是运行在 UDP 上。
+
+TCP 是面向连接的，并且为两个端系统之间的数据流动提供可靠的字节流通道。
+
+UDP 是无连接的，从一个端系统向另一个端系统发送独立的数据分组，不对交付提供任何保证。
+
+### UDP 套接字编程
+
+{{< image src="/images/computer_networking/02_16.jpg" caption="使用 UDP 的客户 - 服务器应用程序" title="使用 UDP 的客户 - 服务器应用程序" >}}
+
+``` UDPClient.py
+from socket import *
+
+server_name = 'localhost'
+server_port = 12000
+
+# 创建客户的套接字
+# AF_INET 指示了底层网络使用了 IPv4
+# SOCK_DGRAM 指示 UDP 套接字
+# 操作系统指示端口号
+client_socket = socket(AF_INET, SOCK_DGRAM)
+
+message = input('Input lowercase sentence:')
+
+# 首先将报文由字符串类型转换为字节类型
+# 再向进程的套接字发送分组
+client_socket.sendto(message.encode(), (server_name, server_port))
+
+# 在发送分组之后，客户等待接收来自服务器的数据
+# 缓存长度 2048
+modified_message, server_address = client_socket.recvfrom(2048)
+
+# 将报文从字节转化为字符串后，在用户显示器上打印
+print(modified_message.decode())
+
+# 关闭套接字
+client_socket.close()
+```
+
+``` UDPServer.py
+from socket import *
+
+server_port = 12000
+server_socket = socket(AF_INET, SOCK_DGRAM)
+
+# 将端口号 12000 与该服务器的套接字绑定在一起
+server_socket.bind(('', server_port))
+print ('The server is ready to receive')
+
+while True:
+    message, client_address = server_socket.recvfrom(2048)
+    modified_message = message.decode().upper()
+    server_socket.sendto(modified_message.encode(), client_address)
+```
+
+### TCP 套接字编程
+
+{{< image src="/images/computer_networking/02_17.jpg" caption="TCPServer 进程有两个套接字" title="TCPServer 进程有两个套接字" >}}
+
+{{< image src="/images/computer_networking/02_18.jpg" caption="使用 TCP 的客户 - 服务器应用程序" title="使用 TCP 的客户 - 服务器应用程序" >}}
+
+``` TCPClient.py
+from socket import *
+
+server_name = 'localhost'
+server_port = 12000
+
+# 参数指示该套接字是 SOCK_STREAM 类型。这表明它是一个 TCP 套接字
+client_socket = socket(AF_INET, SOCK_STREAM)
+
+# 执行三次握手，并在客户和服务器之间创建起一条 TCP 连接
+client_socket.connect((server_name, server_port))
+
+sentence = input('Input lowercase sentence:')
+client_socket.send(sentence.encode())
+
+modified_sentence = client_socket.recv(1024)
+print('From Server: ', modified_sentence.decode())
+
+# 引起客户中的 TCP 向服务器中的 TCP 发送一条 TCP 报文
+client_socket.close()
+```
+
+``` TCPServer.py
+from socket import *
+
+server_port = 12000
+
+server_socket = socket(AF_INET, SOCK_STREAM)
+
+# 将服务器的端口号与套接字关联
+server_socket.bind(('', server_port))
+
+# 欢迎套接字，等待并聆听某个客户敲门
+# 参数定义了请求连接的最大数
+server_socket.listen(1)
+
+print('The server is ready to receive')
+
+while True:
+    # server_socket 调用 accept() 方法
+    # 创建 connection_socket 新套接字
+    # 客户和服务器则完成了握手
+    # 创建了一个 TCP 连接
+    connection_socket, addr = server_socket.accept()
+    sentence = connection_socket.recv(1024).decode()
+    capitalized_sentence = sentence.upper()
+    connection_socket.send(capitalized_sentence.encode())
+    connection_socket.close()
+```
+
+---
 
