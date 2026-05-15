@@ -372,5 +372,11 @@ TCP 的指导性原则：
 
 {{< image src="/images/computer_networking/03_21.jpg" caption="TCP拥塞控制的FSM描述" title="TCP 拥塞控制的 FSM 描述" >}}
 
+#### 网络辅助的拥塞控制
+
+对于IP和TCP的扩展方案［RFC 3168］已经提出并已经实现和部署，该方案允许网络明确向TCP发送方和接收方发出拥塞信号。这种形式的网络辅助拥塞控制称为**明确拥塞通告**（Explicit Congestion Notification, ECN）。
+
+{{< image src="/images/computer_networking/03_22.jpg" caption="明确拥塞通告：网络辅助拥塞控制" title="明确拥塞通告：网络辅助拥塞控制" >}}
+
 ---
 
