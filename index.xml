@@ -3,7 +3,7 @@
         <title>Nanciico&#39;s Blog</title>
         <link>https://Nanciico.github.io/</link>
         <description>这是我的全新 Hugo 网站</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Fri, 28 Nov 2025 00:00:00 &#43;0000</lastBuildDate>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Wed, 05 Aug 2026 00:00:00 &#43;0000</lastBuildDate>
             <atom:link href="https://Nanciico.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
     <title>计算机网络自顶向下方法 —— 网络层：数据平面</title>
@@ -12,20 +12,6 @@
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_04/</guid>
     <description><![CDATA[计算机网络自顶向下方法 —— 网络层：数据平面]]></description>
-</item><item>
-    <title>Linux sed 命令</title>
-    <link>https://Nanciico.github.io/posts/linux_sed/</link>
-    <pubDate>Wed, 19 Nov 2025 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/linux_sed/</guid>
-    <description><![CDATA[Linux sed 命令]]></description>
-</item><item>
-    <title>Linux运维常用命令</title>
-    <link>https://Nanciico.github.io/posts/linux_operation/</link>
-    <pubDate>Tue, 18 Nov 2025 00:00:00 &#43;0000</pubDate><author>
-        <name>Nanciico</name>
-    </author><guid>https://Nanciico.github.io/posts/linux_operation/</guid>
-    <description><![CDATA[Linux运维常用命令]]></description>
 </item><item>
     <title>计算机网络自顶向下方法 —— 运输层</title>
     <link>https://Nanciico.github.io/posts/computer_architecture/computer_networking/computer_networking_03/</link>
@@ -74,6 +60,20 @@
     <pubDate>Sun, 29 Sep 2024 00:00:00 &#43;0000</pubDate><author>
         <name>Nanciico</name>
     </author><guid>https://Nanciico.github.io/posts/support_distributed_cache_02/</guid>
+    <description><![CDATA[添加分布式缓存设计]]></description>
+</item><item>
+    <title>添加分布式缓存 —— 缓存设计</title>
+    <link>https://Nanciico.github.io/posts/support_distributed_cache_01/</link>
+    <pubDate>Sat, 28 Sep 2024 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/support_distributed_cache_01/</guid>
+    <description><![CDATA[添加分布式缓存设计]]></description>
+</item><item>
+    <title>添加分布式缓存 —— 原缓存流程</title>
+    <link>https://Nanciico.github.io/posts/support_distributed_cache_00/</link>
+    <pubDate>Fri, 27 Sep 2024 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/support_distributed_cache_00/</guid>
     <description><![CDATA[添加分布式缓存设计]]></description>
 </item></channel>
 </rss>
