@@ -1,0 +1,14 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Raft 共识算法 - 系列 - Nanciico&#39;s Blog</title>
+        <link>https://Nanciico.github.io/series/raft-%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/</link>
+        <description>Raft 共识算法 - 系列 - Nanciico&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Thu, 13 Aug 2026 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://Nanciico.github.io/series/raft-%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/" rel="self" type="application/rss+xml" /><item>
+    <title>Raft 算法</title>
+    <link>https://Nanciico.github.io/posts/consensus_algorithm/raft_00/</link>
+    <pubDate>Thu, 13 Aug 2026 00:00:00 &#43;0000</pubDate><author>
+        <name>Nanciico</name>
+    </author><guid>https://Nanciico.github.io/posts/consensus_algorithm/raft_00/</guid>
+    <description><![CDATA[Raft 算法]]></description>
+</item></channel>
+</rss>
